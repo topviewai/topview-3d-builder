@@ -1,6 +1,6 @@
 {
   "name": "topview-3d-builder",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build, check and render 3D director scenes on your own machine with the topview-3d-cli command: characters, poses, props, cameras and keyframes, fully offline.",
   "author": {
     "name": "Topview",

@@ -24,14 +24,14 @@ Playwright and Chromium.
 
 ## Installing topview-3d-cli
 
-Use this skill's pinned version, 0.1.0, and stop at the first route that works:
+Use this skill's pinned version, 0.1.1, and stop at the first route that works:
 
-1. `uvx --python 3.12 topview-3d-cli@0.1.0 doctor --json`: runs without a permanent install;
+1. `uvx --python 3.12 topview-3d-cli@0.1.1 doctor --json`: runs without a permanent install;
    `--python 3.12` makes uv use (or download) a Python it can run the package with.
-   Prefix every later command the same way (`uvx --python 3.12 topview-3d-cli@0.1.0 ...`).
-2. `pipx run --spec topview-3d-cli==0.1.0 topview-3d-cli doctor --json`, or
-   `pipx install topview-3d-cli==0.1.0` for a permanent `topview-3d-cli` on PATH.
-3. `python3 -m pip install --user topview-3d-cli==0.1.0`, then make sure the user scripts
+   Prefix every later command the same way (`uvx --python 3.12 topview-3d-cli@0.1.1 ...`).
+2. `pipx run --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`, or
+   `pipx install topview-3d-cli==0.1.1` for a permanent `topview-3d-cli` on PATH.
+3. `python3 -m pip install --user topview-3d-cli==0.1.1`, then make sure the user scripts
    directory is on PATH.
 
 If step 2 or 3 fails because the configured index has no such version (a mirror that has not
@@ -39,9 +39,9 @@ synced yet reports `Could not find a version` and `from versions: none`), retry 
 command against the official PyPI simple index and do not change the user's pip configuration.
 Build the index as scheme https, host `pypi.org`, path `/simple/`, and pass it like this:
 
-- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.0`
-- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.0 topview-3d-cli doctor --json`
-- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.0`
+- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.1`
+- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`
+- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.1`
 
 Other pip failures (no network, permissions, a broken environment) are not an index problem;
 do not switch the index for those.

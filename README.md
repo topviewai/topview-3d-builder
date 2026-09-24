@@ -38,7 +38,7 @@ execution path.
 ## Install the plugin
 
 The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent; it has no MCP server and no
-app. The skill's first step runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.0` (or a
+app. The skill's first step runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.1` (or a
 local wheel, see [Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+,
 Node.js 20.6+ and uv or pipx on the machine. The public repository is
 [topviewai/topview-3d-builder](https://github.com/topviewai/topview-3d-builder).

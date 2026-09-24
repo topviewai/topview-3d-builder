@@ -38,10 +38,10 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
 `checks.<name>.hint` and follow `references/doctor-browser.md`:
 
 - **`topview-3d-cli` not found:** run it without installing, pinned to this skill's version:
-  `uvx --python 3.12 topview-3d-cli@0.1.0 doctor --json` (`--python 3.12` lets uv fetch a suitable
+  `uvx --python 3.12 topview-3d-cli@0.1.1 doctor --json` (`--python 3.12` lets uv fetch a suitable
   Python when the default one is older than 3.11). Without `uvx`, use
-  `pipx run --spec topview-3d-cli==0.1.0 topview-3d-cli doctor --json`, then
-  `python3 -m pip install --user topview-3d-cli==0.1.0`. If that pip or pipx install fails
+  `pipx run --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`, then
+  `python3 -m pip install --user topview-3d-cli==0.1.1`. If that pip or pipx install fails
   because the configured index has no such version (a mirror that has not synced yet reports
   `from versions: none`), retry the same command with `--index-url` set to the official PyPI
   simple index: scheme https, host `pypi.org`, path `/simple/`. For pipx, pass that index inside
