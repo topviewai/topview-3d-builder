@@ -68,15 +68,16 @@ when the user has not already asked you to set topview-3d-cli up.
 
 ## Open the finished scene in Studio
 
-After the scene is checked and the renders have been looked at, open it in the local Studio.
-Studio is the checkout app `editor/apps/studio`, started with Node:
+After the scene is checked and the renders have been looked at, open the local Studio in the
+In-App Browser. Do not open it in the system browser.
 
 ```bash
 topview-3d-cli studio open <dir>
 ```
 
-The command starts Studio with Node on port 3002 when that port is free, and opens the system
-browser on this project. The project directory is `.topview-3d`. Studio saves edits back into
+The command only starts Studio with Node on port 3002 when that port is free. It returns a `url`
+and does not open a browser. Open that `url` in the In-App Browser. The project directory is
+`.topview-3d`. Studio saves edits back into
 that project. When the user says they changed the scene in Studio, re-read it with
 `topview-3d-cli document get <dir> --summary` and continue from that result. Do not replay the
 scene you built before the Studio edit.

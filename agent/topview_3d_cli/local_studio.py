@@ -2,7 +2,8 @@
 
 Studio is the Next.js app at ``editor/apps/studio``. It is not inside the published
 wheel, so this command only works from a repository checkout. It starts Studio with
-Node when port 3002 is free, then opens the system browser on this project.
+Node when port 3002 is free. It returns the project URL and does not open a browser; the
+caller opens that URL in the In-App Browser.
 """
 from __future__ import annotations
 
@@ -16,7 +17,6 @@ import subprocess
 import time
 import urllib.error
 import urllib.request
-import webbrowser
 from pathlib import Path
 
 from topview_3d_cli.local_errors import LocalProjectError
@@ -135,7 +135,6 @@ def open_studio(directory: str) -> dict:
         pid = _start(studio, _next_bin(studio), root)
         started = True
         _wait_until_listed(STUDIO_PORT, project_id)
-    webbrowser.open(url)
     return {
         "ok": True,
         "url": url,

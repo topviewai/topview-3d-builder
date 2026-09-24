@@ -8,7 +8,7 @@ description: >
   props or cameras; pose characters; check framing, grounding, spacing or collisions; render views
   of a scene as a reference for video generation; or works in a directory that contains
   `.topview-3d/`. Also use when a topview-3d-cli command fails or topview-3d-cli still has to be installed.
-  The Codex plugin is shown as Topview 3D Builder. After a scene is built, open it in the local Studio.
+  The Codex plugin is shown as Topview 3D Builder. After a scene is built, open the local Studio in the In-App Browser.
 ---
 
 # topview-3d-cli
@@ -101,7 +101,7 @@ Read the reference for a stage once per session, before its first command:
 | 6. Cameras | Mandatory bird's-eye overview plus purposeful story views | `references/camera.md` |
 | 7. Edit | Change only what was asked; batch syntax; keyframes | `references/edit.md` |
 | 8. Check | Numbers, renders, look at the PNGs, revise | `references/checks.md` |
-| 9. Studio | Open the finished scene in the local Studio | `references/doctor-browser.md` |
+| 9. Studio | Open the finished scene in the local Studio with the In-App Browser | `references/doctor-browser.md` |
 
 Asset search rules for props, characters and poses are in `references/asset-selection.md`.
 Installation, the browser and sandbox limits are in `references/doctor-browser.md`.
@@ -125,7 +125,7 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
 | Find a rendered PNG | `topview-3d-cli renders list <dir>`, `topview-3d-cli renders show <dir> [runId] [--frame N]` |
 | Plan record | `topview-3d-cli bom get <dir>`, `topview-3d-cli bom checkpoint <dir> patch.json` |
 | Structural validation | `topview-3d-cli document validate <dir>` |
-| Open in Studio | `topview-3d-cli studio open <dir>` |
+| Open in Studio | `topview-3d-cli studio open <dir>`, then open the returned `url` in the In-App Browser |
 
 ## Hard rules
 
@@ -144,3 +144,5 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
    a measurement or a failed BOM hard relation behind it. One `inspect views` per correction pass.
 8. Default timeline: 24 fps, 120 frames. Never paste image bytes or Base64 into messages; give
    paths.
+9. Open the local Studio in the In-App Browser. `studio open` only starts the server and returns
+   `url`; open that `url` in the In-App Browser, not the system browser.
