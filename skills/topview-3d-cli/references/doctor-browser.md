@@ -70,7 +70,9 @@ when the user has not already asked you to set topview-3d-cli up.
 ## Open the finished scene in Studio
 
 After the scene is checked and the renders have been looked at, open the local Studio in the
-In-App Browser. Do not open it in the system browser.
+In-App Browser so the user can view it. Do not open it in the system browser. Do not edit the
+scene in that page: moving a stool, checking bounds, or any other change goes through
+topview-3d-cli. Browser automation must not click or drag the Studio UI to change the scene.
 
 ```bash
 topview-3d-cli studio open <dir>

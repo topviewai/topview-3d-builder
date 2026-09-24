@@ -1,6 +1,8 @@
 # EDIT mode
 
-Start from the existing document and change only what the user asks.
+Start from the existing document and change only what the user asks. Every change is a
+topview-3d-cli write (`node batch`, `pose batch`, or `document apply`). Do not edit the open
+Studio page, and do not use browser automation to move nodes.
 
 - Read `layout.md` if not yet read; reconcile `topview-3d-cli bom get` with
   `topview-3d-cli document get --summary` and apply the layout procedure to the affected objects and their

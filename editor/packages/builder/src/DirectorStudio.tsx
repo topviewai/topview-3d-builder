@@ -12,7 +12,7 @@ import { LocaleProvider } from './locale'
 
 export type { DirectorApi, StudioCloseHandler }
 
-export const DEFAULT_AUTO_SAVE_INTERVAL_MS = 30_000
+export const DEFAULT_AUTO_SAVE_INTERVAL_MS = 5_000
 
 export interface DirectorStudioProps {
   /**
@@ -44,7 +44,7 @@ export interface DirectorStudioProps {
    */
   locale?: string
   /**
-   * 自动保存间隔。缺省 30000；`0` 关闭。
+   * 自动保存间隔。缺省 5000；`0` 关闭。
    * `saveDocument` 未实现时整条链关闭。
    */
   autoSaveIntervalMs?: number

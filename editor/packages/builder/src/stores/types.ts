@@ -165,7 +165,7 @@ export interface EnvironmentPatch {
 export type SaveState = 'idle' | 'saving' | 'saved' | 'error'
 
 export interface SaveOptions {
-  /** 默认 true；定时 autosave 传 false，避免 30s 一次 WebGL readback */
+  /** 默认 true；定时 autosave 传 false，避免按保存间隔做 WebGL readback */
   captureCover?: boolean
 }
 

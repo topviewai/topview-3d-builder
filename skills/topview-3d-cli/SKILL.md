@@ -8,7 +8,8 @@ description: >
   props or cameras; pose characters; check framing, grounding, spacing or collisions; render views
   of a scene as a reference for video generation; or works in a directory that contains
   `.topview-3d/`. Also use when a topview-3d-cli command fails or topview-3d-cli still has to be installed.
-  The Codex plugin is shown as Topview 3D Builder. After a scene is built, open the local Studio in the In-App Browser.
+  The Codex plugin is shown as Topview 3D Builder. Change the 3D scene only with topview-3d-cli.
+  After a scene is built, open the local Studio in the In-App Browser to view it, not to edit it.
 ---
 
 # topview-3d-cli
@@ -75,6 +76,9 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
   ids, dimensions or measurements.
 - After a render, open the returned PNG files and look at them before judging. A render that was
   not viewed is not visual evidence.
+- Change the 3D scene with topview-3d-cli (`node batch`, `pose batch`, `document apply`). Do not
+  click, drag, or type in the Studio page, and do not use browser automation to move or edit
+  nodes. The In-App Browser only opens Studio so the user can look at the scene.
 - One writer at a time: do not run a writing command while Studio is saving the same project.
   After the user edits in Studio, re-read with `document get` before planning the next change.
   Studio writes back through `project adopt`, so the project on disk is the edited scene.
@@ -147,7 +151,8 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
    a measurement or a failed BOM hard relation behind it. One `inspect views` per correction pass.
 8. Default timeline: 24 fps, 120 frames. Never paste image bytes or Base64 into messages; give
    paths.
-9. Open the local Studio in the In-App Browser. `studio open` only starts the server and returns
-   `url`; open that `url` in the In-App Browser, not the system browser. If it fails because
-   Next.js is not installed, run `pnpm install` in the checkout's `editor/` directory once and
-   retry `studio open` once. See `references/doctor-browser.md`.
+9. Change the 3D scene with the CLI. Do not edit it through the Studio page or browser automation.
+10. Open the local Studio in the In-App Browser so the user can view it. `studio open` only starts
+   the server and returns `url`; open that `url` in the In-App Browser, not the system browser.
+   If it fails because Next.js is not installed, run `pnpm install` in the checkout's `editor/`
+   directory once and retry `studio open` once. See `references/doctor-browser.md`.
