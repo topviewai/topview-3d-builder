@@ -37,6 +37,7 @@ renaming or removing a command or option fails the lint until the skill is updat
 | `topview-3d-cli studio open <dir>` | From a repository checkout, start `editor/apps/studio` with Node on `127.0.0.1:3002` when that port is free (`TOPVIEW3D_PROJECTS` set to this project) and open the system browser on `/?project=<id>`. Fails with `STUDIO_UNAVAILABLE` outside a checkout, `STUDIO_PROJECT_MISSING` when Studio is already running without this project, or `STUDIO_START_FAILED` when it does not become ready. |
 | `topview-3d-cli project init <dir> [--force]` | Create `<dir>/.topview-3d/` holding the empty director document and default camera (`cam-main`). |
 | `topview-3d-cli project status <dir>` | Metadata, a document summary, and dangling references. |
+| `topview-3d-cli project adopt <dir> <edit.json\|->` | Write a Studio edit back into the entity store. The JSON object has `document`, `fcurves`, or both; the omitted side stays as stored. Later CLI commands then continue from that edit. `adopted` is false when nothing changed. |
 | `topview-3d-cli document get <dir> [--summary \| --entity ID [--type node\|clip\|fcurves] [--include-curves]]` | Full document, merged fcurves, `entityVersions`, `sceneSequence`. `--summary` returns an outline without curves; `--entity` returns one node, clip or `fcurves__<nodeId>` shard with its `entityVersion` (`DOCUMENT_ENTITY_NOT_FOUND` otherwise). |
 | `topview-3d-cli document validate <dir>` | Schema-validate the stored document and fcurves; fails with `DOCUMENT_INVALID` (and `details.danglingReferences`) when a clip, fcurves shard or node references a missing node. |
 | `topview-3d-cli document apply <dir> <ops.json\|-> [--strict] [--dry-run]` | Apply one atomic batch. Refused with `DANGLING_REFERENCE` when it would add a reference to a missing node (references already stored do not block unrelated edits). |
@@ -176,6 +177,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `USAGE_INVALID` | 2 | Unknown command, missing argument or bad option. |
 | `PROJECT_NOT_INITIALIZED` | 2 | The directory has no .topview-3d project; run `project init`. |
 | `PROJECT_EXISTS` | 2 | `project init` target already contains a project; pass --force to replace it. |
+| `PROJECT_ADOPT_INVALID` | 2 | `project adopt` body must be a JSON object with document and/or fcurves. |
 | `OPERATIONS_NOT_FOUND` | 2 | The operations file does not exist. |
 | `OPERATIONS_JSON_INVALID` | 2 | The operations file is not JSON or not an operation batch. |
 | `RENDER_PAYLOAD_INVALID` | 2 | The render payload is not a JSON object of frames/width/height/cameraNodeId/publicAssetBase. |

@@ -1,18 +1,19 @@
-# Scene3D local CLI
+# Topview 3D Builder
 
-Scene3D builds and renders 3D director scenes entirely on your machine. The
-local `topview-3d-cli` CLI (Python) owns the project state and operation rules. A
-Node + Playwright renderer, built on the 3D Builder, produces the PNGs.
+Topview 3D Builder creates editable 3D scenes on your own machine, and those scenes
+guide AI video generation. You place characters, poses, props and cameras, adjust
+the blocking, and render reference frames. The 3D scene is the staging plan the
+video model follows. It is not the finished video.
 
-The target product is **Scene3D by TopView** (plugin `topview-3d-builder`, CLI package `topview-3d-cli`), a skills-only
-plugin for the OpenAI plugin directory (ChatGPT / Codex). The same skills are
-also meant for Cursor, Claude Code, and Codex CLI. The plugin runs the local CLI,
-with no MCP server, no login, account, or API key, and no telemetry.
+The scene stays in a local project directory (`.topview-3d/`) and can be edited
+again after it is built. `topview-3d-cli` (Python) owns that project. A Node
+renderer, built on the 3D Builder, writes the PNG frames. Open the same project
+in the local Studio to look at it and keep editing.
 
-This repository is the open-source workspace for getting there. The former hosted
-Agent/Docker runtime has been replaced by the local CLI and the `topview-3d-cli` agent skill; see
-[the migration plan](docs/scene3d-local-cli-migration-plan.md) for stages and
-status. The CLI ships as the `topview-3d-cli` wheel; it is not on PyPI yet.
+The Codex plugin is **Topview 3D Builder** (`topview-3d-builder`). It is a skill
+that runs this CLI: no MCP server, no login, and no uploads. The same skill works
+in the Codex CLI, Cursor, and Claude Code. Install the CLI from PyPI as
+`topview-3d-cli`.
 
 ## Repository layout
 
@@ -38,7 +39,7 @@ execution path.
 ## Install the plugin
 
 The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent; it has no MCP server and no
-app. The skill's first step runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.1` (or a
+app. The skill's first step runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.2` (or a
 local wheel, see [Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+,
 Node.js 20.6+ and uv or pipx on the machine. The public repository is
 [topviewai/topview-3d-builder](https://github.com/topviewai/topview-3d-builder).
@@ -90,17 +91,17 @@ or `~/.cache/topview-3d-cli`) by `topview-3d-cli browser ensure`.
 
 ### Without a checkout (pipx / uvx / pip)
 
-Until the package is published, build the wheel once (see below) or get it from a release, then:
-
 ```bash
-pipx install ./dist/topview_3d_cli-*.whl       # or: pip install <wheel> in a venv
-# uvx --from ./dist/topview_3d_cli-*.whl topview-3d-cli doctor
+pipx install topview-3d-cli
+# or, without a permanent install:
+uvx --python 3.12 topview-3d-cli@0.1.2 doctor
 topview-3d-cli browser ensure          # installs Playwright into the user cache and downloads Chromium
 topview-3d-cli doctor
 ```
 
-After publication this becomes `pipx install topview-3d-cli` or `uvx --python 3.12 topview-3d-cli@X` (a plain `uvx topview-3d-cli`
-fails when the default Python is older than 3.11).
+A plain `uvx topview-3d-cli` fails when the default Python is older than 3.11, so pass
+`--python 3.12`. If pip is pointed at a mirror that does not have this version yet, retry
+with the official index: `python3 -m pip install --user --index-url https://pypi.org/simple/ topview-3d-cli==0.1.2`.
 
 ### Developer install from a checkout
 
@@ -181,14 +182,10 @@ pnpm -C editor --filter @topview/3d-builder test:evaluate
 pnpm -C editor --filter @topview/3d-director-cli test
 ```
 
-## Development rule
+## For contributors
 
-Work only in this repository after the initial snapshot. The original editor and
-agent checkouts are upstream source references and must not be used as the
-working tree for this migration.
-
-Read [the migration plan](docs/scene3d-local-cli-migration-plan.md) before
-changing the CLI contract or the local project format.
+The CLI contract and the `.topview-3d/` project format are documented in
+[docs/topview-3d-cli.md](docs/topview-3d-cli.md). Read that before changing either one.
 
 ## License
 

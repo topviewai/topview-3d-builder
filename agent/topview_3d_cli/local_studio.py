@@ -9,7 +9,9 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import socket
+import sys
 import subprocess
 import time
 import urllib.error
@@ -94,6 +96,7 @@ def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
     log_path = log_dir / "studio.log"
     env = dict(os.environ)
     env["TOPVIEW3D_PROJECTS"] = str(project_root)
+    env["TOPVIEW3D_CLI"] = shutil.which("topview-3d-cli") or sys.argv[0]
     try:
         env["TOPVIEW3D_BUILTIN_ASSETS"] = str(runtime().builtin_assets)
     except LocalProjectError:

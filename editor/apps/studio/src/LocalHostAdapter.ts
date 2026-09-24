@@ -61,7 +61,7 @@ function keyUrl(key: string): string {
 export type LocalDocumentSource = 'draft' | 'project'
 
 /**
- * 纯本地宿主：草稿走 /api/drafts，CLI 项目走 /api/projects（只读），
+ * 纯本地宿主：草稿走 /api/drafts，CLI 项目走 /api/projects。两边都可以保存。
  * 素材搜索与文件都来自本机素材清单（/api/local-assets）。没有登录，也不访问外网。
  */
 export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
@@ -72,13 +72,8 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
   private readonly base: string
 
   constructor(source: LocalDocumentSource = 'draft') {
-    this.readOnly = source === 'project'
+    this.readOnly = false
     this.base = source === 'project' ? '/api/projects' : '/api/drafts'
-    if (this.readOnly) {
-      // 没有 saveDocument 时 builder 关闭整条保存链。
-      this.saveDocument = undefined
-      this.saveFCurves = undefined
-    }
   }
 
   async loadDocument(documentId: string): Promise<DirectorDocument> {
@@ -88,12 +83,12 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
   }
 
   saveDocument?: (documentId: string, doc: DirectorDocument) => Promise<void> = async (documentId, doc) => {
-    const res = await fetch(`/api/drafts/${documentId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(doc) })
+    const res = await fetch(`${this.base}/${documentId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(doc) })
     if (!res.ok) throw new Error(`保存失败: HTTP ${res.status}`)
   }
 
   saveFCurves?: (documentId: string, data: unknown) => Promise<void> = async (documentId, data) => {
-    const res = await fetch(`/api/drafts/${documentId}/fcurves`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+    const res = await fetch(`${this.base}/${documentId}/fcurves`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
     if (!res.ok) throw new Error(`关键帧保存失败: HTTP ${res.status}`)
   }
 

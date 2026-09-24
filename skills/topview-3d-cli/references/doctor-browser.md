@@ -24,14 +24,14 @@ Playwright and Chromium.
 
 ## Installing topview-3d-cli
 
-Use this skill's pinned version, 0.1.1, and stop at the first route that works:
+Use this skill's pinned version, 0.1.2, and stop at the first route that works:
 
-1. `uvx --python 3.12 topview-3d-cli@0.1.1 doctor --json`: runs without a permanent install;
+1. `uvx --python 3.12 topview-3d-cli@0.1.2 doctor --json`: runs without a permanent install;
    `--python 3.12` makes uv use (or download) a Python it can run the package with.
-   Prefix every later command the same way (`uvx --python 3.12 topview-3d-cli@0.1.1 ...`).
-2. `pipx run --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`, or
-   `pipx install topview-3d-cli==0.1.1` for a permanent `topview-3d-cli` on PATH.
-3. `python3 -m pip install --user topview-3d-cli==0.1.1`, then make sure the user scripts
+   Prefix every later command the same way (`uvx --python 3.12 topview-3d-cli@0.1.2 ...`).
+2. `pipx run --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`, or
+   `pipx install topview-3d-cli==0.1.2` for a permanent `topview-3d-cli` on PATH.
+3. `python3 -m pip install --user topview-3d-cli==0.1.2`, then make sure the user scripts
    directory is on PATH.
 
 If step 2 or 3 fails because the configured index has no such version (a mirror that has not
@@ -39,9 +39,9 @@ synced yet reports `Could not find a version` and `from versions: none`), retry 
 command against the official PyPI simple index and do not change the user's pip configuration.
 Build the index as scheme https, host `pypi.org`, path `/simple/`, and pass it like this:
 
-- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.1`
-- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`
-- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.1`
+- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.2`
+- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`
+- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.2`
 
 Other pip failures (no network, permissions, a broken environment) are not an index problem;
 do not switch the index for those.
@@ -76,7 +76,10 @@ topview-3d-cli studio open <dir>
 ```
 
 The command starts Studio with Node on port 3002 when that port is free, and opens the system
-browser on this project. The project directory is `.topview-3d`.
+browser on this project. The project directory is `.topview-3d`. Studio saves edits back into
+that project. When the user says they changed the scene in Studio, re-read it with
+`topview-3d-cli document get <dir> --summary` and continue from that result. Do not replay the
+scene you built before the Studio edit.
 Do this once at the end of a scene, not after every edit.
 
 - `STUDIO_UNAVAILABLE`: this install has no Studio (the published package does not include it).

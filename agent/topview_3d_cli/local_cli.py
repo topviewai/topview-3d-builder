@@ -22,6 +22,7 @@ from topview_3d_cli.local_errors import EXIT_INVALID_INPUT, EXIT_OK, exit_code_f
 from topview_3d_cli.local_project import (
     CLI_VERSION,
     LocalProjectError,
+    adopt_edit,
     apply_operations,
     init_project,
     open_project,
@@ -262,6 +263,9 @@ def _parser() -> argparse.ArgumentParser:
     init.add_argument("directory")
     init.add_argument("--force", action="store_true", help="replace an existing project")
     project.add_parser("status").add_argument("directory")
+    adopt = project.add_parser("adopt", help="write a Studio edit back into the project so later commands continue from it")
+    adopt.add_argument("directory")
+    adopt.add_argument("payload", help="{\"document\"?, \"fcurves\"?} JSON file, or - for stdin")
 
     document = group("document", "read, validate and edit the director document")
     get = document.add_parser("get", help="the stored document; --summary or --entity for smaller reads")
@@ -411,7 +415,11 @@ def _dispatch(args: argparse.Namespace) -> dict[str, Any]:
     if command == "studio":
         return open_studio(args.directory)
     if command == "project":
-        return init_project(args.directory, force=args.force) if sub == "init" else project_status(args.directory)
+        if sub == "init":
+            return init_project(args.directory, force=args.force)
+        if sub == "adopt":
+            return adopt_edit(args.directory, load_spec(args.payload, "PROJECT_ADOPT_INVALID"))
+        return project_status(args.directory)
     if command == "document":
         if sub == "get":
             return document_view(args.directory, summary=args.summary, entity=args.entity,

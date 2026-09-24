@@ -25,9 +25,11 @@ from topview_3d_cli.director_document import (
     validate_fcurves,
 )
 from topview_3d_cli.director_operations import (
+    MAX_BATCH_OPERATIONS,
     DirectorConflictError,
     DirectorOperationError,
     DirectorStore,
+    diff_operations,
     genesis_store,
 )
 from topview_3d_cli.local_errors import LocalProjectError
@@ -191,6 +193,33 @@ def base_result(project: Project) -> dict[str, Any]:
     if project.migrated_from is not None:
         result["migrationPending"] = {"fromSchemaVersion": project.migrated_from, "toSchemaVersion": SCHEMA_VERSION}
     return result
+
+
+def adopt_edit(root: str | os.PathLike[str], payload: dict[str, Any]) -> dict[str, Any]:
+    """Replace the stored scene with a Studio edit so the next CLI command continues from it.
+
+    ``payload`` may include ``document``, ``fcurves``, or both. The omitted side stays as stored.
+    The entity store remains authoritative: the edit is applied as operations, then rewritten.
+    """
+    if not isinstance(payload, dict) or not ({"document", "fcurves"} & payload.keys()):
+        raise LocalProjectError("PROJECT_ADOPT_INVALID", "body must be an object with document and/or fcurves")
+    project = open_project(root)
+    current = project.store.assemble()
+    document = payload["document"] if "document" in payload else current["document"]
+    fcurves = payload["fcurves"] if "fcurves" in payload else current["fcurves"]
+    try:
+        operations = diff_operations(current, document, fcurves, stem="studio")
+    except (TypeError, ValueError) as exc:
+        raise LocalProjectError("INVALID_DIRECTOR_DOCUMENT", str(exc)) from exc
+    if not operations:
+        return {**base_result(project), "adopted": False, "operations": 0}
+    try:
+        for start in range(0, len(operations), MAX_BATCH_OPERATIONS):
+            project.store.apply(operations[start:start + MAX_BATCH_OPERATIONS], strict_versions=False, batch_id="studio")
+    except (DirectorConflictError, DirectorOperationError, ValueError) as exc:
+        raise LocalProjectError("INVALID_DIRECTOR_DOCUMENT", str(exc)) from exc
+    commit(project)
+    return {**base_result(project), "adopted": True, "operations": len(operations)}
 
 
 def project_status(root: str | os.PathLike[str]) -> dict[str, Any]:

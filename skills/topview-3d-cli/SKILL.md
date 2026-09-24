@@ -38,10 +38,10 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
 `checks.<name>.hint` and follow `references/doctor-browser.md`:
 
 - **`topview-3d-cli` not found:** run it without installing, pinned to this skill's version:
-  `uvx --python 3.12 topview-3d-cli@0.1.1 doctor --json` (`--python 3.12` lets uv fetch a suitable
+  `uvx --python 3.12 topview-3d-cli@0.1.2 doctor --json` (`--python 3.12` lets uv fetch a suitable
   Python when the default one is older than 3.11). Without `uvx`, use
-  `pipx run --spec topview-3d-cli==0.1.1 topview-3d-cli doctor --json`, then
-  `python3 -m pip install --user topview-3d-cli==0.1.1`. If that pip or pipx install fails
+  `pipx run --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`, then
+  `python3 -m pip install --user topview-3d-cli==0.1.2`. If that pip or pipx install fails
   because the configured index has no such version (a mirror that has not synced yet reports
   `from versions: none`), retry the same command with `--index-url` set to the official PyPI
   simple index: scheme https, host `pypi.org`, path `/simple/`. For pipx, pass that index inside
@@ -72,7 +72,9 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
   ids, dimensions or measurements.
 - After a render, open the returned PNG files and look at them before judging. A render that was
   not viewed is not visual evidence.
-- One writer per project: do not run two writing commands on the same project at once.
+- One writer at a time: do not run a writing command while Studio is saving the same project.
+  After the user edits in Studio, re-read with `document get` before planning the next change.
+  Studio writes back through `project adopt`, so the project on disk is the edited scene.
 
 ## Each session starts with context
 

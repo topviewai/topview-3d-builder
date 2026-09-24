@@ -86,6 +86,20 @@ def test_studio_open_needs_a_checkout(capsys, project, monkeypatch):
     assert code == 1 and body["code"] == "STUDIO_UNAVAILABLE"
 
 
+def test_adopt_studio_edit_is_what_the_cli_reads_next(capsys, project, tmp_path):
+    document = document_get(project)["document"]
+    camera = next(node for node in document["content"]["nodes"] if node["id"] == "cam-main")
+    camera["name"] = "Studio camera"
+    payload = tmp_path / "edit.json"
+    payload.write_text(json.dumps({"document": document}), encoding="utf-8")
+    code, body = run(capsys, "project", "adopt", project, payload)
+    assert code == 0 and body["adopted"] is True and body["operations"] >= 1
+    reread = document_get(project)["document"]
+    assert next(node["name"] for node in reread["content"]["nodes"] if node["id"] == "cam-main") == "Studio camera"
+    code, again = run(capsys, "project", "adopt", project, payload)
+    assert code == 0 and again["adopted"] is False
+
+
 def test_init_refuses_existing_project(capsys, project):
     code, body = run(capsys, "project", "init", project)
     assert code == 2 and body["code"] == "PROJECT_EXISTS"

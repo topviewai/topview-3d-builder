@@ -130,12 +130,12 @@ export function WorkbenchClient() {
         {projects.length > 0 ? (
           <section className="wb-section">
             <div className="wb-section-head">
-              <h2>CLI 项目（只读）</h2>
+              <h2>CLI 项目</h2>
               <span className="wb-count">{projects.length}</span>
             </div>
             <div className="wb-grid">
               {projects.map((project) => (
-                <DraftCard key={project.id} draft={project} readonly onOpen={openProject} />
+                <DraftCard key={project.id} draft={project} onOpen={openProject} />
               ))}
             </div>
           </section>

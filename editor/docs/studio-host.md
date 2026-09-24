@@ -55,12 +55,10 @@ pnpm build && pnpm --filter @topview/3d-studio start
 | 来源 | 列在工作台 | 读 | 写 |
 |---|---|---|---|
 | 本地草稿 | 「我的草稿」 | `GET /api/drafts/{id}`（+ `/fcurves`） | `PUT /api/drafts/{id}`（+ `/fcurves`），文件在 `apps/studio/drafts/`（已 gitignore） |
-| CLI 项目 | 「CLI 项目（只读）」，来自 `TOPVIEW3D_PROJECTS` | `GET /api/projects/{id}`（+ `/fcurves`），读 `.topview-3d/document.json` 与 `fcurves.json` | 不写 |
+| CLI 项目 | 「CLI 项目」，来自 `TOPVIEW3D_PROJECTS` | `GET /api/projects/{id}`（+ `/fcurves`），读 `.topview-3d/document.json` 与 `fcurves.json` | `PUT` 同一路径，经 `topview-3d-cli project adopt` 写回 `entities.json` |
 
-CLI 项目只读：`document.json` / `fcurves.json` 是 CLI 从 `entities.json` 派生的视图，Studio 直接覆写会被
-下一次 CLI 写入冲掉，也绕过了 CLI 的单写者版本号。所以 Studio 以 `readOnly` 打开（写锁开启、不自动保存），
-修改请用 `topview-3d-cli` CLI。要让 Studio 可写回 CLI 项目，需要把整份文档的差异翻译成 CLI 操作，
-这不在当前范围内。
+Studio 里改过的 CLI 项目会写回实体库。下一次 `topview-3d-cli` 读到的就是这次编辑，Agent 从这份结果继续改。
+保存时 Studio 进程要能运行 `topview-3d-cli`（`studio open` 会设置 `TOPVIEW3D_CLI`）。同一时刻只让一边写入。
 
 ---
 

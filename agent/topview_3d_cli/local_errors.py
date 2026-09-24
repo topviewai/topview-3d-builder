@@ -16,6 +16,7 @@ ERROR_CODES: dict[str, tuple[int, str]] = {
     "USAGE_INVALID": (2, "Unknown command, missing argument or bad option."),
     "PROJECT_NOT_INITIALIZED": (2, "The directory has no .topview-3d project; run `project init`."),
     "PROJECT_EXISTS": (2, "`project init` target already contains a project; pass --force to replace it."),
+    "PROJECT_ADOPT_INVALID": (2, "`project adopt` body must be a JSON object with document and/or fcurves."),
     "OPERATIONS_NOT_FOUND": (2, "The operations file does not exist."),
     "OPERATIONS_JSON_INVALID": (2, "The operations file is not JSON or not an operation batch."),
     "RENDER_PAYLOAD_INVALID": (2, "The render payload is not a JSON object of frames/width/height/cameraNodeId/publicAssetBase."),
