@@ -4,7 +4,8 @@
 #
 #   scripts/install.sh [--dev] [--install-uv] [--skip-node] [--skip-browser]
 #
-#   --dev           install the whole editor workspace (studio app, test tooling) and pytest
+#   --dev           install the whole editor workspace (test tooling included) and pytest.
+#                   The default install already includes Studio (Next.js) and the renderer.
 #   --install-uv    if no Python >= 3.11 is found, install uv (https://astral.sh/uv) and use it
 #   --skip-node     skip the Node/pnpm/builder steps
 #   --skip-browser  skip the Playwright Chromium download
@@ -113,7 +114,8 @@ if [ "$SKIP_NODE" = 0 ]; then
   if [ "$DEV" = 1 ]; then
     "${PNPM[@]}" -C "$EDITOR" install --frozen-lockfile
   else
-    "${PNPM[@]}" -C "$EDITOR" install --frozen-lockfile --filter "@topview/3d-director-cli..."
+    "${PNPM[@]}" -C "$EDITOR" install --frozen-lockfile \
+      --filter "@topview/3d-director-cli..." --filter "@topview/3d-studio..."
   fi
 
   step "Building @topview/3d-builder"

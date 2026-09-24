@@ -49,6 +49,9 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
   `uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json`; for a source checkout see
   `references/doctor-browser.md`.
 - **`node` fails:** Node.js 20.6 or newer (with npm) is required; ask the user to install it.
+- **Source checkout:** during this setup step, run `scripts/install.sh` (or `install.ps1` on
+  Windows). It installs the renderer and Studio's Next.js together. Do not install only the
+  renderer package.
 - **`playwright` or `chromium` fails:** run `topview-3d-cli browser ensure` once (it downloads the pinned
   Chromium into the user cache).
 - **Rendering fails inside an agent sandbox** although `doctor` passes: the sandbox blocks the
@@ -145,4 +148,6 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
 8. Default timeline: 24 fps, 120 frames. Never paste image bytes or Base64 into messages; give
    paths.
 9. Open the local Studio in the In-App Browser. `studio open` only starts the server and returns
-   `url`; open that `url` in the In-App Browser, not the system browser.
+   `url`; open that `url` in the In-App Browser, not the system browser. If it fails because
+   Next.js is not installed, run `pnpm install` in the checkout's `editor/` directory once and
+   retry `studio open` once. See `references/doctor-browser.md`.

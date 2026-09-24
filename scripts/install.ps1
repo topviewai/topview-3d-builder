@@ -6,7 +6,8 @@
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File scripts\install.ps1 [-Dev] [-InstallUv] [-SkipNode] [-SkipBrowser]
 
-  -Dev          install the whole editor workspace (studio app, test tooling) and pytest
+  -Dev          install the whole editor workspace (test tooling included) and pytest.
+                The default install already includes Studio (Next.js) and the renderer.
   -InstallUv    if no Python >= 3.11 is found, install uv (https://astral.sh/uv) and use it
   -SkipNode     skip the Node/pnpm/builder steps
   -SkipBrowser  skip the Playwright Chromium download
@@ -147,7 +148,7 @@ if (-not $SkipNode) {
   if ($Dev) {
     Invoke-Native $pnpm[0] ($pnpmArgs + @('-C', $Editor, 'install', '--frozen-lockfile'))
   } else {
-    Invoke-Native $pnpm[0] ($pnpmArgs + @('-C', $Editor, 'install', '--frozen-lockfile', '--filter', '@topview/3d-director-cli...'))
+    Invoke-Native $pnpm[0] ($pnpmArgs + @('-C', $Editor, 'install', '--frozen-lockfile', '--filter', '@topview/3d-director-cli...', '--filter', '@topview/3d-studio...'))
   }
 
   Write-Step 'Building @topview/3d-builder'

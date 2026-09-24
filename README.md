@@ -121,7 +121,7 @@ The script:
 
 1. Creates `agent/.venv` and installs the CLI into it in editable mode. It uses `uv` when present,
    otherwise `python -m venv` plus pip. An editable install uses the checkout as its runtime.
-2. Installs the director-cli workspace dependencies with `pnpm install --frozen-lockfile`.
+2. Installs the renderer and Studio (Next.js) with `pnpm install --frozen-lockfile`. `--dev` also installs the rest of the editor workspace.
 3. Builds `@topview/3d-builder`.
 4. Runs `topview-3d-cli browser ensure` to download Playwright Chromium.
 5. Runs `topview-3d-cli doctor`.

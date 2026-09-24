@@ -51,10 +51,11 @@ When the package index is not an option (no network to PyPI, or a build that is 
 - **A wheel file** the user provides (`topview_3d_cli-<version>-py3-none-any.whl`):
   `uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json`, and the same prefix for
   every later command; or `pipx install <path-to-wheel>` for a permanent command.
-- **A source checkout** of the repository: the renderer bundle has to be built first, so follow
-  the checkout's README (`install.sh`, or `install.ps1` on Windows, builds the editor and installs
-  the command into `agent/.venv`), or build a wheel there with `scripts/build_dist.py` and use it
-  as above. Installing straight from the `agent/` directory without that build step gives
+- **A source checkout** of the repository: run `scripts/install.sh` (or `install.ps1` on
+  Windows) during setup, before the first scene. It installs the CLI into `agent/.venv`, the
+  renderer, and Studio's Next.js. Do not install only the renderer package; that can render PNGs
+  and then fail `studio open` because Next.js is missing. Installing straight from the `agent/`
+  directory without that build step gives
   `RUNTIME_MISSING`.
 
 Then run `topview-3d-cli browser ensure` once. It is idempotent: it installs the pinned Playwright into
@@ -83,8 +84,15 @@ that project. When the user says they changed the scene in Studio, re-read it wi
 scene you built before the Studio edit.
 Do this once at the end of a scene, not after every edit.
 
-- `STUDIO_UNAVAILABLE`: this install has no Studio (the published package does not include it).
-  Say so and stop; do not build another viewer.
+- `STUDIO_UNAVAILABLE` and the error says Next.js is not installed: the checkout is there, but
+  `editor/` dependencies were not installed (a render-only setup does not include Studio). From
+  the checkout that contains this CLI — if the command is `<checkout>/agent/.venv/bin/topview-3d-cli`,
+  the checkout is `<checkout>` — run `pnpm install` in `<checkout>/editor` once (pnpm 8 or newer;
+  `corepack enable pnpm` is enough when pnpm is missing). Then run `studio open` one more time
+  and open the returned `url` in the In-App Browser. Do not treat this as a missing Studio.
+- `STUDIO_UNAVAILABLE` and the error says Studio is not part of this install: this copy has no
+  `editor/apps/studio` (the published package does not include it). Say so and stop; do not build
+  another viewer.
 - `STUDIO_PROJECT_MISSING`: a Studio is already running without this project. Ask the user to
   stop it, then run the command again.
 - `STUDIO_START_FAILED`: Node did not bring Studio up. Report the error and do not retry in a loop.
