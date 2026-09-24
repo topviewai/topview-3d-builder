@@ -57,7 +57,7 @@ def write_json(path: Path, value) -> Path:
 
 
 def state_bytes(project: Path) -> dict[str, bytes]:
-    return {path.name: path.read_bytes() for path in (project / ".topview3d").glob("*.json")}
+    return {path.name: path.read_bytes() for path in (project / ".topview-3d").glob("*.json")}
 
 
 @pytest.fixture
@@ -308,7 +308,7 @@ def test_inspect_views_rejects_bad_specs(tmp_path, capsys, monkeypatch, scene):
         {"cameraNodeId": "cam-main", "frames": [0]}]})
     assert run(capsys, "inspect", "views", scene, spec)[1]["code"] == "SCENE_SEQUENCE_CONFLICT"
     assert run(capsys, "inspect", "views", scene, spec, "--camera", "cam-main")[1]["code"] == "USAGE_INVALID"
-    assert not (scene / ".topview3d" / "bom.json").exists()
+    assert not (scene / ".topview-3d" / "bom.json").exists()
 
 
 def test_pair_overlap():

@@ -1,4 +1,4 @@
-"""``.topview3d/bom.json``: the plan / constraint record kept next to the director document."""
+"""``.topview-3d/bom.json``: the plan / constraint record kept next to the director document."""
 from __future__ import annotations
 
 import json

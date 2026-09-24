@@ -19,7 +19,7 @@ plugin directory. The plugin is a set of skills that drive a local Python `topvi
 ```text
 skills/topview-3d-cli (SKILL.md + references/)
     -> uvx --from <pkg>==X topview-3d-cli ...        (local process on the user's machine)
-        -> local .topview3d project              (single writer, offline)
+        -> local .topview-3d project              (single writer, offline)
         -> Node + Playwright renderer          (PNG output inside the project)
 ```
 
@@ -42,7 +42,7 @@ skills/topview-3d-cli (SKILL.md + references/)
 | Python import package | `topview_3d_cli` (`python -m topview_3d_cli`) |
 | Command | `topview-3d-cli` (no `scene3d` alias) |
 | Skill | `skills/topview-3d-cli` (`topview-3d-builder:topview-3d-cli`, 33 characters) |
-| Project data directory | `.topview3d/` |
+| Project data directory | `.topview-3d/` |
 | User cache | `~/Library/Caches/topview-3d-cli`, `%LOCALAPPDATA%\topview-3d-cli\Cache`, `~/.cache/topview-3d-cli` |
 | Environment variables | `TOPVIEW3D_*` |
 
@@ -106,7 +106,7 @@ the operation kinds, the error-code table, and the project format. In short:
 ## Local project format (schemaVersion 2)
 
 ```text
-.topview3d/
+.topview-3d/
 ├── metadata.json   format, schemaVersion, cliVersion, builderVersion, revision, sceneSequence, updatedAt
 ├── entities.json   authoritative entity store (versions, tombstones, sequence, operation log)
 ├── document.json   derived view: assembled director document
@@ -234,7 +234,7 @@ Delivered:
 - `render.mjs` takes `outputDir` as a parameter. It must be an absolute path to
   `<…>/renders/<runId>`: no `.` or `..` segments, a `runId` matching `[A-Za-z0-9_-]{1,128}`, and a parent
   named `renders`. The checks accept POSIX and Windows paths. The `/tmp/director` root is gone.
-- The CLI renders straight into `.topview3d/renders/<runId>/`; nothing is moved afterwards.
+- The CLI renders straight into `.topview-3d/renders/<runId>/`; nothing is moved afterwards.
 - Each render writes `render.json`: run id, creation time, resolution, camera, `sceneSequence`, frames
   and contact sheet (file names, sizes, SHA-256), blocked requests, and CLI metadata (revision,
   document SHA-256, builder version, CLI version).
@@ -257,7 +257,7 @@ shipped in phase 1 (motions: see "Phase 2: motion library"). No Mixamo-derived d
 Delivered:
 
 - Asset manifests (`scene3d-asset-manifest` v1): the built-in root `builtin-assets/`, overridable with
-  `TOPVIEW3D_BUILTIN_ASSETS`, and the project root `.topview3d/assets/`. Entries record id, kind, key,
+  `TOPVIEW3D_BUILTIN_ASSETS`, and the project root `.topview-3d/assets/`. Entries record id, kind, key,
   file, size, SHA-256, licence, and source. Paths outside the root are rejected.
 - `topview-3d-cli asset list` and `topview-3d-cli asset import` (character, prop, pose; no motion kind).
 - `render` resolves every character and prop model through the manifests and passes an explicit
@@ -421,7 +421,7 @@ offline data and the shared operation engine. Stage 8 rewrites the skill against
 | `inspect_director_views` | `inspect views <dir> [views.json] [--camera]… [--frames] [--primary]` | Render runs in the project; evidence goes to the BOM. |
 | `render_director_frames` | `render <dir> [payload.json]` | |
 | `get_director_render_image` | `renders show <dir> [runId] [--frame N]`, `renders list <dir>` | Returns the PNG path and a verified sha256. |
-| `get_bom`, `checkpoint_bom` | `bom get <dir>`, `bom checkpoint <dir> <patch.json>` | Stored in `.topview3d/bom.json`. |
+| `get_bom`, `checkpoint_bom` | `bom get <dir>`, `bom checkpoint <dir> <patch.json>` | Stored in `.topview-3d/bom.json`. |
 
 New helpers with no MCP counterpart: `camera presets` (preset ids for `add_camera`) and `node delete`
 (the cascading delete).
@@ -510,7 +510,7 @@ Acceptance (met, macOS):
     canvas copy, draft ensure, bindings, host defaults, object-storage signing, asset and media
     proxies) are removed, together with the online adapters and the unused AWS SDK dependencies.
   - `LocalHostAdapter` reads the same asset manifests as the CLI (`builtin-assets/` plus the
-    `.topview3d/assets/` of every project in `TOPVIEW3D_PROJECTS`) through `/api/local-assets/*`, which
+    `.topview-3d/assets/` of every project in `TOPVIEW3D_PROJECTS`) through `/api/local-assets/*`, which
     serves only files listed in a manifest.
   - Local drafts stay in `apps/studio/drafts/`. CLI projects listed in `TOPVIEW3D_PROJECTS` open
     read-only; writing back would have to translate whole-document edits into CLI operations, which

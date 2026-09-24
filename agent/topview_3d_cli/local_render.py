@@ -1,4 +1,4 @@
-"""Render runs under ``.topview3d/renders/<runId>`` with the Node renderer and local model files."""
+"""Render runs under ``.topview-3d/renders/<runId>`` with the Node renderer and local model files."""
 from __future__ import annotations
 
 import hashlib

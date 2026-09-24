@@ -14,7 +14,7 @@ EXIT_INVALID_INPUT = 2
 ERROR_CODES: dict[str, tuple[int, str]] = {
     # Command line and input files
     "USAGE_INVALID": (2, "Unknown command, missing argument or bad option."),
-    "PROJECT_NOT_INITIALIZED": (2, "The directory has no .topview3d project; run `project init`."),
+    "PROJECT_NOT_INITIALIZED": (2, "The directory has no .topview-3d project; run `project init`."),
     "PROJECT_EXISTS": (2, "`project init` target already contains a project; pass --force to replace it."),
     "OPERATIONS_NOT_FOUND": (2, "The operations file does not exist."),
     "OPERATIONS_JSON_INVALID": (2, "The operations file is not JSON or not an operation batch."),
@@ -34,7 +34,7 @@ ERROR_CODES: dict[str, tuple[int, str]] = {
     "ENTITY_NOT_FOUND": (2, "Delete targets an entity that never existed."),
     "DIRECTOR_NODE_NOT_FOUND": (2, "A referenced node does not exist (the message names it; batches add details.index)."),
     "DOCUMENT_ENTITY_NOT_FOUND": (2, "`document get --entity` found no node, clip or fcurves shard with that id."),
-    "RENDER_NOT_FOUND": (2, "No such render run or frame image in .topview3d/renders."),
+    "RENDER_NOT_FOUND": (2, "No such render run or frame image in .topview-3d/renders."),
     "BOM_CHECKPOINT_INVALID": (2, "`bom checkpoint` patch fails its schema or repeats/conflicts ids."),
     "BOM_TOO_LARGE": (2, "The merged BOM would exceed 64 KiB."),
     # Operation shape (nothing is applied)
@@ -72,7 +72,7 @@ ERROR_CODES: dict[str, tuple[int, str]] = {
     "BUILDER_PACKAGE_UNREADABLE": (1, "editor/packages/builder/package.json is missing or has no version."),
     "ASSET_MANIFEST_INVALID": (1, "An asset manifest is corrupt or lists a path outside its root."),
     "POSE_ASSET_INVALID": (1, "A pose file is larger than 1 MiB or lacks hips and 1-256 bone quaternions."),
-    "BOM_JSON_INVALID": (1, ".topview3d/bom.json is corrupt; fix or delete it."),
+    "BOM_JSON_INVALID": (1, ".topview-3d/bom.json is corrupt; fix or delete it."),
     "RENDER_IMAGE_INVALID": (1, "A render image is not a PNG or no longer matches the sha256 in render.json."),
     "ASSET_FILE_MISSING": (1, "A manifest entry points to a file that does not exist."),
     "ASSET_NOT_AVAILABLE": (1, "A character or prop model in the document has no local asset (see details)."),
@@ -87,6 +87,9 @@ ERROR_CODES: dict[str, tuple[int, str]] = {
     "RENDER_RESULT_MISSING": (1, "The Node renderer printed no result."),
     "RENDER_RESULT_INVALID": (1, "The Node renderer printed a non-JSON result."),
     "DOCTOR_FAILED": (1, "Plain `doctor` found a missing or outdated dependency (`doctor --json` always exits 0)."),
+    "STUDIO_UNAVAILABLE": (1, "Studio is not in this install: it lives in editor/apps/studio of a checkout with Next.js installed."),
+    "STUDIO_START_FAILED": (1, "Node started Studio, but it did not list this project on port 3002."),
+    "STUDIO_PROJECT_MISSING": (1, "Studio is already running on port 3002 without this project; stop it and retry."),
     "INTERNAL_ERROR": (1, "Unexpected failure; the message carries the exception."),
 }
 

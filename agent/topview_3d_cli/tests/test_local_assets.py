@@ -177,7 +177,7 @@ def test_render_writes_into_project_with_metadata_and_local_assets(capsys, built
     monkeypatch.setattr(local_cli.subprocess, "run", fake_run)
     code, body = run(capsys, "render", project)
     assert code == 0
-    assert Path(seen["outputDir"]) == (project / ".topview3d" / "renders" / body["runId"]).resolve()
+    assert Path(seen["outputDir"]) == (project / ".topview-3d" / "renders" / body["runId"]).resolve()
     assert seen["localAssets"] == {CHARACTER_KEY: str((builtin / "characters/scout.glb").resolve())}
     assert seen["publicAssetBase"] == ""
     assert set(seen["metadata"]) == {"revision", "documentSha256", "builderVersion", "cliVersion"}

@@ -1,7 +1,7 @@
 {
   "name": "topview-3d-builder",
   "interface": {
-    "displayName": "Scene3D by TopView"
+    "displayName": "Topview 3D Builder"
   },
   "plugins": [
     {

@@ -1,7 +1,7 @@
 # Layout from the BOM (NEW and EDIT)
 
 The scene document is the authority for the actual nodes, transforms, geometry, poses and camera
-settings. The BOM (`.topview3d/bom.json`) stores only the meaning and requirements the scene cannot
+settings. The BOM (`.topview-3d/bom.json`) stores only the meaning and requirements the scene cannot
 reconstruct. It is not a second scene snapshot and not a constraint solver.
 
 Layout represents physical space abstractly so that several cameras describe one consistent world.

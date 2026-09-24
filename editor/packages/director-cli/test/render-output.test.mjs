@@ -12,12 +12,12 @@ test('outputDir is required and must be absolute', () => {
 test('outputDir must be exactly one run directory below a renders directory', () => {
   for (const bad of [
     '/tmp/director/out',
-    '/project/.topview3d/renders',
-    '/project/.topview3d/renders/',
-    '/project/.topview3d/renders/abc/def',
-    '/project/.topview3d/renders/../renders/abc',
-    '/project/.topview3d/renders/./abc',
-    '/project/.topview3d/renders/a b',
+    '/project/.topview-3d/renders',
+    '/project/.topview-3d/renders/',
+    '/project/.topview-3d/renders/abc/def',
+    '/project/.topview-3d/renders/../renders/abc',
+    '/project/.topview-3d/renders/./abc',
+    '/project/.topview-3d/renders/a b',
     '/renders/..',
   ]) {
     assert.throws(() => resolveOutputDir(bad), /RENDER_OUTPUT_DIR_INVALID/, bad)
@@ -25,7 +25,7 @@ test('outputDir must be exactly one run directory below a renders directory', ()
 })
 
 test('project and legacy run dirs are accepted', () => {
-  assert.equal(resolveOutputDir('/project/.topview3d/renders/abc'), path.resolve('/project/.topview3d/renders/abc'))
+  assert.equal(resolveOutputDir('/project/.topview-3d/renders/abc'), path.resolve('/project/.topview-3d/renders/abc'))
   assert.equal(
     resolveOutputDir('/tmp/director/renders/47133e066d7044bda947da4914741c36'),
     path.resolve('/tmp/director/renders/47133e066d7044bda947da4914741c36'),
@@ -34,10 +34,10 @@ test('project and legacy run dirs are accepted', () => {
 
 test('Windows paths follow the same rules', () => {
   const win = path.win32
-  assert.equal(resolveOutputDir('C:\\Users\\me\\scene\\.topview3d\\renders\\run_1', win),
-    'C:\\Users\\me\\scene\\.topview3d\\renders\\run_1')
-  assert.throws(() => resolveOutputDir('C:\\Users\\me\\scene\\.topview3d\\renders\\..\\x', win), /RENDER_OUTPUT_DIR_INVALID/)
-  assert.throws(() => resolveOutputDir('scene\\.topview3d\\renders\\run_1', win), /RENDER_OUTPUT_DIR_INVALID/)
+  assert.equal(resolveOutputDir('C:\\Users\\me\\scene\\.topview-3d\\renders\\run_1', win),
+    'C:\\Users\\me\\scene\\.topview-3d\\renders\\run_1')
+  assert.throws(() => resolveOutputDir('C:\\Users\\me\\scene\\.topview-3d\\renders\\..\\x', win), /RENDER_OUTPUT_DIR_INVALID/)
+  assert.throws(() => resolveOutputDir('scene\\.topview-3d\\renders\\run_1', win), /RENDER_OUTPUT_DIR_INVALID/)
 })
 
 test('only an explicit public asset base opens a network origin', () => {

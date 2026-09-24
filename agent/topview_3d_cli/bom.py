@@ -1,7 +1,7 @@
 """Plan / constraint record (BOM): intent, relationships, constraints, camera roles, model review.
 
 Pure merge and evidence logic behind the ``topview-3d-cli bom`` and ``inspect views`` commands (stored as
-``.topview3d/bom.json``). ``checkpoint`` fields are model-owned; the
+``.topview-3d/bom.json``). ``checkpoint`` fields are model-owned; the
 runtime owns ``observed`` and ``verification``. Errors are ``ValueError("<CODE>: ...")``.
 """
 from __future__ import annotations

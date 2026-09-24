@@ -54,7 +54,7 @@ def write_ops(tmp_path, operations, name="ops.json"):
 
 
 def state_bytes(project):
-    return {path.name: path.read_bytes() for path in sorted((project / ".topview3d").glob("*.json"))}
+    return {path.name: path.read_bytes() for path in sorted((project / ".topview-3d").glob("*.json"))}
 
 
 @pytest.fixture
@@ -75,8 +75,15 @@ def test_init_status_get_validate(capsys, tmp_path):
     assert got["entityVersions"] == {"director": 1, "cam-main": 1}
     assert got["fcurves"] == {"version": 1, "encoding": "compact-v1", "fcurves": []}
     assert run(capsys, "document", "validate", root)[0] == 0
-    disk = json.loads((root / ".topview3d" / "document.json").read_text(encoding="utf-8"))
+    disk = json.loads((root / ".topview-3d" / "document.json").read_text(encoding="utf-8"))
     assert disk == got["document"]
+
+
+def test_studio_open_needs_a_checkout(capsys, project, monkeypatch):
+    monkeypatch.setattr("topview_3d_cli.local_studio.REPO_ROOT", project)
+    monkeypatch.setattr("topview_3d_cli.local_studio._port_open", lambda _port: False)
+    code, body = run(capsys, "studio", "open", project)
+    assert code == 1 and body["code"] == "STUDIO_UNAVAILABLE"
 
 
 def test_init_refuses_existing_project(capsys, project):
@@ -175,7 +182,7 @@ def test_operations_file_errors(capsys, project, tmp_path):
 
 def test_schema_version_1_project_is_migrated_on_first_write(capsys, tmp_path):
     root = tmp_path / "old"
-    state = root / ".topview3d"
+    state = root / ".topview-3d"
     state.mkdir(parents=True)
     document = empty_director_document()
     document["content"]["nodes"].append(box())

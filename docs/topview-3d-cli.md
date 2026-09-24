@@ -34,23 +34,24 @@ renaming or removing a command or option fails the lint until the skill is updat
 | `topview-3d-cli --version` | Print the CLI version. |
 | `topview-3d-cli doctor [--json]` | Check python ≥ 3.11, node ≥ 20.6, the renderer runtime (`packaged` or `workspace`, see below), the built-in assets, the pinned Playwright, and Chromium; in a checkout also pnpm. Each failing check carries a `hint`. |
 | `topview-3d-cli browser ensure [--with-deps]` | Idempotent. Installs the pinned Playwright into the user cache (packaged runtime only, with the `npm` that ships with Node) and then Chromium into Playwright's browser cache. `--with-deps` also installs Linux system packages. `render` never downloads anything; it fails with `BROWSER_NOT_INSTALLED` instead. |
-| `topview-3d-cli project init <dir> [--force]` | Create `<dir>/.topview3d/` holding the empty director document and default camera (`cam-main`). |
+| `topview-3d-cli studio open <dir>` | From a repository checkout, start `editor/apps/studio` with Node on `127.0.0.1:3002` when that port is free (`TOPVIEW3D_PROJECTS` set to this project) and open the system browser on `/?project=<id>`. Fails with `STUDIO_UNAVAILABLE` outside a checkout, `STUDIO_PROJECT_MISSING` when Studio is already running without this project, or `STUDIO_START_FAILED` when it does not become ready. |
+| `topview-3d-cli project init <dir> [--force]` | Create `<dir>/.topview-3d/` holding the empty director document and default camera (`cam-main`). |
 | `topview-3d-cli project status <dir>` | Metadata, a document summary, and dangling references. |
 | `topview-3d-cli document get <dir> [--summary \| --entity ID [--type node\|clip\|fcurves] [--include-curves]]` | Full document, merged fcurves, `entityVersions`, `sceneSequence`. `--summary` returns an outline without curves; `--entity` returns one node, clip or `fcurves__<nodeId>` shard with its `entityVersion` (`DOCUMENT_ENTITY_NOT_FOUND` otherwise). |
 | `topview-3d-cli document validate <dir>` | Schema-validate the stored document and fcurves; fails with `DOCUMENT_INVALID` (and `details.danglingReferences`) when a clip, fcurves shard or node references a missing node. |
 | `topview-3d-cli document apply <dir> <ops.json\|-> [--strict] [--dry-run]` | Apply one atomic batch. Refused with `DANGLING_REFERENCE` when it would add a reference to a missing node (references already stored do not block unrelated edits). |
 | `topview-3d-cli node batch <dir> <spec.json\|-> [--dry-run]` | `{"expectedSceneSequence"?, "changes": [...]}` with 1..64 changes: `add_primitive`, `add_library` (`kind` `characters`/`props`, `libraryId` from the local manifests), `add_camera` (`presetId`, optional `subjectNodeId`), `update` (name, partial transform, `fov`, `distance`, or `view` = `{mode: world, position, target}` / `{mode: subject, subjectNodeId, offset, targetOffset}`), `delete` (cascading) and `repeat_primitive` (`nodeId_1..nodeId_count`). Changes are staged in order and compiled into one atomic batch of at most 64 operations. The result lists `createdIds`, `updatedIds`, `deletedIds`, compact `state` rows (primitives add `primitive: {kind, parameters, size}`, `size` scaled and before rotation) and the primitive `geometry` check. A change that cannot apply fails with `NODE_BATCH_REJECTED` and `details: {index, nodeId, reason}`; a missing node or asset fails with `DIRECTOR_NODE_NOT_FOUND` / `ASSET_NOT_FOUND` and the same details. |
 | `topview-3d-cli node delete <dir> <nodeId> [--dry-run]` | Delete a node and, in the same batch, its clips, its `fcurves__<nodeId>`, and every reference to it (camera subject/lookAt target, children, transitions, editorial clips, physical constraints). |
-| `topview-3d-cli render <dir> [payload.json]` | Render frames (default `[0]`) from the stored document and fcurves straight into `.topview3d/renders/<runId>/`: `frame-<n>.png`, `contact-sheet.png` and `render.json` (run id, time, resolution, camera, sceneSequence, revision, document SHA-256, builder and CLI versions, blocked requests). The payload may only set `frames`, `width`, `height`, `cameraNodeId` and `publicAssetBase`. Models resolve through the local asset manifests; a missing character/prop model fails with `ASSET_NOT_AVAILABLE`, a missing motion only adds `MOTION_NOT_AVAILABLE:<id>` to `warnings` (the character keeps its pose/fcurves). Chromium blocks every request outside the local server and the optional `publicAssetBase`. `cameraNodeId` is checked before the renderer starts (`CAMERA_NOT_FOUND`, or `CAMERA_REQUIRED` for a non-camera node or a scene without cameras). Known headless console noise (`Mediabunny was loaded twice`, `GPU stall due to ReadPixels`) is dropped from the renderer's `warnings`. |
+| `topview-3d-cli render <dir> [payload.json]` | Render frames (default `[0]`) from the stored document and fcurves straight into `.topview-3d/renders/<runId>/`: `frame-<n>.png`, `contact-sheet.png` and `render.json` (run id, time, resolution, camera, sceneSequence, revision, document SHA-256, builder and CLI versions, blocked requests). The payload may only set `frames`, `width`, `height`, `cameraNodeId` and `publicAssetBase`. Models resolve through the local asset manifests; a missing character/prop model fails with `ASSET_NOT_AVAILABLE`, a missing motion only adds `MOTION_NOT_AVAILABLE:<id>` to `warnings` (the character keeps its pose/fcurves). Chromium blocks every request outside the local server and the optional `publicAssetBase`. `cameraNodeId` is checked before the renderer starts (`CAMERA_NOT_FOUND`, or `CAMERA_REQUIRED` for a non-camera node or a scene without cameras). Known headless console noise (`Mediabunny was loaded twice`, `GPU stall due to ReadPixels`) is dropped from the renderer's `warnings`. |
 | `topview-3d-cli evaluate <dir> [plan.json\|-] [--frames 0,24] [--camera ID]` | Numerical checks (camera framing, origins in frustum, ground penetration, non-finite transforms) of the stored scene, or of a plan staged in memory: `{"changes": [...]}` (the `node batch` syntax) or `{"operations": [...]}` (the `document apply` syntax), plus optional `expectedSceneSequence`. Pure Node, no browser. Nothing is written (`persisted: false`). |
 | `topview-3d-cli inspect nodes <dir> <nodeId>… [--frame N]` | Chromium mesh measurement of 1..16 nodes: world `bounds`, `size`, `origin`, landmarks or support surfaces, plus `grounding` (`grounded`/`floating`/`penetrating` against `groundHeight`, tolerance 0.02) and `pairs` (origin distance, horizontal distance, bounds gap, `boundsIntersect` and `overlapSize`). |
-| `topview-3d-cli inspect views <dir> [views.json\|-] [--camera ID]… [--frames 0,24] [--primary ID]` | For each camera (default: every camera, frame 0), numerical checks plus one render run in `.topview3d/renders/`. The spec is `{"expectedSceneSequence"?, "views": [{cameraNodeId, frames (1..3)}] (1..8), "width"?, "height"?, "primaryCameraNodeId"?}`. Characters are measured by their posed mesh bounds (`measurement`), so grounding and target framing follow the mesh, not the origin. Returns `renderStatus` per view, `checksComplete` with `checksBlockedBy` (stale scene, geometry issues, errors or below-ground warnings, the camera's target out of frame, incomplete renders; other nodes outside the frustum are informational), `primaryStoryPreview`, and records the evidence as the BOM `verification`. |
+| `topview-3d-cli inspect views <dir> [views.json\|-] [--camera ID]… [--frames 0,24] [--primary ID]` | For each camera (default: every camera, frame 0), numerical checks plus one render run in `.topview-3d/renders/`. The spec is `{"expectedSceneSequence"?, "views": [{cameraNodeId, frames (1..3)}] (1..8), "width"?, "height"?, "primaryCameraNodeId"?}`. Characters are measured by their posed mesh bounds (`measurement`), so grounding and target framing follow the mesh, not the origin. Returns `renderStatus` per view, `checksComplete` with `checksBlockedBy` (stale scene, geometry issues, errors or below-ground warnings, the camera's target out of frame, incomplete renders; other nodes outside the frustum are informational), `primaryStoryPreview`, and records the evidence as the BOM `verification`. |
 | `topview-3d-cli renders list <dir>` | Render runs from each `render.json`, oldest first, with `stale` when the run's `sceneSequence` is not the current one. |
 | `topview-3d-cli renders show <dir> [runId] [--frame N]` | Absolute path, size and verified sha256 of the contact sheet (default) or one frame of a run (default: latest). `RENDER_NOT_FOUND` / `RENDER_IMAGE_INVALID` otherwise. |
 | `topview-3d-cli camera presets` | Camera preset ids, names and fov for `add_camera`. |
-| `topview-3d-cli bom get <dir>` | The plan / constraint record `.topview3d/bom.json` (empty when missing) with `observed` nodes and `verification.stale` derived from the current scene. |
+| `topview-3d-cli bom get <dir>` | The plan / constraint record `.topview-3d/bom.json` (empty when missing) with `observed` nodes and `verification.stale` derived from the current scene. |
 | `topview-3d-cli bom checkpoint <dir> <patch.json\|->` | Merge `intent`, `relationships`, `constraints`, `cameras`, `notes`, `remove` and/or `modelReview` with compare-and-set on `expectedSceneSequence` and `expectedBomRevision`. `modelReview` needs current `inspect views` evidence; an omitted `sha256` is filled from it. |
-| `topview-3d-cli asset list [<dir>] [--kind K]` | List built-in assets, plus the project's `.topview3d/assets` when `<dir>` is given (project entries override built-ins with the same id). |
+| `topview-3d-cli asset list [<dir>] [--kind K]` | List built-in assets, plus the project's `.topview-3d/assets` when `<dir>` is given (project entries override built-ins with the same id). |
 | `topview-3d-cli asset import (--project <dir> \| --builtin) <file> --kind character\|prop\|pose --id ID [--key K] [--cover IMG] [--name N] [--rig R] [--license L] [--source S]` | Copy a `.glb`/`.gltf` model or pose `.json` (and an optional `.webp`/`.png`/`.jpg` cover) into the asset root and add its manifest entry (size and SHA-256 recorded). `--key` is the value documents use in `metadata.modelUrl`. |
 | `topview-3d-cli asset search [query] [--project <dir>] [--kind K] [--category C] [--tag T]… [--rig R] [--limit 20] [--offset 0]` | Every query token must match name, id, category, tags or rig (case-insensitive). Results are scored (name 3, exact tag 2, other fields 1) and carry `facets` (kind, category, rig, top tags) over all matches, `total`, `complete` and `nextOffset`. |
 | `topview-3d-cli asset show <id> [--project <dir>] [--kind K]` | One entry with its absolute `path` and `coverPath`, pose `boneCount`/`hips`, and a `usage` snippet (a `node batch` change or a `pose batch` item). Pose ids work without the `a3d_pose_` prefix. |
@@ -107,7 +108,7 @@ not run two writing commands against the same project at once. Within that model
 ## Project format (schemaVersion 2)
 
 ```
-<dir>/.topview3d/
+<dir>/.topview-3d/
   metadata.json   format, schemaVersion, cliVersion, builderVersion, revision, sceneSequence, updatedAt
   entities.json   authoritative entity store: versions, tombstones, sequence, operation log
   document.json   derived: assembled director document (read-only view)
@@ -147,7 +148,7 @@ Rendering never downloads assets by default. Two manifests (`manifest.json`, for
 
 - the built-in root: `builtin-assets/` in a checkout, shipped inside the package otherwise (override
   with `TOPVIEW3D_BUILTIN_ASSETS`);
-- the project root `<dir>/.topview3d/assets/` (filled by `asset import --project`).
+- the project root `<dir>/.topview-3d/assets/` (filled by `asset import --project`).
 
 Each entry has `id`, `kind` (`character`, `prop`, `pose` or `primitive`) and `name`.
 The repository ships the four built-in characters (Child, Youth, Female, Man), 121 poses with cover
@@ -173,7 +174,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | Code | Exit | Meaning |
 | --- | --- | --- |
 | `USAGE_INVALID` | 2 | Unknown command, missing argument or bad option. |
-| `PROJECT_NOT_INITIALIZED` | 2 | The directory has no .topview3d project; run `project init`. |
+| `PROJECT_NOT_INITIALIZED` | 2 | The directory has no .topview-3d project; run `project init`. |
 | `PROJECT_EXISTS` | 2 | `project init` target already contains a project; pass --force to replace it. |
 | `OPERATIONS_NOT_FOUND` | 2 | The operations file does not exist. |
 | `OPERATIONS_JSON_INVALID` | 2 | The operations file is not JSON or not an operation batch. |
@@ -193,7 +194,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `ENTITY_NOT_FOUND` | 2 | Delete targets an entity that never existed. |
 | `DIRECTOR_NODE_NOT_FOUND` | 2 | A referenced node does not exist (the message names it; batches add details.index). |
 | `DOCUMENT_ENTITY_NOT_FOUND` | 2 | `document get --entity` found no node, clip or fcurves shard with that id. |
-| `RENDER_NOT_FOUND` | 2 | No such render run or frame image in .topview3d/renders. |
+| `RENDER_NOT_FOUND` | 2 | No such render run or frame image in .topview-3d/renders. |
 | `BOM_CHECKPOINT_INVALID` | 2 | `bom checkpoint` patch fails its schema or repeats/conflicts ids. |
 | `BOM_TOO_LARGE` | 2 | The merged BOM would exceed 64 KiB. |
 | `INVALID_DIRECTOR_BATCH` | 2 | Batch must contain 1..64 operations. |
@@ -228,7 +229,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `BUILDER_PACKAGE_UNREADABLE` | 1 | editor/packages/builder/package.json is missing or has no version. |
 | `ASSET_MANIFEST_INVALID` | 1 | An asset manifest is corrupt or lists a path outside its root. |
 | `POSE_ASSET_INVALID` | 1 | A pose file is larger than 1 MiB or lacks hips and 1-256 bone quaternions. |
-| `BOM_JSON_INVALID` | 1 | .topview3d/bom.json is corrupt; fix or delete it. |
+| `BOM_JSON_INVALID` | 1 | .topview-3d/bom.json is corrupt; fix or delete it. |
 | `RENDER_IMAGE_INVALID` | 1 | A render image is not a PNG or no longer matches the sha256 in render.json. |
 | `ASSET_FILE_MISSING` | 1 | A manifest entry points to a file that does not exist. |
 | `ASSET_NOT_AVAILABLE` | 1 | A character or prop model in the document has no local asset (see details). |
@@ -243,4 +244,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `RENDER_RESULT_MISSING` | 1 | The Node renderer printed no result. |
 | `RENDER_RESULT_INVALID` | 1 | The Node renderer printed a non-JSON result. |
 | `DOCTOR_FAILED` | 1 | Plain `doctor` found a missing or outdated dependency (`doctor --json` always exits 0). |
+| `STUDIO_UNAVAILABLE` | 1 | Studio is not in this install: it lives in editor/apps/studio of a checkout with Next.js installed. |
+| `STUDIO_START_FAILED` | 1 | Node started Studio, but it did not list this project on port 3002. |
+| `STUDIO_PROJECT_MISSING` | 1 | Studio is already running on port 3002 without this project; stop it and retry. |
 | `INTERNAL_ERROR` | 1 | Unexpected failure; the message carries the exception. |

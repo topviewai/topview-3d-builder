@@ -1,7 +1,7 @@
 # topview-3d-cli
 
 `topview-3d-cli` builds and renders 3D director scenes on your machine. Projects are plain files in a
-`.topview3d/` directory; rendering uses a local headless Chromium and makes no network requests.
+`.topview-3d/` directory; rendering uses a local headless Chromium and makes no network requests.
 
 Requirements: Python 3.11+ and Node.js 20.6+ (with npm).
 

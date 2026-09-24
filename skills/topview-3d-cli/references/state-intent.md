@@ -12,7 +12,7 @@
    The summary is the document outline: nodes, cameras and `sceneSequence`. Use
    `topview-3d-cli document get <dir> --entity <nodeId>` for one full node or clip. Respect existing
    names, transforms, cameras and animation. The summary is a view, not something to edit.
-   A directory without `.topview3d/` fails with `PROJECT_NOT_INITIALIZED`; create it with
+   A directory without `.topview-3d/` fails with `PROJECT_NOT_INITIALIZED`; create it with
    `topview-3d-cli project init <dir>` only when the user wants a new scene there.
 2. **Read the request history.** BOM `intent` holds the request as understood so far, in the
    user's own wording. Interpret this turn against it and the conversation. If neither says what

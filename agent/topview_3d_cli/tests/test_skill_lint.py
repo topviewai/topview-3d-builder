@@ -101,7 +101,7 @@ def test_commands_are_checked(tmp_path, code, expected):
 
 
 def test_prose_and_paths_are_not_commands(tmp_path):
-    body = "topview-3d-cli resolves assets itself; files live in `.topview3d/renders/` and `<dir>/.topview3d/`."
+    body = "topview-3d-cli resolves assets itself; files live in `.topview-3d/renders/` and `<dir>/.topview-3d/`."
     assert _errors(_skill(tmp_path, body)) == []
 
 

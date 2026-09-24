@@ -32,7 +32,7 @@ pnpm build && pnpm --filter @topview/3d-studio start
 服务端（`apps/studio/src/localAssets.ts`）读取与 CLI 相同的素材清单（`scene3d-asset-manifest` v1）：
 
 1. 内置库 `builtin-assets/manifest.json`；
-2. `TOPVIEW3D_PROJECTS` 里每个项目的 `.topview3d/assets/manifest.json`，同 id 时项目覆盖内置。
+2. `TOPVIEW3D_PROJECTS` 里每个项目的 `.topview-3d/assets/manifest.json`，同 id 时项目覆盖内置。
 
 | 路由 | 用途 |
 |---|---|
@@ -55,7 +55,7 @@ pnpm build && pnpm --filter @topview/3d-studio start
 | 来源 | 列在工作台 | 读 | 写 |
 |---|---|---|---|
 | 本地草稿 | 「我的草稿」 | `GET /api/drafts/{id}`（+ `/fcurves`） | `PUT /api/drafts/{id}`（+ `/fcurves`），文件在 `apps/studio/drafts/`（已 gitignore） |
-| CLI 项目 | 「CLI 项目（只读）」，来自 `TOPVIEW3D_PROJECTS` | `GET /api/projects/{id}`（+ `/fcurves`），读 `.topview3d/document.json` 与 `fcurves.json` | 不写 |
+| CLI 项目 | 「CLI 项目（只读）」，来自 `TOPVIEW3D_PROJECTS` | `GET /api/projects/{id}`（+ `/fcurves`），读 `.topview-3d/document.json` 与 `fcurves.json` | 不写 |
 
 CLI 项目只读：`document.json` / `fcurves.json` 是 CLI 从 `entities.json` 派生的视图，Studio 直接覆写会被
 下一次 CLI 写入冲掉，也绕过了 CLI 的单写者版本号。所以 Studio 以 `readOnly` 打开（写锁开启、不自动保存），
@@ -83,5 +83,5 @@ HTTP 错误都会失败；结束时删除这份临时草稿。已有服务时用
 |---|---|
 | 角色 / 姿势面板为空 | `TOPVIEW3D_BUILTIN_ASSETS` 指错目录，或 `manifest.json` 格式不是 `scene3d-asset-manifest` v1（服务端日志有提示） |
 | 草稿里的模型加载 404 | 草稿引用的 key 不在任何清单里；用 CLI `topview-3d-cli assets import` 导入，或把项目加进 `TOPVIEW3D_PROJECTS` |
-| 看不到「CLI 项目」 | `TOPVIEW3D_PROJECTS` 没配，或目录下没有 `.topview3d/document.json` |
+| 看不到「CLI 项目」 | `TOPVIEW3D_PROJECTS` 没配，或目录下没有 `.topview-3d/document.json` |
 | 改了 `.env.local` 没生效 | 没重启服务 |

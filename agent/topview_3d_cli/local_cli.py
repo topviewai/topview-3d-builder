@@ -31,6 +31,7 @@ from topview_3d_cli.local_project import (
 from topview_3d_cli.local_inspect import evaluate, inspect_nodes, inspect_views, parse_frames
 from topview_3d_cli.local_read import camera_presets, document_view, renders_list, renders_show
 from topview_3d_cli.local_render import render
+from topview_3d_cli.local_studio import open_studio
 from topview_3d_cli.renderer import node_path
 from topview_3d_cli.runtime import PLAYWRIGHT_VERSION, builder_version, node_env, runtime
 
@@ -317,7 +318,7 @@ def _parser() -> argparse.ArgumentParser:
     camera = group("camera", "camera helpers")
     camera.add_parser("presets", help="camera preset ids for add_camera")
 
-    bom = group("bom", "plan / constraint record (.topview3d/bom.json)")
+    bom = group("bom", "plan / constraint record (.topview-3d/bom.json)")
     bom.add_parser("get").add_argument("directory")
     checkpoint = bom.add_parser("checkpoint", help="merge a checkpoint patch (compare-and-set)")
     checkpoint.add_argument("directory")
@@ -329,7 +330,7 @@ def _parser() -> argparse.ArgumentParser:
     listing.add_argument("--kind", choices=KINDS)
     search = asset.add_parser("search", help="keyword search with filters and facets")
     search.add_argument("query", nargs="?", default="")
-    search.add_argument("--project", dest="directory", help="also search <project>/.topview3d/assets")
+    search.add_argument("--project", dest="directory", help="also search <project>/.topview-3d/assets")
     search.add_argument("--kind", choices=KINDS)
     search.add_argument("--category")
     search.add_argument("--tag", action="append", help="required tag (repeatable)")
@@ -342,7 +343,7 @@ def _parser() -> argparse.ArgumentParser:
     show_asset.add_argument("--kind", choices=KINDS)
     importing = asset.add_parser("import", help="copy a model or pose file into an asset root")
     target = importing.add_mutually_exclusive_group(required=True)
-    target.add_argument("--project", dest="directory", help="import into <project>/.topview3d/assets")
+    target.add_argument("--project", dest="directory", help="import into <project>/.topview-3d/assets")
     target.add_argument("--builtin", action="store_true", help="import into the built-in asset root")
     importing.add_argument("file")
     importing.add_argument("--kind", required=True, choices=("character", "prop", "pose"))
@@ -376,6 +377,8 @@ def _parser() -> argparse.ArgumentParser:
     browser = group("browser", "renderer browser setup")
     ensure = browser.add_parser("ensure", help="install the pinned Playwright and Chromium (idempotent)")
     ensure.add_argument("--with-deps", action="store_true", help="also install Linux system packages (sudo)")
+    studio = group("studio", "open the local Studio app on this project")
+    studio.add_parser("open", help="start Studio with Node if needed and open this project in the browser").add_argument("directory")
     return parser
 
 
@@ -405,6 +408,8 @@ def _dispatch(args: argparse.Namespace) -> dict[str, Any]:
         return doctor()
     if command == "browser":
         return browser_ensure(with_deps=args.with_deps)
+    if command == "studio":
+        return open_studio(args.directory)
     if command == "project":
         return init_project(args.directory, force=args.force) if sub == "init" else project_status(args.directory)
     if command == "document":

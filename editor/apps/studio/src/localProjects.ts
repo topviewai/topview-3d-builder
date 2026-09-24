@@ -1,5 +1,5 @@
 // CLI 项目只读入口（仅服务端）。TOPVIEW3D_PROJECTS 列出项目目录（用系统路径分隔符隔开），
-// 读取各自 .topview3d/document.json 与 fcurves.json。这两个文件是 CLI 从 entities.json 派生的视图，
+// 读取各自 .topview-3d/document.json 与 fcurves.json。这两个文件是 CLI 从 entities.json 派生的视图，
 // 直接覆写会被下一次 CLI 写入冲掉，所以 Studio 只读打开，修改请走 CLI。
 import { existsSync, readFileSync } from 'node:fs'
 import path from 'node:path'
@@ -8,6 +8,11 @@ import { summarizeDraft, type DraftSummary } from './draftStore'
 export interface LocalProject {
   id: string
   root: string
+}
+
+export function projectStateDir(root: string): string | null {
+  const dir = path.join(root, '.topview-3d')
+  return existsSync(path.join(dir, 'document.json')) ? dir : null
 }
 
 function slug(value: string): string {
@@ -24,7 +29,7 @@ export function projectRoots(): string[] {
 export function listProjects(): LocalProject[] {
   const used = new Set<string>()
   return projectRoots()
-    .filter((root) => existsSync(path.join(root, '.topview3d', 'document.json')))
+    .filter((root) => projectStateDir(root))
     .map((root) => {
       const base = `cli-${slug(path.basename(root))}`
       let id = base
@@ -49,7 +54,8 @@ function findProject(id: string): LocalProject | undefined {
 export function projectSummaries(): (DraftSummary & { root: string })[] {
   const out: (DraftSummary & { root: string })[] = []
   for (const project of listProjects()) {
-    const doc = readJson(path.join(project.root, '.topview3d', 'document.json'))
+    const state = projectStateDir(project.root)
+    const doc = state ? readJson(path.join(state, 'document.json')) : null
     const summary = doc ? summarizeDraft(project.id, doc) : null
     if (summary) out.push({ ...summary, name: summary.name === project.id ? path.basename(project.root) : summary.name, root: project.root })
   }
@@ -58,10 +64,12 @@ export function projectSummaries(): (DraftSummary & { root: string })[] {
 
 export function readProjectDocument(id: string): unknown | null {
   const project = findProject(id)
-  return project ? readJson(path.join(project.root, '.topview3d', 'document.json')) : null
+  const state = project ? projectStateDir(project.root) : null
+  return state ? readJson(path.join(state, 'document.json')) : null
 }
 
 export function readProjectFCurves(id: string): unknown | null {
   const project = findProject(id)
-  return project ? readJson(path.join(project.root, '.topview3d', 'fcurves.json')) : null
+  const state = project ? projectStateDir(project.root) : null
+  return state ? readJson(path.join(state, 'fcurves.json')) : null
 }

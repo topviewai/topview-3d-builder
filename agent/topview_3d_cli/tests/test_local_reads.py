@@ -79,7 +79,7 @@ def test_document_get_summary_and_entities(capsys, tmp_path):
 
 
 def write_run(project: Path, run_id: str, sequence: int, created: str) -> Path:
-    run_dir = project / ".topview3d" / "renders" / run_id
+    run_dir = project / ".topview-3d" / "renders" / run_id
     run_dir.mkdir(parents=True)
     (run_dir / "frame-0.png").write_bytes(PNG)
     (run_dir / "contact-sheet.png").write_bytes(PNG + b"sheet")
@@ -99,7 +99,7 @@ def test_renders_list_and_show(capsys, tmp_path):
     assert code == 2 and body["code"] == "RENDER_NOT_FOUND"
     write_run(project, "old", 1, "2026-01-01T00:00:00Z")
     latest = write_run(project, "new", 2, "2026-01-02T00:00:00Z")
-    (project / ".topview3d" / "renders" / "junk").mkdir()
+    (project / ".topview-3d" / "renders" / "junk").mkdir()
     code, body = run(capsys, "renders", "list", project)
     assert code == 0 and [row["runId"] for row in body["runs"]] == ["old", "new"]
     assert [row["stale"] for row in body["runs"]] == [True, False]
@@ -131,9 +131,9 @@ def test_bom_get_and_checkpoint(capsys, tmp_path):
                                  "constraints": [{"id": "c1", "text": "both faces visible"}]}), encoding="utf-8")
     code, body = run(capsys, "bom", "checkpoint", project, patch)
     assert code == 0 and body["bomRevision"] == 1
-    stored = json.loads((project / ".topview3d" / "bom.json").read_text(encoding="utf-8"))
+    stored = json.loads((project / ".topview-3d" / "bom.json").read_text(encoding="utf-8"))
     assert stored["intent"] == "two people talk" and "observed" not in stored
-    before = (project / ".topview3d" / "bom.json").read_bytes()
+    before = (project / ".topview-3d" / "bom.json").read_bytes()
     code, body = run(capsys, "bom", "checkpoint", project, patch)
     assert code == 1 and body["code"] == "BOM_REVISION_CONFLICT"
     patch.write_text(json.dumps({"expectedSceneSequence": 1, "expectedBomRevision": 1, "notes": []}), encoding="utf-8")
@@ -149,8 +149,8 @@ def test_bom_get_and_checkpoint(capsys, tmp_path):
     assert code == 1 and body["code"] == "BOM_REVIEW_EVIDENCE_MISSING"
     code, body = run(capsys, "bom", "checkpoint", project, tmp_path / "missing.json")
     assert code == 2 and body["code"] == "INPUT_NOT_FOUND"
-    assert (project / ".topview3d" / "bom.json").read_bytes() == before
-    (project / ".topview3d" / "bom.json").write_text("{", encoding="utf-8")
+    assert (project / ".topview-3d" / "bom.json").read_bytes() == before
+    (project / ".topview-3d" / "bom.json").write_text("{", encoding="utf-8")
     code, body = run(capsys, "bom", "get", project)
     assert code == 1 and body["code"] == "BOM_JSON_INVALID"
     assert open_project(project).store.scene_sequence == 2

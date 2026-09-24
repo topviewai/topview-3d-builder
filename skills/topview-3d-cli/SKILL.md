@@ -7,12 +7,13 @@ description: >
   Use when the user asks to stage, block out, lay out or storyboard a scene in 3D; place people,
   props or cameras; pose characters; check framing, grounding, spacing or collisions; render views
   of a scene as a reference for video generation; or works in a directory that contains
-  `.topview3d/`. Also use when a topview-3d-cli command fails or topview-3d-cli still has to be installed.
+  `.topview-3d/`. Also use when a topview-3d-cli command fails or topview-3d-cli still has to be installed.
+  The Codex plugin is shown as Topview 3D Builder. After a scene is built, open it in the local Studio.
 ---
 
 # topview-3d-cli
 
-`topview-3d-cli` edits and renders a local director project: a directory with a `.topview3d/` folder. The
+`topview-3d-cli` edits and renders a local director project: a directory with a `.topview-3d/` folder. The
 goal is an abstract, physically consistent staging reference for video generation: simple shapes,
 correct scale and support, clear blocking, one world seen from several static cameras. Character
 positions come first, then plausibility and camera continuity, then composition. Fine visual detail
@@ -40,8 +41,11 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
   `uvx --python 3.12 topview-3d-cli@0.1.0 doctor --json` (`--python 3.12` lets uv fetch a suitable
   Python when the default one is older than 3.11). Without `uvx`, use
   `pipx run --spec topview-3d-cli==0.1.0 topview-3d-cli doctor --json`, then
-  `python3 -m pip install --user topview-3d-cli==0.1.0`. Use the same prefix for every later
-  command. When the user supplies a wheel file instead (for example before a release), run
+  `python3 -m pip install --user topview-3d-cli==0.1.0`. If that pip or pipx install fails
+  because the configured index has no such version (a mirror that has not synced yet reports
+  `from versions: none`), retry the same command with `--index-url` set to the official PyPI
+  simple index: scheme https, host `pypi.org`, path `/simple/`. For pipx, pass that index inside
+  `--pip-args`. Use the same prefix for every later command. When the user supplies a wheel file instead (for example before a release), run
   `uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json`; for a source checkout see
   `references/doctor-browser.md`.
 - **`node` fails:** Node.js 20.6 or newer (with npm) is required; ask the user to install it.
@@ -95,6 +99,7 @@ Read the reference for a stage once per session, before its first command:
 | 6. Cameras | Mandatory bird's-eye overview plus purposeful story views | `references/camera.md` |
 | 7. Edit | Change only what was asked; batch syntax; keyframes | `references/edit.md` |
 | 8. Check | Numbers, renders, look at the PNGs, revise | `references/checks.md` |
+| 9. Studio | Open the finished scene in the local Studio | `references/doctor-browser.md` |
 
 Asset search rules for props, characters and poses are in `references/asset-selection.md`.
 Installation, the browser and sandbox limits are in `references/doctor-browser.md`.
@@ -118,6 +123,7 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
 | Find a rendered PNG | `topview-3d-cli renders list <dir>`, `topview-3d-cli renders show <dir> [runId] [--frame N]` |
 | Plan record | `topview-3d-cli bom get <dir>`, `topview-3d-cli bom checkpoint <dir> patch.json` |
 | Structural validation | `topview-3d-cli document validate <dir>` |
+| Open in Studio | `topview-3d-cli studio open <dir>` |
 
 ## Hard rules
 

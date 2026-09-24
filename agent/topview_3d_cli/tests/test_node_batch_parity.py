@@ -49,7 +49,7 @@ def batch(capsys, tmp_path: Path, project: Path, spec) -> tuple[int, dict]:
 
 
 def state(project: Path) -> dict[str, bytes]:
-    return {path.name: path.read_bytes() for path in (project / ".topview3d").glob("*.json")}
+    return {path.name: path.read_bytes() for path in (project / ".topview-3d").glob("*.json")}
 
 
 def test_camera_subject_view_and_conservative_box_geometry():
@@ -124,7 +124,7 @@ def test_sequence_conflict_and_noop(tmp_path, capsys, project):
     before = state(project)
     code, body = batch(capsys, tmp_path, project, {"expectedSceneSequence": 1, "changes": [primitive()]})
     assert (code, body["code"]) == (1, "SCENE_SEQUENCE_CONFLICT")
-    fov = json.loads((project / ".topview3d" / "document.json").read_text())["content"]["nodes"][0]["camera"]["fov"]
+    fov = json.loads((project / ".topview-3d" / "document.json").read_text())["content"]["nodes"][0]["camera"]["fov"]
     code, body = batch(capsys, tmp_path, project, {"expectedSceneSequence": 2, "changes": [
         {"action": "update", "nodeId": "cam-main", "fov": fov}]})
     assert code == 0 and body["operationCount"] == 0, body

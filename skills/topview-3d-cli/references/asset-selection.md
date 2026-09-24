@@ -2,7 +2,7 @@
 
 Decide the primitive constructions before searching; simple primitive props need no search. The
 local library holds the four built-in characters and 121 poses, plus whatever the user imported
-into the project (`.topview3d/assets`, found with `--project <dir>`).
+into the project (`.topview-3d/assets`, found with `--project <dir>`).
 
 | Need | Command |
 | --- | --- |

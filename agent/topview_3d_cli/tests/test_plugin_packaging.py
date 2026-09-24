@@ -43,6 +43,7 @@ def test_manifests_parse_and_share_the_plugin_name():
         assert set(names) == {"topview-3d-builder"}, rel
         assert "mcpServers" not in data and "apps" not in data, rel
     codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
+    assert codex["interface"]["displayName"] == "Topview 3D Builder"
     assert codex["skills"] == "./skills/"
     assert codex["interface"]["capabilities"] == ["Read", "Write"]
     for key in ("composerIcon", "logo"):

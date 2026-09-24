@@ -34,6 +34,18 @@ Use this skill's pinned version, 0.1.0, and stop at the first route that works:
 3. `python3 -m pip install --user topview-3d-cli==0.1.0`, then make sure the user scripts
    directory is on PATH.
 
+If step 2 or 3 fails because the configured index has no such version (a mirror that has not
+synced yet reports `Could not find a version` and `from versions: none`), retry that same
+command against the official PyPI simple index and do not change the user's pip configuration.
+Build the index as scheme https, host `pypi.org`, path `/simple/`, and pass it like this:
+
+- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.0`
+- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.0 topview-3d-cli doctor --json`
+- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.0`
+
+Other pip failures (no network, permissions, a broken environment) are not an index problem;
+do not switch the index for those.
+
 When the package index is not an option (no network to PyPI, or a build that is not published):
 
 - **A wheel file** the user provides (`topview_3d_cli-<version>-py3-none-any.whl`):
@@ -53,6 +65,25 @@ Playwright's browser cache. It needs network access once; after that everything 
 
 Installing software changes the user's machine: say what you are about to install and ask first
 when the user has not already asked you to set topview-3d-cli up.
+
+## Open the finished scene in Studio
+
+After the scene is checked and the renders have been looked at, open it in the local Studio.
+Studio is the checkout app `editor/apps/studio`, started with Node:
+
+```bash
+topview-3d-cli studio open <dir>
+```
+
+The command starts Studio with Node on port 3002 when that port is free, and opens the system
+browser on this project. The project directory is `.topview-3d`.
+Do this once at the end of a scene, not after every edit.
+
+- `STUDIO_UNAVAILABLE`: this install has no Studio (the published package does not include it).
+  Say so and stop; do not build another viewer.
+- `STUDIO_PROJECT_MISSING`: a Studio is already running without this project. Ask the user to
+  stop it, then run the command again.
+- `STUDIO_START_FAILED`: Node did not bring Studio up. Report the error and do not retry in a loop.
 
 ## When the browser is blocked
 

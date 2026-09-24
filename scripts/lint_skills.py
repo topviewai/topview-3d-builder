@@ -28,7 +28,7 @@ BANNED = [
     (re.compile(r"\bclaude\b", re.I), "vendor-specific agent name"),
     (re.compile(r"https?://", re.I), "URL"),
     (re.compile(r"\b[\w-]+\.(?:topview\.ai|topview\.com)\b|\btopview\.(?:ai|com)\b", re.I), "internal domain"),
-    (re.compile(r"topview(?!-3d-cli|-3d-builder|_3d_cli|3d(?:\b|_))", re.I), "product identity (only the package, command, data directory and variable names are allowed)"),
+    (re.compile(r"topview(?!-3d-cli|-3d-builder|-3d\b|_3d_cli|3d(?:\b|_)| 3D Builder)", re.I), "product identity (only the package, command, data directory and variable names are allowed)"),
     (re.compile(r"\bcanvas\b", re.I), "product identity"),
     (re.compile(r"\b(?:api[ _-]?)?keys?\b", re.I), "key wording"),
     (re.compile(r"\b(?:secret|token|password|credential)s?\b", re.I), "credential wording"),

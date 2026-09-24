@@ -1,7 +1,7 @@
 """Read-only checks: ``evaluate`` (dry-run numbers), ``inspect nodes`` (mesh measurements), ``inspect views``.
 
 Nothing here edits the director document. ``inspect views`` writes render runs and records the
-runtime evidence in ``.topview3d/bom.json``.
+runtime evidence in ``.topview-3d/bom.json``.
 """
 from __future__ import annotations
 

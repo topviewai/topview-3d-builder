@@ -143,7 +143,7 @@ function publicAssetBase(body) {
 }
 
 // outputDir is `<absolute>/renders/<runId>`: the caller chooses the root (a project's
-// .topview3d/renders), the renderer writes exactly one run directory below it.
+// .topview-3d/renders), the renderer writes exactly one run directory below it.
 export function resolveOutputDir(outputDir, pathApi = path) {
   if (typeof outputDir !== 'string' || !outputDir.trim()) {
     throw new Error('RENDER_OUTPUT_DIR_REQUIRED')

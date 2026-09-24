@@ -26,7 +26,7 @@ correction pass on realism while blocking or spatial relationships are still wro
    ```
 
    It freezes one `sceneSequence`, runs the numerical checks, renders each view into
-   `.topview3d/renders/` and records the evidence as BOM `verification`. Each `views[]` row has
+   `.topview-3d/renders/` and records the evidence as BOM `verification`. Each `views[]` row has
    `numerical` issues, `renderStatus` and `render.contactSheet` (`path`, `sha256`). **Open every
    returned PNG and look at it before judging**: all required objects are visible, people match
    their identities and places, scale, ground contact and orientation are plausible, framing,

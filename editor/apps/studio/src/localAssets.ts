@@ -1,6 +1,6 @@
 // 离线素材层（仅服务端）：读取与 CLI 相同的素材清单（scene3d-asset-manifest v1）。
 // 内置库在仓库根 builtin-assets/，可用 TOPVIEW3D_BUILTIN_ASSETS 覆盖；
-// TOPVIEW3D_PROJECTS 里每个 CLI 项目的 .topview3d/assets/ 叠加在内置库之上（同 id 以项目为准）。
+// TOPVIEW3D_PROJECTS 里每个 CLI 项目的 .topview-3d/assets/ 叠加在内置库之上（同 id 以项目为准）。
 // 只提供清单里列出的文件，不做任何远程请求。
 import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
@@ -122,7 +122,7 @@ export function assetCatalog(): LocalAsset[] {
   const byId = new Map<string, LocalAsset>()
   for (const asset of loadManifest(builtinAssetRoot())) byId.set(asset.id, asset)
   for (const root of projectRoots()) {
-    for (const asset of loadManifest(path.join(root, '.topview3d', 'assets'))) {
+    for (const asset of loadManifest(path.join(root, '.topview-3d', 'assets'))) {
       byId.delete(asset.id)
       byId.set(asset.id, asset)
     }

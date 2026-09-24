@@ -1,6 +1,6 @@
 """Local, single-writer Scene3D project storage.
 
-``.topview3d/entities.json`` is the authoritative entity store (see
+``.topview-3d/entities.json`` is the authoritative entity store (see
 ``director_operations``). ``document.json`` and ``fcurves.json`` are derived views
 rewritten on every commit for renderers and humans; editing them has no effect.
 """
@@ -36,6 +36,7 @@ from topview_3d_cli.runtime import builder_version
 FORMAT_NAME = "scene3d-local-project"
 SCHEMA_VERSION = 2
 CLI_VERSION = __version__
+STATE_DIR_NAME = ".topview-3d"
 
 
 @dataclass(frozen=True)
@@ -61,7 +62,7 @@ class Project:
 
 def project_paths(root: str | os.PathLike[str]) -> ProjectPaths:
     directory = Path(root).expanduser().resolve()
-    state = directory / ".topview3d"
+    state = directory / STATE_DIR_NAME
     return ProjectPaths(
         root=directory,
         state=state,

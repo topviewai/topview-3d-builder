@@ -11,7 +11,7 @@
 素材一律来自本地素材清单（`scene3d-asset-manifest` v1，CLI 与 Studio 共用）：
 
 - 内置库：仓库根 `builtin-assets/manifest.json`（角色、姿势、图元），随 CLI wheel 分发；
-- 项目素材：CLI 项目的 `.topview3d/assets/manifest.json`，由 `topview-3d-cli assets import` 写入。
+- 项目素材：CLI 项目的 `.topview-3d/assets/manifest.json`，由 `topview-3d-cli assets import` 写入。
 
 清单字段与校验规则以 `agent/topview_3d_cli/local_assets.py` 为准。现行规则：
 
@@ -69,7 +69,7 @@ apps/studio/drafts/                         # 本地草稿，已 gitignore
 ../builtin-assets/                          # 内置素材清单与文件（CLI 与 Studio 共用）
 ```
 
-角色与姿势文件、封面只放在 `builtin-assets/`（或各 CLI 项目的 `.topview3d/assets/`），不进 `editor/`。
+角色与姿势文件、封面只放在 `builtin-assets/`（或各 CLI 项目的 `.topview-3d/assets/`），不进 `editor/`。
 `docs/samples/` 只给测试读，工作台只认 `apps/studio/drafts/`（外加只读的 CLI 项目）。
 
 ---

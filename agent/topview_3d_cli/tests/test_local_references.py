@@ -141,7 +141,7 @@ def checkpoint(tmp_path, **fields):
 def test_bom_checkpoint_sets_updated_at_and_hides_guides_read(capsys, project, tmp_path):
     code, body = run(capsys, "bom", "checkpoint", project, checkpoint(tmp_path, intent="walk"))
     assert code == 0 and body["bom"]["updatedAt"] and "guidesRead" not in body["bom"]
-    stored = json.loads((project / ".topview3d" / "bom.json").read_text(encoding="utf-8"))
+    stored = json.loads((project / ".topview-3d" / "bom.json").read_text(encoding="utf-8"))
     assert stored["updatedAt"] == body["bom"]["updatedAt"]
     assert "guidesRead" not in run(capsys, "bom", "get", project)[1]["bom"]
 
@@ -154,7 +154,7 @@ def test_bom_checkpoint_rejects_references_to_missing_nodes(capsys, project, tmp
         code, body = run(capsys, "bom", "checkpoint", project, checkpoint(tmp_path, **{field: [entry]}))
         assert (code, body["code"]) == (2, "DIRECTOR_NODE_NOT_FOUND"), body
         assert body["details"] == {"field": field, "index": 0, "id": entry["id"], "property": key, "ref": "ghost"}
-    assert not (project / ".topview3d" / "bom.json").exists()
+    assert not (project / ".topview-3d" / "bom.json").exists()
 
 
 def test_review_without_evidence_names_both_sequences(capsys, project, tmp_path):
