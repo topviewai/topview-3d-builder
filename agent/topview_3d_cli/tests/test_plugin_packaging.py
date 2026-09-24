@@ -99,11 +99,16 @@ def _png(width: int, height: int) -> bytes:
     return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", ihdr) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
 
 
-def _plugin_repo(tmp_path: Path, icon: bytes | None = None, logo: bytes | None = None) -> Path:
+def _plugin_repo(tmp_path: Path, icon: bytes | None = None, logo: bytes | None = None, todo: bool = False) -> Path:
     repo = tmp_path / "repo"
     (repo / "scripts").mkdir(parents=True)
     shutil.copy2(ROOT / "scripts" / "package-codex-plugin.mjs", repo / "scripts")
     shutil.copytree(ROOT / ".codex-plugin", repo / ".codex-plugin", ignore=IGNORE)
+    if todo:
+        manifest_path = repo / ".codex-plugin" / "plugin.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["interface"]["privacyPolicyURL"] = "TODO"
+        manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     shutil.copytree(ROOT / "skills", repo / "skills", ignore=IGNORE)
     (repo / "assets").mkdir()
     (repo / "assets" / "README.md").write_text("images\n", encoding="utf-8")
@@ -128,9 +133,9 @@ def _package(repo: Path, *args: str) -> subprocess.CompletedProcess[str]:
 @needs_tools
 def test_package_builds_zip_with_only_plugin_files(tmp_path):
     repo = _plugin_repo(tmp_path, icon=_png(64, 64), logo=_png(128, 128))
-    result = _package(repo)
+    result = _package(repo, "--release")
     assert result.returncode == 0, result.stderr
-    assert "TODO placeholders" in result.stderr
+    assert "TODO placeholders" not in result.stderr
     with zipfile.ZipFile(repo / "dist" / "topview-3d-builder-plugin.zip") as archive:
         names = [name for name in archive.namelist() if not name.endswith("/")]
     assert all(name.startswith("topview-3d-builder/") for name in names)
@@ -143,7 +148,11 @@ def test_package_builds_zip_with_only_plugin_files(tmp_path):
 
 @needs_tools
 def test_package_release_mode_rejects_todo_placeholders(tmp_path):
-    repo = _plugin_repo(tmp_path, icon=_png(64, 64), logo=_png(64, 64))
+    repo = _plugin_repo(tmp_path, icon=_png(64, 64), logo=_png(64, 64), todo=True)
+    draft = _package(repo)
+    assert draft.returncode == 0, draft.stderr
+    assert "plugin.json still has TODO placeholders: interface.privacyPolicyURL" in draft.stderr
+    shutil.rmtree(repo / "dist")
     result = _package(repo, "--release")
     assert result.returncode == 1
     assert "TODO placeholders" in result.stderr and not (repo / "dist").exists()
