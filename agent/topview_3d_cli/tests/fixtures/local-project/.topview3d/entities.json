@@ -1,0 +1,228 @@
+{
+  "entities": {
+    "box-1": {
+      "createdSequence": 3,
+      "deletedSequence": null,
+      "entityType": "DIRECTOR_NODE",
+      "entityVersion": 1,
+      "order": 2,
+      "state": {
+        "id": "box-1",
+        "locked": false,
+        "name": "Box",
+        "primitive": {
+          "kind": "BoxGeometry",
+          "parameters": {
+            "depth": 1,
+            "height": 1,
+            "width": 1
+          }
+        },
+        "transform": {
+          "position": {
+            "x": 0.0,
+            "y": 0.5,
+            "z": 0.0
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "type": "primitive",
+        "visible": true
+      },
+      "updatedSequence": 3
+    },
+    "cam-main": {
+      "createdSequence": 2,
+      "deletedSequence": null,
+      "entityType": "DIRECTOR_NODE",
+      "entityVersion": 1,
+      "order": 1,
+      "state": {
+        "camera": {
+          "far": 2000.0,
+          "fov": 50.0,
+          "fovAxis": "vertical",
+          "isPrimary": true,
+          "lookAt": {
+            "x": 0.0,
+            "y": 1.2,
+            "z": 0.0
+          },
+          "near": 0.1,
+          "projection": "perspective"
+        },
+        "id": "cam-main",
+        "locked": false,
+        "name": "主相机",
+        "transform": {
+          "position": {
+            "x": 0.0,
+            "y": 1.8,
+            "z": 5.0
+          },
+          "rotation": {
+            "x": -8.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "type": "camera",
+        "visible": true
+      },
+      "updatedSequence": 2
+    },
+    "director": {
+      "createdSequence": 1,
+      "deletedSequence": null,
+      "entityType": "DIRECTOR_SCENE",
+      "entityVersion": 1,
+      "order": 0,
+      "state": {
+        "content": {
+          "activeShotCameraNodeId": "cam-main",
+          "aspectRatio": "16:9",
+          "asset": {
+            "motionPath": []
+          },
+          "environment": {
+            "background": {
+              "mode": "color",
+              "skyColor": "#87CEEB"
+            },
+            "display": {
+              "characterLabelsVisible": true,
+              "groundHeight": 0.0,
+              "groundOpacity": 1.0,
+              "groundVisible": true
+            }
+          },
+          "physicalConstraints": [],
+          "timeline": {
+            "animation": {
+              "motionTransitions": []
+            },
+            "fps": 24,
+            "frameEnd": 120,
+            "frameStart": 0,
+            "usePreviewRange": false,
+            "version": 1
+          },
+          "version": 1
+        },
+        "extra": {},
+        "pippitAssetId": "local_director",
+        "type": "biz/scene3d-director-document"
+      },
+      "updatedSequence": 1
+    },
+    "fcurves__box-1": {
+      "createdSequence": 4,
+      "deletedSequence": null,
+      "entityType": "DIRECTOR_FCURVES",
+      "entityVersion": 1,
+      "order": 3,
+      "state": {
+        "encoding": "compact-v1",
+        "fcurves": [
+          {
+            "i": 0,
+            "id": "box-1-x",
+            "k": [
+              [
+                0,
+                0,
+                "linear"
+              ],
+              [
+                48,
+                2,
+                "linear"
+              ]
+            ],
+            "p": "transform.position",
+            "t": [
+              "node",
+              "box-1"
+            ]
+          }
+        ],
+        "version": 1
+      },
+      "updatedSequence": 4
+    }
+  },
+  "nextOrder": 4,
+  "operations": {
+    "fixture_box": {
+      "record": {
+        "baseSequence": 2,
+        "batchId": "fixture_local_project",
+        "entityId": "box-1",
+        "entityVersionAfter": 1,
+        "expectedEntityVersion": null,
+        "kind": "director.node.upsert",
+        "operationId": "fixture_box",
+        "sequence": 3,
+        "status": "accepted"
+      },
+      "sha256": "48a386c93957c6ad05c06244c94f446a03802dbb43775f2d5f930905e3d4e732"
+    },
+    "fixture_box_curves": {
+      "record": {
+        "baseSequence": 3,
+        "batchId": "fixture_local_project",
+        "entityId": "fcurves__box-1",
+        "entityVersionAfter": 1,
+        "expectedEntityVersion": null,
+        "kind": "director.fcurves.set",
+        "operationId": "fixture_box_curves",
+        "sequence": 4,
+        "status": "accepted"
+      },
+      "sha256": "71778d47bd9993abb875f5d70c25544d4b989f81eeecef3c1c5b9346e4cf14bd"
+    },
+    "gen_29bada35d8": {
+      "record": {
+        "baseSequence": 1,
+        "batchId": "genesis",
+        "entityId": "cam-main",
+        "entityVersionAfter": 1,
+        "expectedEntityVersion": null,
+        "kind": "director.node.upsert",
+        "operationId": "gen_29bada35d8",
+        "sequence": 2,
+        "status": "accepted"
+      },
+      "sha256": "66aadc134198295adf19ffae95626663f229a8bc773ae8e8bcda74a0314d75b1"
+    },
+    "gen_b005d8302c": {
+      "record": {
+        "baseSequence": 0,
+        "batchId": "genesis",
+        "entityId": "director",
+        "entityVersionAfter": 1,
+        "expectedEntityVersion": null,
+        "kind": "director.scene.set",
+        "operationId": "gen_b005d8302c",
+        "sequence": 1,
+        "status": "accepted"
+      },
+      "sha256": "4c01a3a26b3826084d13f4ec89215bee4799fe7cb39988b680a59daea27e9244"
+    }
+  },
+  "sceneSequence": 4
+}

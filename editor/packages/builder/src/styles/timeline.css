@@ -1,0 +1,757 @@
+.t3d-timeline {
+  --t3d-timeline-height: 320px;
+  height: var(--t3d-timeline-height);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border-top: 1px solid var(--t3d-border);
+  background: var(--t3d-bg-panel);
+}
+
+.t3d-timeline.is-collapsed {
+  height: auto;
+}
+
+.t3d-timeline-resize {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  right: 0;
+  z-index: 8;
+  height: 6px;
+  cursor: row-resize;
+}
+
+.t3d-timeline-resize::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: transparent;
+}
+
+.t3d-timeline-resize:hover::after,
+.t3d-timeline-resize.is-dragging::after {
+  background: var(--t3d-accent);
+}
+
+.t3d-timeline-fold {
+  position: absolute;
+  left: 50%;
+  top: -11px;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 22px;
+  padding: 0;
+  transform: translateX(-50%);
+  border: none;
+  border-radius: 11px;
+  background: var(--t3d-dock-surface);
+  color: var(--t3d-btn-icon);
+  backdrop-filter: blur(var(--t3d-dock-blur));
+  -webkit-backdrop-filter: blur(var(--t3d-dock-blur));
+  box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+}
+
+.t3d-timeline-fold:hover {
+  background: var(--t3d-ui-active);
+  color: var(--t3d-text);
+}
+
+.t3d-timeline-fold-icon {
+  display: block;
+  transform: rotate(90deg);
+}
+
+.t3d-timeline.is-collapsed .t3d-timeline-fold-icon {
+  transform: rotate(-90deg);
+}
+
+.t3d-timeline.is-collapsed .t3d-timeline-toolbar {
+  border-bottom: none;
+}
+
+.t3d-timeline-toolbar {
+  flex: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 42px;
+  padding: 6px 12px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--t3d-border-subtle);
+}
+
+.t3d-timeline-group {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 30px;
+  padding: 2px;
+  gap: 2px;
+  border-radius: 14px;
+  background: var(--t3d-bg-input);
+}
+
+.t3d-timeline-field,
+.t3d-timeline-text-btn,
+.t3d-timeline-toggle {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  height: 30px;
+  gap: 6px;
+  color: var(--t3d-text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.t3d-timeline-field input[type='number'],
+.t3d-timeline-field .t3d-scrub-input {
+  width: 3.6em;
+  background: var(--t3d-bg-input);
+  color: var(--t3d-text);
+  border: none;
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 22px;
+  appearance: textfield;
+}
+
+.t3d-timeline-field-range input[type='number'],
+.t3d-timeline-field-range .t3d-scrub-input {
+  width: 4.4em;
+}
+
+.t3d-timeline-field-unit {
+  color: var(--t3d-text-secondary);
+}
+
+.t3d-timeline-zoom {
+  min-width: 0;
+}
+
+.t3d-timeline-zoom .t3d-range-slider {
+  width: 80px;
+}
+
+.t3d-timeline-icon-btn,
+.t3d-timeline-text-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  color: var(--t3d-btn-icon);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.t3d-timeline-icon-btn {
+  border-radius: 50%;
+}
+
+.t3d-timeline-icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.t3d-timeline-icon-btn:hover,
+.t3d-timeline-text-btn:hover {
+  background: var(--t3d-ui-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-timeline-icon-btn.is-active {
+  color: var(--t3d-text);
+  background: color-mix(in srgb, var(--t3d-text) 16%, transparent);
+}
+
+.t3d-timeline-play,
+.t3d-timeline-play:hover,
+.t3d-timeline-play.is-active {
+  background: #fff;
+  color: #111;
+}
+
+.t3d-timeline-auto-key {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 6px;
+  height: 26px;
+  padding: 0 8px;
+  background: transparent;
+  color: var(--t3d-btn-icon);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  white-space: nowrap;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.t3d-timeline-auto-key svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.t3d-timeline-auto-key:hover {
+  background: var(--t3d-ui-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-timeline-auto-key.is-active {
+  color: var(--t3d-text);
+  background: color-mix(in srgb, var(--t3d-text) 16%, transparent);
+}
+
+.t3d-timeline-text-btn {
+  width: auto;
+  padding: 0 10px;
+}
+
+.t3d-timeline-icon-btn:disabled,
+.t3d-timeline-text-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
+.t3d-timeline-range-cluster {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  gap: 6px;
+  min-width: 0;
+}
+
+.t3d-timeline-toggle {
+  min-width: 0;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.t3d-timeline-toolbar-end {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.t3d-timeline-toolbar-tail {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* 用户关键帧覆写 / 运镜衔接：求值开关仍生效，工具栏入口暂隐藏 */
+.t3d-timeline-toolbar-tail.t3d-timeline-eval-toggles {
+  display: none;
+}
+
+.t3d-timeline-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.t3d-timeline-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.t3d-timeline-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.t3d-timeline-scroll::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+
+.t3d-timeline-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
+  background-clip: padding-box;
+}
+
+.t3d-timeline-scroll::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.t3d-timeline-content {
+  --t3d-sheet-accent: #d4d4d4;
+  --t3d-sheet-grid: rgba(255, 255, 255, 0.08);
+  position: relative;
+  min-width: 100%;
+  min-height: 100%;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.t3d-timeline-row {
+  display: grid;
+  grid-template-columns: 188px minmax(0, 1fr);
+  min-height: 30px;
+  height: 30px;
+  border-bottom: 1px solid var(--t3d-sheet-grid);
+}
+
+.t3d-timeline-ruler-row {
+  height: 30px;
+  position: sticky;
+  top: 0;
+  z-index: var(--t3d-z-sticky);
+  background: var(--t3d-bg-header);
+}
+
+.t3d-timeline-name {
+  width: 188px;
+  position: sticky;
+  left: 0;
+  z-index: calc(var(--t3d-z-sticky) - 1);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 8px;
+  box-sizing: border-box;
+  background: var(--t3d-bg-track-name);
+  cursor: pointer;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.t3d-timeline-name-selected {
+  background: var(--t3d-bg-track-name-selected);
+}
+
+.t3d-timeline-row-node .t3d-timeline-name {
+  background: var(--t3d-bg-input-deep);
+}
+
+.t3d-timeline-row-group .t3d-timeline-name {
+  background: var(--t3d-bg-panel);
+}
+
+.t3d-timeline-row-node .t3d-timeline-name-selected {
+  background: var(--t3d-bg-track-name-selected);
+}
+
+.t3d-timeline-twisty {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  margin-left: -4px;
+  padding: 0;
+  appearance: none;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+  color: var(--t3d-text-muted);
+}
+
+.t3d-timeline-twisty svg {
+  display: block;
+  width: 12px;
+  height: 12px;
+}
+
+.t3d-timeline-twisty.is-open svg {
+  transform: rotate(90deg);
+}
+
+.t3d-timeline-twisty:hover,
+.t3d-timeline-twisty:focus,
+.t3d-timeline-twisty:focus-visible,
+.t3d-timeline-twisty:active {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  outline: none;
+  color: var(--t3d-text-input);
+}
+
+.t3d-timeline-twisty-spacer {
+  flex: none;
+  width: 18px;
+}
+
+.t3d-timeline-ruler-name {
+  cursor: default;
+  color: var(--t3d-text-dim);
+}
+
+.t3d-timeline-node-name {
+  font-weight: 600;
+  color: var(--t3d-text-node);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.t3d-timeline-follow-badge {
+  flex: none;
+  margin-left: 4px;
+  padding: 0 4px;
+  border: 1px solid var(--t3d-border-input);
+  border-radius: 3px;
+  color: var(--t3d-text-muted);
+  font-size: 10px;
+  line-height: 14px;
+  white-space: nowrap;
+}
+
+.t3d-timeline-track-label {
+  color: var(--t3d-text-track);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.t3d-timeline-kf-add {
+  margin-left: auto;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 27px;
+  padding: 3px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--t3d-text-secondary);
+  cursor: pointer;
+}
+
+.t3d-timeline-kf-add:hover {
+  background: var(--t3d-bg-elevated, var(--t3d-bg-input));
+  color: var(--t3d-sheet-accent, #d4d4d4);
+}
+
+.t3d-timeline-kf-add svg {
+  display: block;
+}
+
+.t3d-timeline-track {
+  position: relative;
+  z-index: 4;
+  min-width: 0;
+  min-height: 29px;
+  margin-left: 12px;
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.t3d-timeline-ruler {
+  cursor: ew-resize;
+}
+
+.t3d-timeline-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  padding: 7px 0 0 6px;
+  border-left: 1px solid var(--t3d-sheet-grid);
+  color: var(--t3d-text-muted);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  white-space: nowrap;
+  font-size: 11px;
+}
+
+.t3d-timeline-cursor-label {
+  position: absolute;
+  top: 3px;
+  min-width: 24px;
+  padding: 3px 5px;
+  box-sizing: border-box;
+  border-radius: 4px 4px 4px 0;
+  background: var(--t3d-sheet-accent);
+  color: #111;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 14px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.t3d-timeline-grid {
+  position: absolute;
+  top: 30px;
+  bottom: 0;
+  background-image: linear-gradient(to right, var(--t3d-sheet-grid) 1px, transparent 1px);
+  background-size: var(--t3d-sheet-grid-step) 100%;
+  pointer-events: none;
+}
+
+.t3d-timeline-playhead {
+  position: absolute;
+  top: 30px;
+  bottom: 0;
+  width: 11px;
+  transform: translateX(-5px);
+  z-index: 3;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+
+
+.t3d-timeline-playhead::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 5px;
+  border-left: 1px solid var(--t3d-sheet-accent);
+  pointer-events: none;
+}
+
+.t3d-timeline-clip {
+  position: absolute;
+  touch-action: none;
+  top: 4px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 22px;
+  padding: 0 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.t3d-timeline-clip-camera {
+  background: var(--t3d-clip-camera);
+  color: var(--t3d-clip-camera-text);
+}
+
+.t3d-timeline-clip-motion {
+  background: var(--t3d-clip-motion);
+  color: var(--t3d-clip-motion-text);
+}
+
+.t3d-timeline-clip-path {
+  background: var(--t3d-clip-path);
+  color: var(--t3d-clip-path-text);
+}
+
+.t3d-timeline-clip:hover {
+  filter: brightness(1.2);
+}
+
+.t3d-timeline-clip-moving {
+  z-index: var(--t3d-z-drag);
+  opacity: 0.9;
+  cursor: grabbing;
+  pointer-events: auto;
+}
+
+.t3d-timeline-clip-selected {
+  border-color: var(--t3d-text);
+  box-shadow: 0 0 0 1px var(--t3d-text);
+}
+
+.t3d-timeline-clip-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+  background: rgba(255, 255, 255, 0.85);
+  opacity: 0;
+  z-index: 1;
+}
+
+.t3d-timeline-clip-handle-start {
+  left: 0;
+}
+
+.t3d-timeline-clip-handle-end {
+  right: 0;
+}
+
+.t3d-timeline-clip:hover .t3d-timeline-clip-handle,
+.t3d-timeline-clip-resizing .t3d-timeline-clip-handle {
+  opacity: 1;
+}
+
+.t3d-timeline-clip-handle:hover {
+  background: var(--t3d-text);
+}
+
+.t3d-timeline-clip-ghost {
+  opacity: 0.4;
+  pointer-events: none;
+  top: 9px;
+  height: 12px;
+  line-height: 12px;
+  color: transparent;
+  border-radius: 0;
+}
+
+.t3d-timeline-kf {
+  /* 视觉 10×10，命中盒略大，悬停更灵敏；缩放/光晕只作用在 ::after 钻石上 */
+  --t3d-kf-size: 10px;
+  --t3d-kf-scale: 1;
+  --t3d-kf-halo: 0 0 0 0 transparent;
+  --t3d-kf-fill: var(--t3d-text);
+  --t3d-kf-stroke: transparent;
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  filter: none;
+  cursor: grab;
+  /* 必须高于播放头（z-index:3），否则当前帧上的钻石点不到、拖不动 */
+  z-index: 4;
+  touch-action: none;
+}
+
+.t3d-timeline-kf::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--t3d-kf-size);
+  height: var(--t3d-kf-size);
+  box-sizing: border-box;
+  background: var(--t3d-kf-fill);
+  border: 1px solid var(--t3d-kf-stroke);
+  box-shadow: var(--t3d-kf-halo);
+  transform: translate(-50%, -50%) rotate(45deg) scale(var(--t3d-kf-scale));
+  transition:
+    transform 140ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 140ms ease;
+  pointer-events: none;
+}
+
+.t3d-timeline-kf:hover {
+  --t3d-kf-scale: 1.1;
+  --t3d-kf-halo:
+    0 0 0 1px rgba(255, 255, 255, 0.14),
+    0 0 4px 1px rgba(255, 255, 255, 0.22);
+  z-index: 5;
+}
+
+.t3d-timeline-kf:active {
+  cursor: grabbing;
+}
+
+.t3d-timeline-kf-selected,
+.t3d-timeline-kf-selected:hover {
+  --t3d-kf-fill: rgb(172, 120, 255);
+  --t3d-kf-stroke: #ffffff;
+  --t3d-kf-scale: 1;
+  --t3d-kf-halo: 0 0 0 0 transparent;
+  z-index: 5;
+}
+
+.t3d-timeline-kf-readonly {
+  --t3d-kf-fill: transparent;
+  --t3d-kf-stroke: var(--t3d-fcurve);
+  cursor: default;
+  z-index: var(--t3d-z-panel);
+  pointer-events: none;
+}
+
+.t3d-timeline-kf-readonly:hover {
+  --t3d-kf-scale: 1;
+  --t3d-kf-halo: 0 0 0 0 transparent;
+}
+
+/* fcurves（官方曲线层）关键帧：空心菱形区分 userKeys，可点击（单击 seek，双击/右键删除） */
+.t3d-timeline-kf-fcurve {
+  --t3d-kf-fill: transparent;
+  --t3d-kf-stroke: var(--t3d-fcurve);
+  cursor: pointer;
+}
+
+.t3d-timeline-kf-fcurve.t3d-timeline-kf-selected,
+.t3d-timeline-kf-fcurve.t3d-timeline-kf-selected:hover {
+  --t3d-kf-fill: rgb(172, 120, 255);
+  --t3d-kf-stroke: #ffffff;
+}
+
+/* 「变换」组行的组合关键帧：与子轨道同一套三态，命中盒同样放大 */
+.t3d-timeline-kf-xform {
+  cursor: pointer;
+}
+
+.t3d-timeline-kf-ghost {
+  --t3d-kf-size: 8px;
+  opacity: 0.72;
+}
+
+/* 运镜接管时：变换关键帧挂起置灰，仍可悬停看提示，不可拖 */
+.t3d-timeline-kf-suspended {
+  --t3d-kf-fill: #8a8a8a;
+  opacity: 0.36;
+  cursor: default;
+}
+.t3d-timeline-kf-suspended:hover {
+  --t3d-kf-scale: 1;
+  --t3d-kf-halo: 0 0 0 0 transparent;
+  opacity: 0.42;
+}
+.t3d-timeline-kf-suspended:active {
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t3d-timeline-kf::after {
+    transition: none;
+  }
+}
+
+.t3d-timeline-kf-box {
+  position: absolute;
+  pointer-events: none;
+  z-index: 8;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px dashed rgba(255, 255, 255, 0.7);
+}
+
+.t3d-timeline-clip-drop-preview {
+  border: 1px dashed rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--t3d-text-muted);
+  pointer-events: none;
+}

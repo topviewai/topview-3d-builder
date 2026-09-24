@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "batchId": "batch_director_01",
+  "operations": [
+    {
+      "operationId": "op_director_scene_set",
+      "baseSequence": 0,
+      "entityId": "director",
+      "expectedEntityVersion": null,
+      "kind": "director.scene.set",
+      "payload": {
+        "scene": {
+          "type": "biz/scene3d-director-document",
+          "pippitAssetId": "director_fixture_01",
+          "extra": { "customDraftName": "director-v1-fixture" },
+          "content": {
+            "version": 1,
+            "aspectRatio": "21:9",
+            "activeShotCameraNodeId": "camera_1",
+            "environment": {
+              "background": { "mode": "color", "skyColor": "#060608" },
+              "display": {
+                "characterLabelsVisible": true,
+                "groundVisible": true,
+                "groundHeight": 0,
+                "groundOpacity": 1
+              }
+            },
+            "asset": { "motionPath": [] },
+            "physicalConstraints": [],
+            "timeline": {
+              "version": 1,
+              "fps": 24,
+              "frameStart": 0,
+              "frameEnd": 120,
+              "usePreviewRange": false,
+              "animation": {
+                "fcurves": [],
+                "motionTransitions": []
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "operationId": "op_director_node_upsert",
+      "baseSequence": 0,
+      "entityId": "camera_1",
+      "expectedEntityVersion": null,
+      "kind": "director.node.upsert",
+      "payload": {
+        "node": {
+          "id": "camera_1",
+          "type": "camera",
+          "name": "主相机",
+          "visible": true,
+          "locked": false,
+          "transform": {
+            "position": { "x": 0, "y": 1.8, "z": 5 },
+            "rotation": { "x": -8, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "camera": {
+            "projection": "perspective",
+            "fov": 50,
+            "fovAxis": "vertical",
+            "near": 0.1,
+            "far": 2000,
+            "isPrimary": true,
+            "lookAt": { "x": 0, "y": 1.2, "z": 0 }
+          }
+        }
+      }
+    },
+    {
+      "operationId": "op_director_clip_upsert",
+      "baseSequence": 0,
+      "entityId": "clip_cam_push_1",
+      "expectedEntityVersion": null,
+      "kind": "director.clip.upsert",
+      "payload": {
+        "clipKind": "cameraMotion",
+        "clip": {
+          "id": "clip_cam_push_1",
+          "target": { "type": "node", "nodeId": "camera_1" },
+          "frameStart": 0,
+          "frameEnd": 48,
+          "trimStartMs": 0,
+          "trimEndMs": 2000,
+          "playback": {
+            "version": 1,
+            "speed": 1,
+            "loop": false,
+            "loopMode": "none",
+            "baseDurationFrames": 48
+          },
+          "motion": {
+            "id": "static_shot",
+            "version": 1,
+            "presetId": "static_shot",
+            "label": "固定镜头",
+            "timeUnit": "ms",
+            "durationMs": 2000,
+            "curves": []
+          }
+        }
+      }
+    },
+    {
+      "operationId": "op_director_fcurves_set",
+      "baseSequence": 0,
+      "entityId": "fcurves__camera_1",
+      "expectedEntityVersion": null,
+      "kind": "director.fcurves.set",
+      "payload": {
+        "version": 1,
+        "encoding": "compact-v1",
+        "fcurves": []
+      }
+    },
+    {
+      "operationId": "op_director_clip_delete",
+      "baseSequence": 1,
+      "entityId": "clip_cam_push_1",
+      "expectedEntityVersion": 1,
+      "kind": "director.clip.delete",
+      "payload": {}
+    },
+    {
+      "operationId": "op_director_fcurves_delete",
+      "baseSequence": 1,
+      "entityId": "fcurves__camera_1",
+      "expectedEntityVersion": 1,
+      "kind": "director.fcurves.delete",
+      "payload": {}
+    },
+    {
+      "operationId": "op_director_node_delete",
+      "baseSequence": 1,
+      "entityId": "camera_1",
+      "expectedEntityVersion": 1,
+      "kind": "director.node.delete",
+      "payload": {}
+    }
+  ]
+}

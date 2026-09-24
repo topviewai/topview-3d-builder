@@ -1,0 +1,645 @@
+.t3d-topbar {
+  height: 44px;
+  flex: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 0 18px;
+  background: var(--t3d-bg-header);
+  border-bottom: 1px solid var(--t3d-border);
+}
+
+.t3d-topbar-left,
+.t3d-topbar-center,
+.t3d-topbar-right {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.t3d-topbar-left {
+  gap: 10px;
+}
+
+.t3d-topbar-center {
+  justify-content: center;
+  gap: 10px;
+}
+
+.t3d-topbar-right {
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.t3d-body {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+}
+
+.t3d-root.is-viewport-fullscreen .t3d-leftrail-slot,
+.t3d-root.is-viewport-fullscreen .t3d-side,
+.t3d-root.is-viewport-fullscreen .t3d-timeline {
+  display: none;
+}
+
+.t3d-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.t3d-studio-close {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #0a0a0a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 18px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 0 rgba(0, 0, 0, 0.12),
+    0 3px 0 0 #d4d4d8;
+  transition: background-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+
+.t3d-studio-close-face {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.t3d-studio-close.is-loading .t3d-studio-close-face {
+  visibility: hidden;
+}
+
+.t3d-studio-close-spinner {
+  position: absolute;
+  inset: 0;
+  width: 16px;
+  height: 16px;
+  margin: auto;
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: t3d-studio-close-spin 700ms linear infinite;
+}
+
+.t3d-studio-close:hover:not(:disabled) {
+  background: #f4f4f5;
+}
+
+.t3d-studio-close:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.1),
+    0 1px 0 0 #d4d4d8;
+}
+
+.t3d-studio-close:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.t3d-studio-close:disabled,
+.t3d-studio-close.is-loading,
+.t3d-studio-close.is-loading:hover {
+  cursor: default;
+  opacity: 1;
+  background: #ffffff;
+}
+
+@keyframes t3d-studio-close-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t3d-studio-close-spinner { animation: none; }
+}
+
+.t3d-topbar-logo {
+  flex: none;
+  display: block;
+  color: var(--t3d-text);
+}
+
+.t3d-topbar-title {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.t3d-topbar-sep {
+  color: var(--t3d-text-hint);
+  font-weight: 500;
+}
+
+.t3d-topbar-doc {
+  color: var(--t3d-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.t3d-topbar-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--t3d-text-muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.t3d-topbar-save-ok {
+  line-height: 0;
+}
+
+.t3d-topbar-save-mark {
+  display: block;
+}
+
+.t3d-topbar-save-warn {
+  color: var(--t3d-warn);
+}
+
+.t3d-topbar-save-error {
+  color: var(--t3d-danger);
+}
+
+.t3d-topbar-save-muted {
+  color: var(--t3d-text-muted);
+}
+
+.t3d-topbar-ratio {
+  position: relative;
+}
+
+.t3d-topbar-ratio-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  min-width: 56px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--t3d-btn-icon);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16.8px;
+  white-space: nowrap;
+}
+
+.t3d-topbar-ratio-trigger:hover:not(:disabled),
+.t3d-topbar-ratio-trigger[aria-expanded="true"] {
+  background: var(--t3d-ui-hover);
+}
+
+.t3d-topbar-ratio-trigger:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.t3d-topbar-ratio-icon {
+  display: block;
+  flex: none;
+}
+
+.t3d-topbar-ratio-value {
+  font-variant-numeric: tabular-nums;
+}
+
+.t3d-topbar-ratio-menu {
+  width: 282px;
+  max-height: none;
+  overflow: visible;
+  padding: 10px 12px 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 58px);
+  gap: 8px;
+}
+
+.t3d-topbar-ratio-menu-local {
+  top: calc(100% + 6px);
+  left: 0;
+}
+
+.t3d-topbar-ratio-menu-title {
+  grid-column: 1 / -1;
+  height: 20px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.t3d-topbar-ratio-item {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 58px;
+  height: 64px;
+  padding: 8px 6px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t3d-dropdown-item);
+  font: inherit;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  cursor: pointer;
+  transition: background 80ms ease;
+}
+
+.t3d-topbar-ratio-item:hover {
+  background: var(--t3d-dropdown-item-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-topbar-ratio-item-active {
+  background: color-mix(in srgb, var(--t3d-accent) 20%, transparent);
+  border-color: var(--t3d-accent);
+  box-shadow: inset 0 0 0 1px var(--t3d-accent);
+  color: var(--t3d-text);
+  font-weight: 500;
+}
+
+.t3d-topbar-ratio-item-active .t3d-ratio-glyph-frame {
+  background: color-mix(in srgb, var(--t3d-accent) 35%, transparent);
+  border-color: var(--t3d-accent);
+}
+
+.t3d-topbar-ratio-item-label {
+  font-variant-numeric: tabular-nums;
+}
+
+.t3d-topbar-ratio-item-active .t3d-topbar-ratio-item-label {
+  color: var(--t3d-text);
+  font-weight: 600;
+}
+
+.t3d-topbar-ratio-check {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: var(--t3d-accent);
+  color: var(--t3d-text-inverse);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+}
+
+.t3d-ratio-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 18px;
+  color: inherit;
+}
+
+.t3d-ratio-glyph-frame {
+  box-sizing: border-box;
+  border: 2px solid currentColor;
+  border-radius: 0;
+}
+
+.t3d-topbar-glyph {
+  display: block;
+  transform-origin: center;
+}
+
+/* 笔画框对齐到同一长边，按钮热区仍是 32px。 */
+.t3d-topbar-glyph-tutorial {
+  transform: scale(1.16);
+}
+
+.t3d-topbar-glyph-shortcuts {
+  transform: scale(0.94);
+}
+
+.t3d-topbar-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t3d-btn-icon);
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.t3d-topbar-icon-btn:hover:not(:disabled),
+.t3d-topbar-icon-btn[aria-expanded="true"] {
+  background: var(--t3d-ui-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-topbar-icon-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.t3d-topbar-export-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t3d-btn-icon);
+  cursor: pointer;
+  font: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16.8px;
+  white-space: nowrap;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.t3d-topbar-export-btn svg {
+  display: block;
+  flex: none;
+}
+
+.t3d-topbar-export-btn:hover:not(:disabled),
+.t3d-topbar-export-btn[aria-expanded="true"] {
+  background: var(--t3d-ui-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-topbar-export-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.t3d-topbar-menu {
+  position: relative;
+}
+
+.t3d-topbar-menu-panel {
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: var(--t3d-z-dropdown);
+  min-width: 148px;
+  max-height: none;
+}
+
+.t3d-topbar-menu-error {
+  margin: 4px 8px 2px;
+  color: var(--t3d-danger);
+  font-size: 12px;
+}
+
+.t3d-topbar-meta {
+  color: var(--t3d-text-muted);
+  white-space: nowrap;
+}
+
+.t3d-topbar-status {
+  color: var(--t3d-warn);
+  white-space: nowrap;
+}
+
+.t3d-topbar-status-ok {
+  color: var(--t3d-ok);
+}
+
+.t3d-workspace {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  position: relative;
+}
+
+.t3d-side {
+  position: relative;
+  z-index: 7;
+  flex: none;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  width: var(--t3d-side-width);
+  min-height: 0;
+  overflow: visible;
+  border-left: 1px solid var(--t3d-border);
+  background: var(--t3d-bg-panel);
+  transition: width var(--t3d-panel-fold-duration) var(--t3d-panel-fold-ease);
+}
+
+.t3d-side.is-collapsed {
+  width: var(--t3d-side-collapsed) !important;
+  overflow: visible;
+}
+
+.t3d-side.is-collapsed .t3d-side-resize {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.t3d-side:has(.t3d-side-resize.is-dragging) {
+  transition: none;
+}
+
+.t3d-side-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  transition: opacity var(--t3d-panel-fold-duration) var(--t3d-panel-fold-ease);
+}
+
+.t3d-side.is-collapsed .t3d-side-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.t3d-side-resize {
+  position: absolute;
+  top: 0;
+  left: -3px;
+  z-index: 8;
+  width: 10px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+.t3d-side-resize::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 3px;
+  width: 1px;
+  height: 100%;
+  background: transparent;
+}
+
+.t3d-side-resize:hover::after,
+.t3d-side-resize.is-dragging::after {
+  background: var(--t3d-accent);
+}
+
+.t3d-side-toggle {
+  position: absolute;
+  top: 50%;
+  left: -11px;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 11px;
+  background: var(--t3d-dock-surface);
+  color: var(--t3d-btn-icon);
+  backdrop-filter: blur(var(--t3d-dock-blur));
+  -webkit-backdrop-filter: blur(var(--t3d-dock-blur));
+  box-shadow: inset 0 0.5px 0 0 rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.t3d-side-toggle:hover {
+  background: var(--t3d-ui-active);
+  color: var(--t3d-text);
+}
+
+.t3d-side-chevron,
+.t3d-side-chevron-expand {
+  display: block;
+}
+
+.t3d-side-chevron-expand {
+  transform: rotate(180deg);
+}
+
+.t3d-boot {
+  position: absolute;
+  inset: 0;
+  z-index: var(--t3d-z-fullscreen);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  background: var(--t3d-bg);
+  color: var(--t3d-text);
+  text-align: center;
+}
+
+.t3d-boot-exit {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+
+.t3d-boot-close {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 16px;
+  border: 1px solid var(--t3d-border-input);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--t3d-text-secondary);
+  cursor: pointer;
+}
+
+.t3d-boot-close:hover {
+  background: var(--t3d-bg-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-boot-progress {
+  width: 128px;
+  height: 1px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.t3d-boot-progress-bar {
+  display: block;
+  width: 36%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.88);
+  animation: t3d-boot-progress 1.15s ease-in-out infinite;
+}
+
+.t3d-boot-title {
+  margin: 0;
+  color: var(--t3d-text-muted);
+  font-family: system-ui, -apple-system, "PingFang SC", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 18px;
+  letter-spacing: normal;
+}
+
+.t3d-boot-title-error {
+  color: var(--t3d-danger);
+}
+
+.t3d-root-booting > :not(.t3d-boot):not(.t3d-portal-root) {
+  pointer-events: none;
+}
+
+@keyframes t3d-boot-progress {
+  0% {
+    transform: translateX(-130%);
+  }
+  100% {
+    transform: translateX(380%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t3d-boot-progress-bar {
+    animation: none;
+    transform: none;
+    width: 100%;
+    opacity: 0.55;
+  }
+}

@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "/node_modules/three/build/three.module.js",
+          "three/addons/": "/node_modules/three/examples/jsm/",
+          "zod": "/node_modules/zod/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <canvas id="stage" width="1280" height="720"></canvas>
+    <script type="module">
+      import { createHeadlessRenderer } from '/node_modules/@topview/3d-builder/dist/headless/index.mjs'
+      import { Stage } from '/node_modules/@topview/3d-builder/dist/engine/index.mjs'
+      import { Box3, Vector3 } from 'three'
+      import { FCurveSet } from '/node_modules/@topview/3d-builder/dist/evaluate/index.mjs'
+      import { resolveHeadlessMediaUrl } from '/mediaUrl.mjs'
+      import { compileLibraryPose } from './pose.mjs'
+      import { supportSurfaces, characterLandmarks } from './measure.mjs'
+      window.compileDirectorPose = compileLibraryPose
+
+      window.createDirectorRenderer = async ({
+        document, fcurves, width, height, publicAssetBase, dracoDecoderPath, localAssetUrls,
+      }) => {
+        const renderer = createHeadlessRenderer({
+          width,
+          height,
+          dracoDecoderPath,
+          resolveMediaUrl: (ref) => resolveHeadlessMediaUrl(ref, publicAssetBase || '', localAssetUrls),
+        })
+        // Evidence renders should not cover faces/contact with Editor name sprites.
+        // This copy keeps the saved draft's label settings unchanged.
+        const renderDocument = structuredClone(document)
+        for (const node of renderDocument.content.nodes) {
+          if (node.character) node.character.label = { ...node.character.label, showLabel: false }
+        }
+        await renderer.load(renderDocument, fcurves)
+        return renderer
+      }
+
+      window.inspectDirectorNodes = async ({
+        document, fcurves, nodeIds, frame, publicAssetBase, dracoDecoderPath, localAssetUrls,
+      }) => {
+        const stage = new Stage(ref => resolveHeadlessMediaUrl(ref, publicAssetBase || '', localAssetUrls), { dracoDecoderPath })
+        try {
+          await stage.load(document)
+          if (fcurves) stage.setFcurves(FCurveSet.parse(fcurves))
+          stage.seek(frame ?? document.content.timeline.frameStart ?? 0)
+          stage.scene.updateMatrixWorld(true)
+          return nodeIds.map(nodeId => {
+            const node = document.content.nodes.find(n => n.id === nodeId)
+            const object = stage.characters.get(nodeId)?.root || stage.props.get(nodeId) || stage.primitives.get(nodeId) || stage.groups.get(nodeId)
+            if (!object) return { nodeId, status: 'geometry-unavailable', type: node?.type }
+            const bounds = new Box3()
+            object.traverse(child => {
+              if (!child.isMesh || !child.geometry) return
+              // Measure meshes only: character label sprites must not inflate size.
+              const box = new Box3().setFromObject(child, true)
+              if (!box.isEmpty()) bounds.union(box)
+            })
+            if (bounds.isEmpty()) return { nodeId, status: 'geometry-unavailable' }
+            const point = value => ({ x: value.x, y: value.y, z: value.z })
+            return { nodeId, name: node.name, type: node.type, status: 'measured',
+              size: point(bounds.getSize(new Vector3())),
+              bounds: { min: point(bounds.min), max: point(bounds.max) },
+              origin: point(object.getWorldPosition(new Vector3())),
+              localForwardAxis: point(new Vector3(0, 0, 1).transformDirection(object.matrixWorld)),
+              ...(node.type === 'character' ? { landmarks: characterLandmarks(object) }
+                : { supportSurfaces: supportSurfaces(object) }),
+              semanticFront: 'unknown; verify in preview', transform: node.transform }
+          })
+        } finally { stage.dispose() }
+      }
+
+      // Chunked encoder: `String.fromCharCode(...bytes)` spreads every byte as a
+      // call argument and overflows the stack for PNGs above ~100 KB, which is
+      // any real-resolution frame. Encode in fixed slices instead.
+      window.bytesToBase64 = (buffer) => {
+        const bytes = new Uint8Array(buffer)
+        const chunk = 0x8000
+        let binary = ''
+        for (let i = 0; i < bytes.length; i += chunk) {
+          binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk))
+        }
+        return btoa(binary)
+      }
+
+      window.composeContactSheet = async (pngs, width, height, label = '') => {
+        const cols = Math.min(3, pngs.length)
+        const rows = Math.ceil(pngs.length / cols)
+        const canvas = document.createElement('canvas')
+        // Cap the sheet at 1024px on the long edge so the file stays cheap to persist.
+        const scale = Math.min(1, 1024 / Math.max(cols * width, rows * height))
+        canvas.width = Math.max(1, Math.round(cols * width * scale))
+        canvas.height = Math.max(1, Math.round(rows * height * scale))
+        const ctx = canvas.getContext('2d')
+        ctx.scale(canvas.width / (cols * width), canvas.height / (rows * height))
+        for (const [index, item] of pngs.entries()) {
+          const image = new Image()
+          image.src = `data:image/png;base64,${item.base64}`
+          await image.decode()
+          const x = (index % cols) * width, y = Math.floor(index / cols) * height
+          ctx.drawImage(image, x, y, width, height)
+          const fontSize = Math.max(14, Math.round(14 / scale))
+          ctx.fillStyle = 'rgba(0,0,0,0.8)'
+          ctx.fillRect(x, y, width, fontSize + 10)
+          ctx.font = `${fontSize}px sans-serif`
+          ctx.fillStyle = '#ffffff'
+          ctx.fillText(`${label ? label + ' · ' : ''}frame ${item.frame}`, x + 6, y + fontSize + 2, width - 12)
+        }
+        const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'))
+        const buffer = await blob.arrayBuffer()
+        return window.bytesToBase64(buffer)
+      }
+
+      window.__directorReady = true
+    </script>
+  </body>
+</html>

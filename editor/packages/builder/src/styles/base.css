@@ -1,0 +1,287 @@
+.t3d-root,
+.t3d-root *,
+.t3d-portal-root,
+.t3d-portal-root * {
+  box-sizing: border-box;
+}
+
+.t3d-studio-host {
+  height: 100%;
+  min-height: 0;
+}
+
+.t3d-root {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: var(--t3d-bg);
+  color: var(--t3d-text);
+  font: 13px/1.5 system-ui, -apple-system, "PingFang SC", sans-serif;
+  user-select: none;
+  outline: none;
+  color-scheme: dark;
+}
+
+.t3d-inspector-write-boundary {
+  display: contents;
+}
+
+.t3d-root.is-write-locked .t3d-inspector button:not(.t3d-inspector-section-head):not(.t3d-inspector-tab),
+.t3d-root.is-write-locked .t3d-inspector input,
+.t3d-root.is-write-locked .t3d-inspector select,
+.t3d-root.is-write-locked .t3d-inspector textarea,
+.t3d-root.is-write-locked .t3d-leftrail-scroll .t3d-leftrail-card {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+/* Windows Chrome 用 overlay 滚动条，会直接忽略 ::-webkit-scrollbar。
+   必须无条件写 scrollbar-width / scrollbar-color，这是唯一能上色的标准属性。 */
+.t3d-root,
+.t3d-root *,
+.t3d-portal-root,
+.t3d-portal-root * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.t3d-root::-webkit-scrollbar,
+.t3d-root *::-webkit-scrollbar,
+.t3d-portal-root::-webkit-scrollbar,
+.t3d-portal-root *::-webkit-scrollbar,
+.t3d-inspector::-webkit-scrollbar,
+.t3d-leftrail-scroll::-webkit-scrollbar,
+.t3d-leftrail-tree::-webkit-scrollbar,
+.t3d-leftrail-chips::-webkit-scrollbar,
+.t3d-timeline-scroll::-webkit-scrollbar,
+.t3d-modal-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+
+.t3d-root::-webkit-scrollbar-track,
+.t3d-root *::-webkit-scrollbar-track,
+.t3d-portal-root::-webkit-scrollbar-track,
+.t3d-portal-root *::-webkit-scrollbar-track,
+.t3d-inspector::-webkit-scrollbar-track,
+.t3d-leftrail-scroll::-webkit-scrollbar-track,
+.t3d-leftrail-tree::-webkit-scrollbar-track,
+.t3d-timeline-scroll::-webkit-scrollbar-track,
+.t3d-modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.t3d-root::-webkit-scrollbar-thumb,
+.t3d-root *::-webkit-scrollbar-thumb,
+.t3d-portal-root::-webkit-scrollbar-thumb,
+.t3d-portal-root *::-webkit-scrollbar-thumb,
+.t3d-inspector::-webkit-scrollbar-thumb,
+.t3d-leftrail-scroll::-webkit-scrollbar-thumb,
+.t3d-leftrail-tree::-webkit-scrollbar-thumb,
+.t3d-timeline-scroll::-webkit-scrollbar-thumb,
+.t3d-modal-body::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+
+.t3d-root::-webkit-scrollbar-thumb:hover,
+.t3d-root *::-webkit-scrollbar-thumb:hover,
+.t3d-portal-root::-webkit-scrollbar-thumb:hover,
+.t3d-portal-root *::-webkit-scrollbar-thumb:hover,
+.t3d-inspector::-webkit-scrollbar-thumb:hover,
+.t3d-leftrail-scroll::-webkit-scrollbar-thumb:hover,
+.t3d-leftrail-tree::-webkit-scrollbar-thumb:hover,
+.t3d-timeline-scroll::-webkit-scrollbar-thumb:hover,
+.t3d-modal-body::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
+  background-clip: padding-box;
+}
+
+.t3d-root::-webkit-scrollbar-corner,
+.t3d-root *::-webkit-scrollbar-corner,
+.t3d-portal-root::-webkit-scrollbar-corner,
+.t3d-portal-root *::-webkit-scrollbar-corner,
+.t3d-inspector::-webkit-scrollbar-corner,
+.t3d-leftrail-scroll::-webkit-scrollbar-corner,
+.t3d-leftrail-tree::-webkit-scrollbar-corner,
+.t3d-timeline-scroll::-webkit-scrollbar-corner,
+.t3d-modal-body::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.t3d-root select option,
+.t3d-portal-root select option {
+  background: var(--t3d-dropdown-bg);
+  color: var(--t3d-dropdown-item);
+}
+
+.t3d-root-noscroll {
+  overflow: hidden;
+}
+
+.t3d-portal-root {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
+/* 对齐 topview-canvas RangeSlider：白圆点 + 已走/未走双色轨道 */
+.t3d-range-slider {
+  --t3d-range-slider-progress: 0%;
+  width: 100%;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+.t3d-range-slider:disabled {
+  cursor: default;
+  opacity: 0.68;
+}
+
+.t3d-range-slider:focus-visible {
+  outline: none;
+}
+
+.t3d-range-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.82) 0%,
+      rgba(255, 255, 255, 0.82) var(--t3d-range-slider-progress),
+      rgba(255, 255, 255, 0.12) var(--t3d-range-slider-progress),
+      rgba(255, 255, 255, 0.12) 100%
+    );
+}
+
+.t3d-range-slider::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  margin-top: -7px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.t3d-range-slider:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.16),
+    0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.t3d-range-slider::-moz-range-track {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.t3d-range-slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.t3d-range-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.t3d-range-slider:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.16),
+    0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.t3d-dual-range {
+  --t3d-dual-range-start: 0%;
+  --t3d-dual-range-end: 100%;
+  position: relative;
+  width: 100%;
+  height: 26px;
+  touch-action: none;
+}
+
+.t3d-dual-range.is-disabled {
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.t3d-dual-range-track,
+.t3d-dual-range-fill {
+  position: absolute;
+  top: 50%;
+  height: 4px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.t3d-dual-range-track {
+  inset-inline: 0;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.t3d-dual-range-fill {
+  left: var(--t3d-dual-range-start);
+  right: calc(100% - var(--t3d-dual-range-end));
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.t3d-dual-range-thumb {
+  position: absolute;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  margin: 0;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.t3d-dual-range-thumb:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 4px rgba(255, 255, 255, 0.16),
+    0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.t3d-scrub-input {
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+
+.t3d-scrub-input:focus {
+  cursor: text;
+  user-select: text;
+}
+
+.t3d-scrub-input:disabled {
+  cursor: default;
+}

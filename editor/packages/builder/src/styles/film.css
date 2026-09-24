@@ -1,0 +1,1282 @@
+/* Film 工作区：对齐专业 NLE 的密度与层次。
+   局部变量只在 .t3d-film-panel 作用域内覆盖，不污染 Scene 模式。 */
+
+.t3d-film-panel {
+  --t3d-film-surface: #141414;
+  --t3d-film-sunken: #060606;
+  --t3d-film-line: #232323;
+  --t3d-film-line-strong: rgba(255, 255, 255, 0.12);
+  --t3d-film-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* 入出点把手：源条和成片片段是同一个裁剪操作，尺寸与配色共用一套变量 */
+  --t3d-film-handle-w: 16px;
+  --t3d-film-handle-w-hover: 19px;
+  --t3d-film-handle-bg: linear-gradient(to bottom, rgb(255 255 255 / 92%), rgb(255 255 255 / 68%));
+  --t3d-sheet-accent: #d4d4d4;
+  min-height: 44px;
+}
+
+/* ── mode switch ─────────────────────────────────────────── */
+
+.t3d-film-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  /* 分段 tab：外框 32 / 内部 28，与 Board 的 --panel-segment-inset 一致 */
+  padding: 2px;
+  border-radius: 12px;
+  background: var(--t3d-bg-segment);
+}
+
+.t3d-film-mode-btn {
+  height: 24px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--t3d-text-muted);
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.14s var(--t3d-film-ease), color 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-mode-btn:hover:not(:disabled) {
+  color: var(--t3d-text);
+}
+
+.t3d-film-mode-btn.is-active {
+  background: var(--t3d-bg-segment-active);
+  color: var(--t3d-text);
+  font-weight: 600;
+}
+
+/* ── shared button ───────────────────────────────────────── */
+
+.t3d-film-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid var(--t3d-border-input);
+  border-radius: var(--t3d-radius-button);
+  background: var(--t3d-bg-button);
+  color: var(--t3d-text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.14s var(--t3d-film-ease), border-color 0.14s var(--t3d-film-ease), color 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-btn:hover:not(:disabled) {
+  border-color: var(--t3d-border-input-deep);
+  background: var(--t3d-bg-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-film-btn:active:not(:disabled) {
+  transform: translateY(0.5px);
+}
+
+.t3d-film-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.t3d-film-btn-plus {
+  font-size: 14px;
+  line-height: 1;
+  opacity: 0.8;
+}
+
+.t3d-film-btn-icon {
+  width: 14px;
+  height: 14px;
+  flex: none;
+  opacity: 0.85;
+}
+
+.t3d-film-btn.is-primary {
+  border-color: transparent;
+  background: var(--t3d-accent-strong);
+  color: #fff;
+  font-weight: 600;
+}
+
+.t3d-film-btn.is-primary:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--t3d-accent-strong-hover);
+  color: #fff;
+}
+
+.t3d-film-btn.is-primary:active:not(:disabled) {
+  background: var(--t3d-accent-strong-active);
+}
+
+.t3d-film-btn.is-solid-white {
+  border-color: rgba(255, 255, 255, 0.92);
+  background: #fff;
+  color: #111;
+  font-weight: 600;
+}
+
+.t3d-film-btn.is-solid-white:hover:not(:disabled) {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111;
+}
+
+.t3d-film-btn.is-solid-white:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.t3d-film-btn.is-danger {
+  border-color: var(--t3d-border-danger);
+  color: #f3a6a6;
+}
+
+.t3d-film-btn.is-danger:hover:not(:disabled) {
+  border-color: var(--t3d-danger);
+  background: var(--t3d-bg-danger);
+  color: #fff;
+}
+
+/* ── toolbar: one row, three segments ────────────────────── */
+
+.t3d-film-toolbar {
+  display: grid;
+  /* 中列（播放控制 + 时码）按内容定宽，两侧等分余量：
+     窄屏要压缩的是缩放滑杆，不是读数 */
+  grid-template-columns: 1fr auto 1fr;
+  /* 按工具栏自身宽度决定收哪个控件，宿主把面板嵌多宽都成立 */
+  container-type: inline-size;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 7px 12px;
+  flex-wrap: nowrap;
+  background: var(--t3d-bg-header);
+  border-bottom: 1px solid var(--t3d-film-line);
+}
+
+.t3d-film-toolbar-left,
+.t3d-film-toolbar-center,
+.t3d-film-toolbar-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.t3d-film-toolbar-center {
+  justify-content: center;
+}
+
+.t3d-film-toolbar-right {
+  justify-content: flex-end;
+}
+
+.t3d-film-toolbar-divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 3px;
+  background: var(--t3d-film-line-strong);
+}
+
+.t3d-film-transport {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  padding: 2px;
+  border-radius: 8px;
+  background: var(--t3d-bg-wash-soft);
+}
+
+.t3d-film-transport .t3d-timeline-icon-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+}
+
+.t3d-film-play {
+  width: 28px !important;
+  height: 28px !important;
+  margin: 0 2px;
+  border-radius: 50% !important;
+  background: #fff;
+  color: #111;
+}
+
+.t3d-film-play:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.88);
+  color: #111;
+}
+
+.t3d-film-play:disabled {
+  background: rgba(255, 255, 255, 0.28);
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.t3d-film-zoom {
+  flex: 0 1 84px;
+  /* 再窄就不是滑杆了，不如收起来：轨道自身的横向滚动条 + 「适配」仍在 */
+  min-width: 56px;
+  width: 84px;
+}
+
+@container (max-width: 880px) {
+  .t3d-film-zoom {
+    display: none;
+  }
+}
+
+/* ── panel body ──────────────────────────────────────────── */
+
+.t3d-film-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 10px;
+  min-height: 0;
+  padding: 10px 12px 12px;
+  background: var(--t3d-bg-panel);
+}
+
+.t3d-film-issues {
+  padding: 6px 10px;
+  border: 1px solid var(--t3d-border-danger);
+  border-radius: var(--t3d-radius-button);
+  background: var(--t3d-bg-danger);
+  color: #f3b4b4;
+  font-size: 11px;
+}
+
+/* ── shot editor card ────────────────────────────────────── */
+
+/* 常驻机位面板。源条左右边缘与下方视频轨道对齐，所以这里不能再有左侧栏。 */
+.t3d-film-camera-panel {
+  position: relative;
+  z-index: 2;
+  flex: none;
+  overflow: visible;
+  /* 左右不垫：源条时钟的 6px 和视频轨道滚动条的 6px 对齐，同一条时间轴左右贴边 */
+  padding: 9px 0 10px;
+  border: 1px solid var(--t3d-film-line);
+  border-radius: var(--t3d-radius-item);
+  background: var(--t3d-film-surface);
+}
+
+.t3d-film-camera-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  /* 源条要贴齐轨道，所以缩进只给控件这一行 */
+  padding: 0 6px;
+  margin-bottom: 10px;
+}
+
+/* 切换器带主语：标签写清这一下会作用到谁 */
+.t3d-film-camera-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.t3d-film-camera-subject {
+  flex: none;
+  color: var(--t3d-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.t3d-film-camera-hint {
+  flex: 1;
+  min-width: 0;
+  color: var(--t3d-text-hint);
+  font-size: 11px;
+}
+
+.t3d-film-camera-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.t3d-film-editor-issues {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+  color: #f3a6a6;
+  font-size: 11px;
+}
+
+/* ── editor fields ───────────────────────────────────────── */
+
+.t3d-film-fields {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.t3d-film-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: var(--t3d-text-muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.t3d-film-field-label {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.t3d-film-select {
+  min-width: 132px;
+  max-width: 180px;
+}
+
+.t3d-film-play-clip {
+  height: 30px;
+}
+
+.t3d-film-timecode:hover:not(:disabled) {
+  border-color: var(--t3d-border-active);
+}
+
+.t3d-film-timecode {
+  width: 100px;
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid var(--t3d-border-input);
+  border-radius: var(--t3d-radius-button);
+  background: var(--t3d-bg-input);
+  color: var(--t3d-text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  text-align: center;
+  transition: border-color 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-timecode:focus {
+  outline: none;
+  border-color: var(--t3d-accent);
+}
+
+.t3d-film-timecode[aria-invalid='true'] {
+  border-color: var(--t3d-danger);
+}
+
+.t3d-film-duration {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+  color: var(--t3d-text);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.t3d-film-duration em {
+  color: var(--t3d-text-muted);
+  font-size: 11px;
+  font-style: normal;
+}
+
+.t3d-film-field-error {
+  color: var(--t3d-danger);
+  font-size: 11px;
+}
+
+/* ── source lane with filmstrip + ruler ──────────────────── */
+
+/* 源条铺满整宽：左右边缘与下方视频轨道对齐 */
+.t3d-film-source {
+  --t3d-film-tick-h: 22px;
+  --t3d-film-lane-h: 60px;
+  --t3d-film-playhead-line-top: var(--t3d-film-tick-h);
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  overflow: visible;
+}
+
+/* 和成片轨道同一套：尺 + 胶片包一层，播放头 top/bottom 拉通；6px 给时间标签两侧留空 */
+.t3d-film-source-clock {
+  position: relative;
+  z-index: 0;
+  padding: 0 6px;
+  overflow: visible;
+}
+
+.t3d-film-source-inner {
+  position: relative;
+}
+
+.t3d-film-source-stage {
+  position: relative;
+}
+
+.t3d-film-source-ticks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--t3d-film-tick-h);
+  color: var(--t3d-text-hint);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.t3d-film-source-lane {
+  position: relative;
+  height: var(--t3d-film-lane-h);
+  border: 1px solid var(--t3d-film-line);
+  border-radius: 6px;
+  background: var(--t3d-film-sunken);
+  overflow: hidden;
+  touch-action: none;
+  cursor: text;
+}
+
+.t3d-film-source-strip {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  pointer-events: none;
+}
+
+.t3d-film-source-cell {
+  flex: 1;
+  min-width: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  filter: saturate(0.9) brightness(0.8);
+  transition: opacity 0.26s var(--t3d-film-ease);
+}
+
+.t3d-film-source-cell.is-loaded {
+  opacity: 1;
+}
+
+/* 已用分镜独立轨道：固定一行；重叠写出分镜号，悬停列表向上浮在胶片上 */
+.t3d-film-used-track {
+  position: relative;
+  /* 时钟层 z-index:0 困住播放头合成层；已用条必须整层压过，列表才能盖住红线 */
+  z-index: 20;
+  flex: none;
+  height: 24px;
+  margin: 6px 6px 0;
+  overflow: visible;
+  border: 1px solid var(--t3d-film-line);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--t3d-film-sunken) 88%, #000);
+}
+
+.t3d-film-used-clip-wrap {
+  position: absolute;
+  top: 3px;
+  z-index: 1;
+}
+
+.t3d-film-used-clip-wrap.is-current,
+.t3d-film-used-clip-wrap.is-open {
+  z-index: 6;
+}
+
+.t3d-film-used-clip-wrap.is-stack::before {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 8px;
+  content: '';
+}
+
+.t3d-film-used-clip {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 18px;
+  overflow: hidden;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 4px;
+  background: hsl(var(--t3d-film-clip-hue, 210) 38% 28%);
+  box-shadow: inset 0 0 0 1px hsl(var(--t3d-film-clip-hue, 210) 42% 58% / 50%);
+  color: var(--t3d-text);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  line-height: 18px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.14s var(--t3d-film-ease), box-shadow 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-used-clip em {
+  color: var(--t3d-text-hint);
+  font-style: normal;
+  font-size: 10px;
+}
+
+.t3d-film-used-clip:hover:not(:disabled) {
+  z-index: 2;
+  background: hsl(var(--t3d-film-clip-hue, 210) 40% 36%);
+}
+
+.t3d-film-used-clip.is-current {
+  z-index: 3;
+  background: hsl(var(--t3d-film-clip-hue, 210) 42% 58%);
+  box-shadow: inset 0 0 0 1px #fff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.t3d-film-used-clip.is-current em {
+  color: rgb(255 255 255 / 78%);
+}
+
+.t3d-film-used-clip:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.t3d-film-used-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.t3d-film-used-id i {
+  font-style: normal;
+  color: var(--t3d-text-hint);
+}
+
+.t3d-film-used-id b {
+  font-weight: 500;
+}
+
+.t3d-film-used-id b.is-focus,
+.t3d-film-used-clip.is-current .t3d-film-used-id b.is-focus {
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.t3d-film-used-more {
+  margin-left: auto;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: rgb(0 0 0 / 28%);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 14px;
+}
+
+.t3d-film-used-clip.is-current .t3d-film-used-more {
+  background: rgb(255 255 255 / 22%);
+}
+
+.t3d-film-used-hover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: var(--t3d-z-dropdown);
+  display: none;
+  box-sizing: border-box;
+  width: max(100%, 176px);
+  padding: 0;
+  overflow: visible;
+  border: 1px solid var(--t3d-dropdown-border);
+  border-radius: 8px;
+  background: var(--t3d-dropdown-bg);
+  box-shadow: var(--t3d-dropdown-shadow);
+  transform-origin: bottom left;
+  animation: t3d-dropdown-in 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.t3d-film-used-hover::after {
+  position: absolute;
+  top: 100%;
+  left: 16px;
+  width: 8px;
+  height: 6px;
+  background: var(--t3d-dropdown-bg);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  content: '';
+}
+
+.t3d-film-used-clip-wrap.is-open .t3d-film-used-hover {
+  display: block;
+}
+
+.t3d-film-used-hover-list {
+  box-sizing: border-box;
+  max-height: none;
+  overflow: hidden;
+  padding: 4px;
+  scrollbar-width: none;
+}
+
+.t3d-film-used-hover-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.t3d-film-used-hover.is-scroll .t3d-film-used-hover-list {
+  max-height: calc(30px * 5 + 8px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--t3d-dropdown-scrollbar-thumb) transparent;
+}
+
+.t3d-film-used-hover.is-scroll .t3d-film-used-hover-list::-webkit-scrollbar {
+  width: 4px;
+  height: 0;
+}
+
+.t3d-film-used-hover.is-scroll .t3d-film-used-hover-list::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: var(--t3d-dropdown-scrollbar-thumb);
+}
+
+.t3d-film-used-hover-item {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  height: 30px;
+  padding: 0 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t3d-dropdown-item);
+  font: inherit;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  line-height: 16px;
+  cursor: pointer;
+  transition: background 80ms ease;
+}
+
+.t3d-film-used-hover-item b {
+  font-weight: 500;
+  color: #fff;
+}
+
+.t3d-film-used-hover-item em {
+  color: rgb(255 255 255 / 38%);
+  font-style: normal;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.t3d-film-used-hover-item:hover:not(:disabled) {
+  background: var(--t3d-dropdown-item-hover);
+}
+
+.t3d-film-used-hover-item.is-current {
+  background: var(--t3d-dropdown-item-active);
+  color: #fff;
+}
+
+.t3d-film-used-hover-item.is-current em {
+  color: rgb(255 255 255 / 62%);
+}
+
+.t3d-film-source-selection {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  /* 至少放得下两个把手 + 中间一条可抓的平移区，极短镜头也不会让两端叠死 */
+  min-width: calc(var(--t3d-film-handle-w) * 2 + 8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.92);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 0 0 999px rgb(0 0 0 / 45%);
+  cursor: grab;
+  transition: background 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-source-selection:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.t3d-film-source-selection:active {
+  cursor: grabbing;
+}
+
+.t3d-film-source-selection.is-draft {
+  border-style: dashed;
+}
+
+/* NLE 常见的出入点把手：贴在选区两端的实心圆角块 + 朝外的箭头，
+   一眼能看出「这里能抓、往这个方向拖」。 */
+.t3d-film-source-handle {
+  position: absolute;
+  /* 贴着选区内沿而不是外沿：入点拖到第 0 帧时也不会被源条的 overflow 裁掉 */
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: var(--t3d-film-handle-w);
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #101014;
+  cursor: ew-resize;
+  transition: background 0.14s var(--t3d-film-ease), width 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-source-handle:hover:not(:disabled),
+.t3d-film-source-handle:focus-visible {
+  width: var(--t3d-film-handle-w-hover);
+  background: #fff;
+}
+
+.t3d-film-source-handle:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.t3d-film-source-handle.is-start {
+  left: 0;
+  border-radius: 4px 0 0 4px;
+}
+
+.t3d-film-source-handle.is-end {
+  right: 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.t3d-film-handle-icon {
+  width: 8px;
+  height: 14px;
+  opacity: 0.86;
+  pointer-events: none;
+}
+
+.t3d-film-source-grip {
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 17px;
+  height: var(--t3d-film-tick-h);
+  cursor: ew-resize;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+/* ── sequence track ──────────────────────────────────────── */
+
+.t3d-film-sequence {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 148px;
+  border: 1px solid var(--t3d-film-line);
+  border-radius: var(--t3d-radius-item);
+  background: var(--t3d-film-sunken);
+  overflow: hidden;
+}
+
+.t3d-film-sequence-scroll {
+  flex: 1;
+  min-height: 118px;
+  /* 两端留出播放头头部的宽度：头永远居中对齐竖线，不靠贴边偏移来躲裁切 */
+  padding: 0 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+
+.t3d-film-sequence-inner {
+  --t3d-film-playhead-line-top: 22px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.t3d-film-ruler {
+  position: relative;
+  flex: none;
+  height: 22px;
+  border-bottom: 1px solid var(--t3d-film-line);
+  background: var(--t3d-bg-header);
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+.t3d-film-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgb(255 255 255 / 8%);
+}
+
+.t3d-film-tick.is-major {
+  background: var(--t3d-tick-major);
+}
+
+.t3d-film-tick span {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  color: var(--t3d-text-muted);
+  font-size: 9px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* 视频轨道初始化用和机位同一组刻度，左右端点才能对上 */
+.t3d-film-ruler .t3d-film-source-ticks {
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  pointer-events: none;
+}
+
+.t3d-film-sequence-track {
+  position: relative;
+  flex: 1;
+  min-width: 100%;
+  min-height: 84px;
+  padding: 9px 0;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 39px, rgb(255 255 255 / 3%) 39px 40px),
+    var(--t3d-film-sunken);
+  touch-action: none;
+}
+
+.t3d-film-sequence-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 100%;
+  color: var(--t3d-text-hint);
+  font-size: 12px;
+}
+
+/* ── clip block ──────────────────────────────────────────── */
+
+/* 片段高度由 JS 按轨道实际高度算（--t3d-film-clip-h，封顶 200px），
+   垂直居中，面板拉高时不会在下方留一条死白带。 */
+.t3d-film-clip-slot {
+  position: absolute;
+  top: calc((100% - var(--t3d-film-clip-h, 88px)) / 2);
+  height: var(--t3d-film-clip-h, 88px);
+  padding-right: 2px;
+}
+
+/* 只有重排时让位才做过渡；裁剪要求即时跟手，动画会变糊 */
+.t3d-film-sequence-track.is-reordering .t3d-film-clip-slot:not(.is-dragging) {
+  transition: left 0.16s var(--t3d-film-ease), width 0.16s var(--t3d-film-ease);
+}
+
+.t3d-film-clip-slot.is-dragging {
+  z-index: 8;
+  transition: none;
+}
+
+.t3d-film-clip {
+  position: relative;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--t3d-film-surface);
+  color: #fff;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
+  transition: box-shadow 0.14s var(--t3d-film-ease), transform 0.14s var(--t3d-film-ease), filter 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-clip::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 3;
+  height: 3px;
+  background: hsl(var(--t3d-film-clip-hue, 210) 42% 58%);
+}
+
+.t3d-film-clip:hover {
+  filter: brightness(1.12);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 22%);
+}
+
+.t3d-film-clip-slot.is-dragging .t3d-film-clip {
+  cursor: grabbing;
+  filter: brightness(1.15);
+  box-shadow: 0 10px 22px rgb(0 0 0 / 55%), inset 0 0 0 1px rgb(255 255 255 / 34%);
+}
+
+.t3d-film-clip.is-selected {
+  box-shadow: inset 0 0 0 2px var(--t3d-accent);
+}
+
+.t3d-film-clip.is-invalid::before {
+  background: var(--t3d-danger);
+}
+
+.t3d-film-clip.is-invalid {
+  box-shadow: inset 0 0 0 1px var(--t3d-danger);
+}
+
+.t3d-film-clip-strip {
+  position: absolute;
+  inset: 3px 0 0;
+  display: flex;
+}
+
+.t3d-film-clip-cell {
+  flex: 1;
+  min-width: 0;
+  background-color: #0e0e10;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.26s var(--t3d-film-ease);
+}
+
+.t3d-film-clip-cell.is-loaded {
+  opacity: 1;
+}
+
+.t3d-film-clip-tint {
+  position: absolute;
+  inset: 3px 0 0;
+  background:
+    linear-gradient(to top, rgb(0 0 0 / 34%) 0%, transparent 52%),
+    hsl(var(--t3d-film-clip-hue, 210) 45% 45% / 9%);
+  pointer-events: none;
+}
+
+/* 底部标签条：独立实心带，不靠渐变压字，窄片段也读得清 */
+.t3d-film-clip-meta {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 19px;
+  /* 两端留出把手宽度：序号与时长永远不会被 trim 把手压住 */
+  padding: 0 calc(var(--t3d-film-handle-w) + 3px);
+  background: linear-gradient(to top, rgb(9 9 11 / 94%), rgb(9 9 11 / 78%));
+  border-top: 1px solid rgb(255 255 255 / 8%);
+  pointer-events: none;
+}
+
+/* 窄片段只剩序号，两端再让位就没地方站了 */
+.t3d-film-clip.is-compact .t3d-film-clip-meta {
+  padding: 0 5px;
+}
+
+.t3d-film-clip-index {
+  flex: none;
+  padding: 0 4px;
+  border-radius: 3px;
+  background: hsl(var(--t3d-film-clip-hue, 210) 38% 56% / 92%);
+  color: #08090c;
+  font-size: 9px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 13px;
+}
+
+.t3d-film-clip-name {
+  flex: 1;
+  min-width: 0;
+  color: rgb(255 255 255 / 92%);
+  font-size: 11px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.t3d-film-clip-duration {
+  flex: none;
+  color: rgb(255 255 255 / 58%);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* 把手压在片段内容之上（缩略图、色条、信息条都在它下面）：
+   trim 抓的就是片段最边上这一条，排到下面会被相邻片段盖住点不到。
+   信息条靠自身内边距避让，不靠压低把手层级。 */
+.t3d-film-clip-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: var(--t3d-film-handle-w);
+  padding: 0;
+  border: 0;
+  background: var(--t3d-film-handle-bg);
+  color: #101014;
+  cursor: ew-resize;
+  opacity: 0;
+  transition: opacity 0.14s var(--t3d-film-ease), width 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-clip:hover .t3d-film-clip-handle,
+.t3d-film-clip.is-selected .t3d-film-clip-handle {
+  opacity: 1;
+}
+
+.t3d-film-clip-handle:hover,
+.t3d-film-clip-handle:focus-visible {
+  width: var(--t3d-film-handle-w-hover);
+  opacity: 1;
+}
+
+.t3d-film-clip-handle.is-start {
+  left: 0;
+  border-radius: 5px 0 0 5px;
+}
+
+.t3d-film-clip-handle.is-end {
+  right: 0;
+  border-radius: 0 5px 5px 0;
+}
+
+/* 添加分镜：跟在片段右侧；最后一条常显，中间的 hover 才出现 */
+.t3d-film-track-add {
+  position: absolute;
+  top: calc((100% - var(--t3d-film-clip-h, 88px)) / 2 + var(--t3d-film-clip-h, 88px) / 2 - 13px);
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px dashed var(--t3d-film-line-strong);
+  border-radius: 50%;
+  background: var(--t3d-film-surface);
+  color: var(--t3d-text-secondary);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.14s var(--t3d-film-ease), color 0.14s var(--t3d-film-ease),
+    background 0.14s var(--t3d-film-ease), opacity 0.14s var(--t3d-film-ease);
+}
+
+.t3d-film-track-add:hover:not(:disabled) {
+  border-color: var(--t3d-accent);
+  border-style: solid;
+  background: color-mix(in srgb, var(--t3d-accent) 22%, var(--t3d-film-surface));
+  color: #fff;
+}
+
+.t3d-film-track-add:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.t3d-film-track-add.is-after {
+  right: -11px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.t3d-film-clip-slot:hover .t3d-film-track-add.is-after,
+.t3d-film-track-add.is-after:focus-visible,
+.t3d-film-track-add.is-tail {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* 换序过程中别冒出来挡路 */
+.t3d-film-sequence-track.is-reordering .t3d-film-track-add {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 插入点让出的整段占位，而不是一条 2px 的线：拖到哪一目了然 */
+.t3d-film-drop-slot {
+  position: absolute;
+  top: calc((100% - var(--t3d-film-clip-h, 88px)) / 2);
+  height: var(--t3d-film-clip-h, 88px);
+  z-index: 1;
+  border: 1px dashed color-mix(in srgb, var(--t3d-accent) 90%, #fff);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--t3d-accent) 14%, transparent);
+  box-shadow: inset 0 0 18px color-mix(in srgb, var(--t3d-accent) 22%, transparent);
+  pointer-events: none;
+  transition: left 0.16s var(--t3d-film-ease), width 0.16s var(--t3d-film-ease);
+}
+
+.t3d-film-playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 9;
+  width: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.t3d-film-playhead::before {
+  content: '';
+  position: absolute;
+  top: var(--t3d-film-playhead-line-top, 22px);
+  bottom: 0;
+  left: 0;
+  border-left: 1px solid var(--t3d-sheet-accent, #d4d4d4);
+}
+
+.t3d-film-playhead-label {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  min-width: 24px;
+  padding: 3px 5px;
+  box-sizing: border-box;
+  border-radius: 4px 4px 4px 0;
+  background: var(--t3d-sheet-accent, #d4d4d4);
+  color: #111;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  line-height: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── version switcher（当前未挂在工具栏上，保留样式） ─────── */
+
+.t3d-film-version {
+  position: relative;
+}
+
+.t3d-film-version-menu {
+  top: 100%;
+  left: 0;
+  z-index: var(--t3d-z-dropdown);
+  min-width: 240px;
+  max-height: none;
+}
+
+.t3d-film-version-row,
+.t3d-film-version-create {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.t3d-film-version-name,
+.t3d-film-version-action,
+.t3d-film-version-create {
+  border: 0;
+  background: transparent;
+  color: var(--t3d-text-secondary);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.t3d-film-version-btn {
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── viewport HUD ────────────────────────────────────────── */
+
+.t3d-film-hud {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.t3d-film-hud-badge {
+  padding: 3px 8px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--t3d-accent) 78%, #000);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.t3d-film-hud-badge.is-source {
+  background: rgb(0 0 0 / 62%);
+}
+
+.t3d-film-hud-camera {
+  color: #fff;
+  font-size: 13px;
+  text-shadow: 0 1px 3px rgb(0 0 0 / 70%);
+}
+
+.t3d-film-hud-time {
+  position: absolute;
+  right: 12px;
+  /* clears the viewport fullscreen button pinned to the bottom-right corner */
+  bottom: 56px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 55%);
+  color: rgb(255 255 255 / 65%);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.t3d-film-hud-time strong {
+  color: #fff;
+  font-size: 12px;
+}
+
+/* ── inspector (read-only in film mode) ──────────────────── */
+
+.t3d-film-inspector-hint {
+  margin: 10px 12px;
+  color: var(--t3d-text-hint);
+  font-size: 11px;
+  line-height: 1.5;
+}

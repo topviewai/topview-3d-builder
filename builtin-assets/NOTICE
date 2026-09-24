@@ -1,0 +1,24 @@
+Scene3D built-in assets
+Copyright (c) Topview. All rights reserved except as granted below.
+
+The files in this directory are licensed under the Creative Commons
+Attribution 4.0 International licence (CC BY 4.0); the full text is in LICENSE
+and at https://creativecommons.org/licenses/by/4.0/legalcode.
+
+Covered:
+  characters/   the four character models (Child, Youth, Female, Man)
+  poses/        the 121 library poses (a3d_pose_*)
+  covers/       the pose cover images
+  manifest.json the asset catalog
+
+The five primitive entries in manifest.json only name code-generated
+geometry; they carry no licence field and are part of the code (Apache-2.0).
+
+Attribution when you redistribute or adapt these assets:
+
+  Scene3D built-in assets © Topview, CC BY 4.0
+  https://creativecommons.org/licenses/by/4.0/
+
+Indicate if you changed them. The rest of the repository (code, schemas,
+documentation) is licensed under the Apache License 2.0; see the LICENSE and
+NOTICE files at the repository root.

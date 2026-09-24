@@ -1,0 +1,215 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
+  NODE_VERSION: "20"
+  PNPM_VERSION: "10.14.0"
+
+jobs:
+  lint:
+    name: Skill lint, manifests, versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install the CLI (lint imports its parser)
+        run: python -m pip install -e agent
+      - name: Skill lint
+        run: python scripts/lint_skills.py
+      - name: Manifests are valid JSON
+        run: |
+          for file in .codex-plugin/plugin.json .claude-plugin/plugin.json .claude-plugin/marketplace.json \
+                      .cursor-plugin/plugin.json .agents/plugins/marketplace.json; do
+            python -m json.tool "$file" > /dev/null || { echo "::error file=$file::invalid JSON"; exit 1; }
+          done
+      - name: Semver and version consistency
+        run: python scripts/set_version.py --check
+
+  python:
+    name: Python tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: editor/pnpm-lock.yaml
+      - name: Install the renderer workspace
+        run: |
+          pnpm -C editor install --frozen-lockfile
+          pnpm -C editor --filter @topview/3d-builder build
+      - name: Install the CLI
+        run: python -m pip install -e "agent[dev]"
+      - name: pytest
+        working-directory: agent
+        run: python -m pytest -q
+
+  node:
+    name: Builder and director-cli tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: editor/pnpm-lock.yaml
+      - run: pnpm -C editor install --frozen-lockfile
+      - run: pnpm -C editor --filter @topview/3d-builder build
+      - name: Typecheck
+        run: pnpm -C editor -s typecheck
+      - name: Builder evaluate tests
+        run: pnpm -C editor -s test:evaluate
+      - name: ESLint and locale check
+        run: pnpm -C editor -s lint
+      - name: director-cli tests
+        run: pnpm -C editor --filter @topview/3d-director-cli test
+
+  studio:
+    name: Studio build and offline smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: editor/pnpm-lock.yaml
+      - run: pnpm -C editor install --frozen-lockfile
+      - run: pnpm -C editor --filter @topview/3d-builder build
+      - run: pnpm -C editor --filter @topview/3d-studio build
+      - name: Install Chromium
+        run: pnpm -C editor --filter @topview/3d-studio exec playwright install --with-deps chromium
+      - name: Offline smoke (fails on any non-localhost request)
+        run: pnpm -C editor --filter @topview/3d-studio test:offline
+
+  package:
+    name: Codex plugin archive
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Fails the job with a named reason (missing or non-square image, bad skill layout, size).
+      - name: Package
+        run: node scripts/package-codex-plugin.mjs
+      - name: Check the archive layout
+        run: |
+          unzip -Z1 dist/topview-3d-builder-plugin.zip > files.txt
+          cat files.txt
+          if grep -v '^topview-3d-builder/' files.txt; then echo "::error::entries outside topview-3d-builder/"; exit 1; fi
+          if grep -vE '^topview-3d-builder/((\.codex-plugin|assets|skills)(/.*)?)?$' files.txt; then
+            echo "::error::unexpected top-level entries"; exit 1
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: topview-3d-builder-plugin
+          path: dist/topview-3d-builder-plugin.zip
+
+  wheel:
+    name: Build wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: editor/pnpm-lock.yaml
+      - run: pnpm -C editor install --frozen-lockfile
+      - run: python -m pip install build
+      - name: Build wheel and sdist
+        run: python scripts/build_dist.py --outdir dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: dist/
+
+  wheel-smoke:
+    name: Wheel smoke (${{ matrix.os }})
+    needs: wheel
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - uses: astral-sh/setup-uv@v6
+      - name: Chromium system libraries
+        if: runner.os == 'Linux'
+        run: npx -y playwright@1.63.0 install-deps chromium
+      - name: uvx --from <wheel> smoke sequence
+        shell: bash
+        run: python scripts/wheel_smoke.py dist/topview_3d_cli-*.whl --workdir "$RUNNER_TEMP/topview3d-smoke"
+
+  secrets:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    env:
+      GITLEAKS_VERSION: "8.30.1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: ${{ github.event_name == 'pull_request' && 0 || 1 }}
+      - name: Install gitleaks
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz -C "$RUNNER_TEMP" gitleaks
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Scan the pull request commits
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: gitleaks git --redact --no-banner --log-opts="${BASE_SHA}..${HEAD_SHA}" .
+      - name: Scan the current tree
+        if: github.event_name != 'pull_request'
+        run: gitleaks dir --redact --no-banner .

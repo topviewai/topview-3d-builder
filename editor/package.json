@@ -1,0 +1,26 @@
+{
+  "name": "@topview/3d-builder-monorepo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "3D director studio package and standalone studio app",
+  "license": "Apache-2.0",
+  "scripts": {
+    "dev": "pnpm --filter @topview/3d-builder build && pnpm --parallel --filter @topview/3d-builder --filter @topview/3d-studio dev",
+    "build": "pnpm --filter @topview/3d-builder build && pnpm --filter @topview/3d-studio build",
+    "typecheck": "pnpm -r run typecheck",
+    "lint": "eslint . && pnpm check:locales",
+    "check:locales": "node scripts/check-locales.cjs",
+    "test:evaluate": "pnpm --filter @topview/3d-builder test:evaluate",
+    "generate:golden": "pnpm --filter @topview/3d-builder generate:golden"
+  },
+  "devDependencies": {
+    "eslint": "8.57.1",
+    "eslint-config-next": "15.1.9",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

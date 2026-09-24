@@ -1,0 +1,48 @@
+{
+  "name": "topview-3d-builder",
+  "version": "0.1.0",
+  "description": "Build, check and render 3D director scenes on your own machine with the topview-3d-cli command: characters, poses, props, cameras and keyframes, fully offline.",
+  "author": {
+    "name": "Topview",
+    "url": "https://www.topview.ai"
+  },
+  "homepage": "https://www.topview.ai/topview-3d-builder",
+  "repository": "https://github.com/topviewai/topview-3d-builder",
+  "license": "Apache-2.0",
+  "keywords": [
+    "3d",
+    "scene",
+    "previs",
+    "storyboard",
+    "camera",
+    "pose",
+    "character",
+    "keyframe",
+    "render",
+    "offline",
+    "cli"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Scene3D by TopView",
+    "shortDescription": "Local 3D scenes, rendered on your machine",
+    "longDescription": "Scene3D turns scene descriptions into 3D director scenes you can check and render locally. The topview-3d-cli command keeps each project in a folder on your machine, places characters, poses, props and primitives from a built-in offline asset library, sets up cameras and keyframes, checks layout and camera coverage, and renders frames and contact sheets with a local browser. No account and no uploads; after a one-time browser download it works offline.",
+    "developerName": "Topview",
+    "category": "Creativity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://www.topview.ai/topview-3d-builder",
+    "privacyPolicyURL": "https://www.topview.ai/privacy",
+    "termsOfServiceURL": "https://www.topview.ai/terms",
+    "defaultPrompt": [
+      "Build a scene with a character next to a box and render a front view",
+      "Move the camera to a low angle and render frames 0 and 48 as a contact sheet",
+      "Pose the character waving and show me the result"
+    ],
+    "brandColor": "#3341FF",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/logo.png"
+  }
+}

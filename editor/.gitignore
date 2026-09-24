@@ -1,0 +1,27 @@
+node_modules
+dist
+.next
+.next-dev
+.next-path-fix
+.next-mock
+out
+.turbo
+*.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+.analysis-xyq/
+
+# 含阿里云私服 authToken，只允许存在于本地
+.npmrc
+
+# 3D 官方库二进制已迁 CDN，禁止再进仓库
+apps/studio/public/assets/**/*.glb
+apps/studio/public/assets/**/*.fbx
+apps/studio/public/assets/**/*.gif
+apps/studio/public/assets/**/*.png
+apps/studio/public/media
+apps/studio/drafts/
+apps/studio/.logs/

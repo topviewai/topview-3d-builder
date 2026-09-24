@@ -1,0 +1,273 @@
+.studio-devtools {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10000;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+  font-size: 13px;
+  color: #e8e8e8;
+}
+
+body:has(.t3d-root.is-viewport-fullscreen) .studio-devtools {
+  right: 72px;
+}
+
+.studio-devtools-fab {
+  min-width: 48px;
+  max-width: 160px;
+  min-height: 48px;
+  padding: 8px 14px;
+  overflow-wrap: anywhere;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(28, 28, 28, 0.92);
+  color: #f2f2f2;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.studio-devtools-fab:hover {
+  background: rgba(40, 40, 40, 0.96);
+}
+
+.studio-devtools-panel {
+  position: absolute;
+  right: 0;
+  bottom: 60px;
+  width: min(560px, calc(100vw - 24px));
+  max-height: min(72vh, 720px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(18, 18, 18, 0.98);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+}
+
+.studio-devtools-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.studio-devtools-icon-btn,
+.studio-devtools-primary,
+.studio-devtools-linkish,
+.studio-devtools-nav-item {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.studio-devtools-icon-btn {
+  padding: 4px 10px;
+}
+
+.studio-devtools-body {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  min-height: 0;
+  flex: 1;
+}
+
+.studio-devtools-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: auto;
+}
+
+.studio-devtools-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px;
+  text-align: left;
+}
+
+.studio-devtools-nav-item small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.studio-devtools-nav-item.is-active {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.studio-devtools-locale-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.studio-devtools-locale-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 8px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.studio-devtools-locale-btn small {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 11px;
+}
+
+.studio-devtools-locale-btn.is-active {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.studio-devtools-content {
+  padding: 12px;
+  overflow: auto;
+  min-height: 0;
+}
+
+.studio-devtools-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.studio-devtools-hint {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.4;
+}
+
+.studio-devtools-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.studio-devtools-upload label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.studio-devtools-upload select,
+.studio-devtools-upload textarea,
+.studio-devtools-upload input[type='file'] {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.35);
+  color: inherit;
+  padding: 8px;
+}
+
+.studio-devtools-check {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 8px !important;
+}
+
+.studio-devtools-primary {
+  padding: 8px 12px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.studio-devtools-primary:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.studio-devtools-banner,
+.studio-devtools-error {
+  margin: 0;
+  color: #e8e8e8;
+}
+
+.studio-devtools-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.studio-devtools-results li {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.studio-devtools-results li[data-status='ok'] {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.studio-devtools-results li[data-status='error'] {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.studio-devtools-result-label {
+  word-break: break-all;
+}
+
+.studio-devtools-linkish {
+  text-align: left;
+  padding: 4px 6px;
+  font-size: 12px;
+  word-break: break-all;
+}
+
+.studio-devtools-nav,
+.studio-devtools-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.studio-devtools-nav::-webkit-scrollbar,
+.studio-devtools-content::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+
+.studio-devtools-nav::-webkit-scrollbar-track,
+.studio-devtools-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.studio-devtools-nav::-webkit-scrollbar-thumb,
+.studio-devtools-content::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  background-clip: padding-box;
+}
+
+.studio-devtools-nav::-webkit-scrollbar-thumb:hover,
+.studio-devtools-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.34);
+  background-clip: padding-box;
+}

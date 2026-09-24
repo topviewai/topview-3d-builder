@@ -1,0 +1,32 @@
+# Local secrets and runtime state
+.env
+.env.*
+!.env.example
+.topview3d/
+!agent/topview_3d_cli/tests/fixtures/local-project/.topview3d/
+agent/topview_3d_cli/tests/fixtures/local-project/.topview3d/renders/
+downloads/
+.local-topview3d/
+
+# Python
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+agent/build/
+
+# Node
+node_modules/
+dist/
+coverage/
+editor/apps/studio/public/draco/
+.turbo/
+.pnpm-store/
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+agent/topview_3d_cli/_runtime/

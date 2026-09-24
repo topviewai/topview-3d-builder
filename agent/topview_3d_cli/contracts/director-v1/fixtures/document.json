@@ -1,0 +1,134 @@
+{
+  "type": "biz/scene3d-director-document",
+  "pippitAssetId": "director_fixture_01",
+  "extra": {
+    "customDraftName": "director-v1-fixture"
+  },
+  "content": {
+    "version": 1,
+    "aspectRatio": "21:9",
+    "activeShotCameraNodeId": "camera_1",
+    "environment": {
+      "background": {
+        "mode": "color",
+        "skyColor": "#060608"
+      },
+      "display": {
+        "characterLabelsVisible": true,
+        "groundVisible": true,
+        "groundHeight": 0,
+        "groundOpacity": 1
+      }
+    },
+    "asset": {
+      "motionPath": []
+    },
+    "nodes": [
+      {
+        "id": "camera_1",
+        "type": "camera",
+        "name": "主相机",
+        "visible": true,
+        "locked": false,
+        "transform": {
+          "position": { "x": 0, "y": 1.8, "z": 5 },
+          "rotation": { "x": -8, "y": 0, "z": 0 },
+          "scale": { "x": 1, "y": 1, "z": 1 }
+        },
+        "camera": {
+          "projection": "perspective",
+          "fov": 50,
+          "fovAxis": "vertical",
+          "near": 0.1,
+          "far": 2000,
+          "isPrimary": true,
+          "lookAt": { "x": 0, "y": 1.2, "z": 0 }
+        }
+      },
+      {
+        "id": "character_1",
+        "type": "character",
+        "name": "角色1",
+        "visible": true,
+        "locked": false,
+        "transform": {
+          "position": { "x": -1.24, "y": 0, "z": -6.682 },
+          "rotation": { "x": 0, "y": 0, "z": 0 },
+          "scale": { "x": 1, "y": 1, "z": 1 }
+        },
+        "metadata": {
+          "assetId": "a3d_char_30ec53c93eae4173946b38639691ebe0",
+          "modelUrl": "3d-builder/library/characters/a3d_char_30ec53c93eae4173946b38639691ebe0-d4ce3fb1.glb"
+        },
+        "character": {
+          "placeholder": true,
+          "gender": "female",
+          "motionId": null,
+          "appearance": { "color": "#d7b5ee" },
+          "label": { "showLabel": true, "scale": 1, "yOffset": 0.04 },
+          "animation": {
+            "mode": "pose",
+            "posePresetId": "stand",
+            "controlValues": { "headNod": -5 }
+          }
+        }
+      },
+      {
+        "id": "prop_box_1",
+        "type": "prop",
+        "name": "箱子",
+        "visible": true,
+        "locked": false,
+        "transform": {
+          "position": { "x": 1, "y": 0, "z": 0 },
+          "rotation": { "x": 0, "y": 0, "z": 0 },
+          "scale": { "x": 1, "y": 1, "z": 1 }
+        },
+        "metadata": {
+          "modelUrl": "3d-builder/public/props/box.glb"
+        },
+        "prop": { "category": "set" }
+      }
+    ],
+    "physicalConstraints": [],
+    "timeline": {
+      "version": 1,
+      "fps": 24,
+      "frameStart": 0,
+      "frameEnd": 120,
+      "usePreviewRange": false,
+      "animation": {
+        "fcurves": [],
+        "cameraMotionClips": [
+          {
+            "id": "clip_cam_push_1",
+            "target": { "type": "node", "nodeId": "camera_1" },
+            "frameStart": 0,
+            "frameEnd": 48,
+            "trimStartMs": 0,
+            "trimEndMs": 2000,
+            "playback": {
+              "version": 1,
+              "speed": 1,
+              "loop": false,
+              "loopMode": "none",
+              "baseDurationFrames": 48
+            },
+            "motion": {
+              "id": "static_shot",
+              "version": 1,
+              "presetId": "static_shot",
+              "label": "固定镜头",
+              "timeUnit": "ms",
+              "durationMs": 2000,
+              "curves": []
+            }
+          }
+        ],
+        "motionTransitions": [],
+        "motionClips": [],
+        "pathMotionClips": []
+      }
+    }
+  }
+}

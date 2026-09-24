@@ -1,0 +1,16 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #131313;
+  color: #d8d8d8;
+  overflow: hidden;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.studio-root {
+  position: relative;
+  height: 100vh;
+}

@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "topview-3d-cli"
+dynamic = ["version"]
+description = "Build and render 3D director scenes locally with the topview-3d-cli command."
+readme = "README.md"
+license = "Apache-2.0 AND CC-BY-4.0"
+license-files = ["LICENSE", "LICENSE-ASSETS", "NOTICE"]
+requires-python = ">=3.11"
+dependencies = ["jsonschema>=4.23.0"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Multimedia :: Graphics :: 3D Rendering",
+]
+
+[project.urls]
+Homepage = "https://www.topview.ai/topview-3d-builder"
+Repository = "https://github.com/topviewai/topview-3d-builder"
+Issues = "https://github.com/topviewai/topview-3d-builder/issues"
+Documentation = "https://github.com/topviewai/topview-3d-builder/blob/main/docs/topview-3d-cli.md"
+
+[project.optional-dependencies]
+test = ["pytest>=8.0.0"]
+dev = ["pytest>=8.0.0", "build>=1.2"]
+
+[project.scripts]
+topview-3d-cli = "topview_3d_cli.local_cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "topview_3d_cli.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["topview_3d_cli*"]
+exclude = ["topview_3d_cli.tests", "topview_3d_cli.tests.*"]
+
+[tool.setuptools.package-data]
+topview_3d_cli = ["contracts/director-v1/schema/*.json", "_runtime/**/*"]
+
+[tool.setuptools.exclude-package-data]
+topview_3d_cli = ["contracts/director-v1/fixtures/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["topview_3d_cli"]
+pythonpath = ["."]

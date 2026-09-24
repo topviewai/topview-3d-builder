@@ -1,0 +1,75 @@
+{
+  "name": "@topview/3d-builder",
+  "version": "1.0.1-beta.1",
+  "description": "Embeddable 3D director studio",
+  "sideEffects": [
+    "./dist/styles.css",
+    "./src/stores/setup.ts"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./evaluate": {
+      "types": "./dist/evaluate/index.d.ts",
+      "import": "./dist/evaluate/index.mjs",
+      "require": "./dist/evaluate/index.js"
+    },
+    "./engine": {
+      "types": "./dist/engine/index.d.ts",
+      "import": "./dist/engine/index.mjs",
+      "require": "./dist/engine/index.js"
+    },
+    "./headless": {
+      "types": "./dist/headless/index.d.ts",
+      "import": "./dist/headless/index.mjs",
+      "require": "./dist/headless/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist",
+    "schema"
+  ],
+  "scripts": {
+    "build": "tsup && node ./scripts/finalize-dist.cjs",
+    "dev": "node ./scripts/dev-watch.cjs",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
+    "lint": "eslint src",
+    "test:evaluate": "vitest run",
+    "generate:golden": "tsx src/evaluate/__tests__/writeGolden.ts",
+    "emit-schema": "tsx ./scripts/emit-schema.ts"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": ">=0.184.0"
+  },
+  "dependencies": {
+    "mediabunny": "^1.56.3",
+    "mobx": "^6.13.0",
+    "mobx-react-lite": "^4.1.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@types/three": "^0.184.0",
+    "chokidar": "^4.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "three": "^0.184.0",
+    "tsx": "^4.19.3",
+    "tsup": "8.0.1",
+    "typescript": "5.3.3",
+    "vitest": "^3.2.4",
+    "zod-to-json-schema": "^3.24.5"
+  },
+  "license": "Apache-2.0"
+}

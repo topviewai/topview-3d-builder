@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "projectId": "project_director_01",
+  "protocolVersion": 2,
+  "sceneSequence": 4,
+  "eventCursor": 4,
+  "mode": "snapshot",
+  "checkpoint": {
+    "revisionId": null,
+    "headVersion": 0,
+    "appliedSceneSequence": 0
+  },
+  "entities": [
+    {
+      "entityId": "director",
+      "entityType": "DIRECTOR_SCENE",
+      "entityVersion": 1,
+      "state": {
+        "type": "biz/scene3d-director-document",
+        "pippitAssetId": "director_fixture_01",
+        "extra": { "customDraftName": "director-v1-fixture" },
+        "content": {
+          "version": 1,
+          "aspectRatio": "21:9",
+          "activeShotCameraNodeId": "camera_1",
+          "environment": {
+            "background": { "mode": "color", "skyColor": "#060608" },
+            "display": {
+              "characterLabelsVisible": true,
+              "groundVisible": true,
+              "groundHeight": 0,
+              "groundOpacity": 1
+            }
+          },
+          "asset": { "motionPath": [] },
+          "physicalConstraints": [],
+          "timeline": {
+            "version": 1,
+            "fps": 24,
+            "frameStart": 0,
+            "frameEnd": 120,
+            "usePreviewRange": false,
+            "animation": {
+              "fcurves": [],
+              "motionTransitions": []
+            }
+          }
+        }
+      },
+      "createdSequence": 1,
+      "updatedSequence": 1,
+      "deletedSequence": null
+    },
+    {
+      "entityId": "camera_1",
+      "entityType": "DIRECTOR_NODE",
+      "entityVersion": 1,
+      "state": {
+        "id": "camera_1",
+        "type": "camera",
+        "name": "主相机",
+        "visible": true,
+        "locked": false,
+        "transform": {
+          "position": { "x": 0, "y": 1.8, "z": 5 },
+          "rotation": { "x": -8, "y": 0, "z": 0 },
+          "scale": { "x": 1, "y": 1, "z": 1 }
+        },
+        "camera": {
+          "projection": "perspective",
+          "fov": 50,
+          "fovAxis": "vertical",
+          "near": 0.1,
+          "far": 2000,
+          "isPrimary": true,
+          "lookAt": { "x": 0, "y": 1.2, "z": 0 }
+        }
+      },
+      "createdSequence": 2,
+      "updatedSequence": 2,
+      "deletedSequence": null
+    },
+    {
+      "entityId": "clip_cam_push_1",
+      "entityType": "DIRECTOR_CLIP",
+      "entityVersion": 1,
+      "state": {
+        "clipKind": "cameraMotion",
+        "clip": {
+          "id": "clip_cam_push_1",
+          "target": { "type": "node", "nodeId": "camera_1" },
+          "frameStart": 0,
+          "frameEnd": 48
+        }
+      },
+      "createdSequence": 3,
+      "updatedSequence": 3,
+      "deletedSequence": null
+    },
+    {
+      "entityId": "fcurves__camera_1",
+      "entityType": "DIRECTOR_FCURVES",
+      "entityVersion": 1,
+      "state": {
+        "version": 1,
+        "encoding": "compact-v1",
+        "fcurves": []
+      },
+      "createdSequence": 4,
+      "updatedSequence": 4,
+      "deletedSequence": null
+    }
+  ],
+  "operationsAfterCheckpoint": [],
+  "activeTurns": [],
+  "activeJobs": [],
+  "compatibility": {
+    "protocolVersion": 2,
+    "directorDocument": 1,
+    "operationVersion": 2
+  }
+}

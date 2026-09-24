@@ -1,0 +1,18 @@
+Scene3D by Topview
+Copyright (c) Topview
+
+Code, schemas and documentation in this repository are licensed under the
+Apache License 2.0 (LICENSE).
+
+The built-in assets in builtin-assets/ (character models, library poses, pose
+covers and the asset manifest) are licensed under Creative Commons Attribution
+4.0 International (builtin-assets/LICENSE). Attribution:
+
+  Scene3D built-in assets © Topview, CC BY 4.0
+
+See builtin-assets/NOTICE for the exact scope. In the topview-3d-cli wheel the
+assets are installed under topview_3d_cli/_runtime/builtin-assets/ together
+with their LICENSE and NOTICE.
+
+Third-party packages staged into the wheel's renderer runtime (three, zod,
+@topview/3d-builder) keep their own licences, copied next to them.

@@ -1,0 +1,353 @@
+{
+  "version": 1,
+  "encoding": "compact-v1",
+  "fcurves": [
+    {
+      "id": "fc_node_character_2_transform_position_0",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.position",
+      "i": 0,
+      "k": [
+        [
+          70,
+          0,
+          "bezier",
+          "kf_mtvfyzg7_156rzs"
+        ],
+        [
+          90,
+          1.7940197164838105,
+          "bezier",
+          "kf_mtvfziph_hr8wp5"
+        ],
+        [
+          115,
+          1.7940196990966797,
+          "bezier",
+          "kf_mtvg0zdd_ocwkj6"
+        ],
+        [
+          152,
+          10.339454577976433,
+          "bezier",
+          "kf_mtvg2ir5_7xvuy6"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_position_1",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.position",
+      "i": 1,
+      "k": [
+        [
+          70,
+          0,
+          "bezier",
+          "kf_mtvfyzg7_id4s6u"
+        ],
+        [
+          90,
+          -0.6100943056303416,
+          "bezier",
+          "kf_mtvfziph_v4kjtu"
+        ],
+        [
+          115,
+          -0.6100943088531494,
+          "bezier",
+          "kf_mtvg0zdd_mx8twh"
+        ],
+        [
+          152,
+          -0.6100943088531494,
+          "bezier",
+          "kf_mtvg2ir5_pmt930"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_position_2",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.position",
+      "i": 2,
+      "k": [
+        [
+          70,
+          0,
+          "bezier",
+          "kf_mtvfyzg7_j9tgo9"
+        ],
+        [
+          90,
+          -1.6593863145673016,
+          "bezier",
+          "kf_mtvfziph_wa2krm"
+        ],
+        [
+          115,
+          -1.6593862771987915,
+          "bezier",
+          "kf_mtvg0zdd_zyynb6"
+        ],
+        [
+          152,
+          -1.6593862771987915,
+          "bezier",
+          "kf_mtvg2ir5_k8bdsn"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_rotation_0",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.rotation",
+      "i": 0,
+      "k": [
+        [
+          90,
+          0,
+          "bezier",
+          "kf_mtvfziph_hcer7t"
+        ],
+        [
+          115,
+          -180,
+          "bezier",
+          "kf_mtvg0zdd_a0h6xd"
+        ],
+        [
+          152,
+          -180,
+          "bezier",
+          "kf_mtvg2ir5_t8ez98"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_rotation_1",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.rotation",
+      "i": 1,
+      "k": [
+        [
+          90,
+          135,
+          "bezier",
+          "kf_mtvfziph_rcs3q0"
+        ],
+        [
+          115,
+          44.99999731270162,
+          "bezier",
+          "kf_mtvg0zdd_es7478"
+        ],
+        [
+          152,
+          44.99999654713709,
+          "bezier",
+          "kf_mtvg2ir5_9rwqp7"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_rotation_2",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.rotation",
+      "i": 2,
+      "k": [
+        [
+          90,
+          0,
+          "bezier",
+          "kf_mtvfziph_rnzso2"
+        ],
+        [
+          115,
+          -180,
+          "bezier",
+          "kf_mtvg0zdd_wxowcl"
+        ],
+        [
+          152,
+          -180,
+          "bezier",
+          "kf_mtvg2ir5_vrfxyx"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_scale_0",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.scale",
+      "i": 0,
+      "k": [
+        [
+          90,
+          1,
+          "bezier",
+          "kf_mtvfziph_7nwrt9"
+        ],
+        [
+          115,
+          1,
+          "bezier",
+          "kf_mtvg0zdd_4iomp9"
+        ],
+        [
+          152,
+          1,
+          "bezier",
+          "kf_mtvg2ir5_3rl22i"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_scale_1",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.scale",
+      "i": 1,
+      "k": [
+        [
+          90,
+          1,
+          "bezier",
+          "kf_mtvfziph_f5cvfq"
+        ],
+        [
+          115,
+          1,
+          "bezier",
+          "kf_mtvg0zdd_0aqfey"
+        ],
+        [
+          152,
+          1,
+          "bezier",
+          "kf_mtvg2ir5_nel4re"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_character_2_transform_scale_2",
+      "t": [
+        "node",
+        "character_2"
+      ],
+      "p": "transform.scale",
+      "i": 2,
+      "k": [
+        [
+          90,
+          1,
+          "bezier",
+          "kf_mtvfziph_qkgpxa"
+        ],
+        [
+          115,
+          1,
+          "bezier",
+          "kf_mtvg0zdd_e0wqu7"
+        ],
+        [
+          152,
+          1,
+          "bezier",
+          "kf_mtvg2ir5_y8r7qr"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_camera_1_camera_fov_0",
+      "t": [
+        "node",
+        "camera_1"
+      ],
+      "p": "camera.fov",
+      "i": 0,
+      "k": [
+        [
+          60,
+          70,
+          "bezier",
+          "kf_mtvgkkfd_pq6adi"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_camera_1_camera_lookAt_0",
+      "t": [
+        "node",
+        "camera_1"
+      ],
+      "p": "camera.lookAt",
+      "i": 0,
+      "k": [
+        [
+          60,
+          0,
+          "bezier",
+          "kf_mtvgkkfd_7hbpev"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_camera_1_camera_lookAt_1",
+      "t": [
+        "node",
+        "camera_1"
+      ],
+      "p": "camera.lookAt",
+      "i": 1,
+      "k": [
+        [
+          60,
+          0,
+          "bezier",
+          "kf_mtvgkkfd_agzkp5"
+        ]
+      ]
+    },
+    {
+      "id": "fc_node_camera_1_camera_lookAt_2",
+      "t": [
+        "node",
+        "camera_1"
+      ],
+      "p": "camera.lookAt",
+      "i": 2,
+      "k": [
+        [
+          60,
+          0,
+          "bezier",
+          "kf_mtvgkkfd_d6o5gh"
+        ]
+      ]
+    }
+  ]
+}

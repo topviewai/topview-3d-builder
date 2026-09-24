@@ -1,0 +1,2372 @@
+{
+  "format": "scene3d-asset-manifest",
+  "version": 1,
+  "assets": [
+    {
+      "id": "primitive_box",
+      "kind": "primitive",
+      "name": "Box",
+      "category": "Primitives",
+      "tags": [
+        "primitive",
+        "box",
+        "cube"
+      ],
+      "primitive": {
+        "kind": "BoxGeometry",
+        "parameters": {
+          "width": 1,
+          "height": 1,
+          "depth": 1
+        }
+      }
+    },
+    {
+      "id": "primitive_sphere",
+      "kind": "primitive",
+      "name": "Sphere",
+      "category": "Primitives",
+      "tags": [
+        "primitive",
+        "sphere",
+        "ball"
+      ],
+      "primitive": {
+        "kind": "SphereGeometry",
+        "parameters": {
+          "radius": 0.5,
+          "widthSegments": 32,
+          "heightSegments": 16
+        }
+      }
+    },
+    {
+      "id": "primitive_cylinder",
+      "kind": "primitive",
+      "name": "Cylinder",
+      "category": "Primitives",
+      "tags": [
+        "primitive",
+        "cylinder"
+      ],
+      "primitive": {
+        "kind": "CylinderGeometry",
+        "parameters": {
+          "radiusTop": 0.5,
+          "radiusBottom": 0.5,
+          "height": 1,
+          "radialSegments": 32
+        }
+      }
+    },
+    {
+      "id": "primitive_cone",
+      "kind": "primitive",
+      "name": "Cone",
+      "category": "Primitives",
+      "tags": [
+        "primitive",
+        "cone"
+      ],
+      "primitive": {
+        "kind": "ConeGeometry",
+        "parameters": {
+          "radius": 0.5,
+          "height": 1,
+          "radialSegments": 32
+        }
+      }
+    },
+    {
+      "id": "primitive_plane",
+      "kind": "primitive",
+      "name": "Plane",
+      "category": "Primitives",
+      "tags": [
+        "primitive",
+        "plane"
+      ],
+      "primitive": {
+        "kind": "PlaneGeometry",
+        "parameters": {
+          "width": 1,
+          "height": 1
+        }
+      }
+    },
+    {
+      "id": "a3d_char_30ec53c93eae4173946b38639691ebe0",
+      "kind": "character",
+      "name": "Female",
+      "file": "characters/a3d_char_30ec53c93eae4173946b38639691ebe0.glb",
+      "bytes": 143864,
+      "sha256": "d4ce3fb196938e538ebc83ff984b90d3294c4d083d8c2489cdd7a25cad0f8be5",
+      "key": "3d-builder/library/characters/a3d_char_30ec53c93eae4173946b38639691ebe0-d4ce3fb1.glb",
+      "category": "People & Characters",
+      "tags": [
+        "mannequin",
+        "female",
+        "woman",
+        "adult",
+        "成人",
+        "女性"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_char_461b4f4b76ae4b198f439fa4f6f743b6",
+      "kind": "character",
+      "name": "Child",
+      "file": "characters/a3d_char_461b4f4b76ae4b198f439fa4f6f743b6.glb",
+      "bytes": 146792,
+      "sha256": "10f31d59b74ff2228f5305e42c09797685ee2be312aea9c4c3f3434e8f398f0b",
+      "key": "3d-builder/library/characters/a3d_char_461b4f4b76ae4b198f439fa4f6f743b6-10f31d59.glb",
+      "category": "People & Characters",
+      "tags": [
+        "mannequin",
+        "child",
+        "kid",
+        "儿童",
+        "幼儿"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_char_7d220ac359844c80a8faaf0e25478477",
+      "kind": "character",
+      "name": "Man",
+      "file": "characters/a3d_char_7d220ac359844c80a8faaf0e25478477.glb",
+      "bytes": 183552,
+      "sha256": "74da5e9627e43836af969f51b37effeb1f3485a2e0995519fc9b4d1b438cc274",
+      "key": "3d-builder/library/characters/a3d_char_7d220ac359844c80a8faaf0e25478477-74da5e96.glb",
+      "category": "People & Characters",
+      "tags": [
+        "mannequin",
+        "man",
+        "male",
+        "adult",
+        "成人",
+        "男性"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_char_de37873a79244fbe8a0660ea08d1b4ab",
+      "kind": "character",
+      "name": "Youth",
+      "file": "characters/a3d_char_de37873a79244fbe8a0660ea08d1b4ab.glb",
+      "bytes": 184012,
+      "sha256": "b6ca36e25e3c3c937de132c2571f82e1ccbc14e451bbabc5cf269fb97153a57b",
+      "key": "3d-builder/library/characters/a3d_char_de37873a79244fbe8a0660ea08d1b4ab-b6ca36e2.glb",
+      "category": "People & Characters",
+      "tags": [
+        "mannequin",
+        "youth",
+        "teen",
+        "少年",
+        "青少年"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-floating-legs-raised-arms-extended-u",
+      "kind": "pose",
+      "name": "Floating, Legs Raised, Arms Extended Upwards",
+      "file": "poses/a3d_pose_dyn-floating-legs-raised-arms-extended-u.json",
+      "bytes": 3933,
+      "sha256": "dbb18e5d4203c3bf49f2a997ffc35009a1b0e07a86777ce83d64f1f3f3e6b2fe",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-floating-legs-raised-arms-extended-u-dbb18e5d.json",
+      "cover": "covers/a3d_pose_dyn-floating-legs-raised-arms-extended-u.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dynamic-float-dive",
+      "kind": "pose",
+      "name": "Float, Diving",
+      "file": "poses/a3d_pose_dynamic-float-dive.json",
+      "bytes": 3982,
+      "sha256": "1f8760b4f9ccc68d863b9820dd34483bac9d63d366b8c6a9acb90e15f1835c9b",
+      "key": "3d-builder/library/poses/a3d_pose_dynamic-float-dive-1f8760b4.json",
+      "cover": "covers/a3d_pose_dynamic-float-dive.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dynamic-float-arch",
+      "kind": "pose",
+      "name": "Float, Back Arched",
+      "file": "poses/a3d_pose_dynamic-float-arch.json",
+      "bytes": 3959,
+      "sha256": "33dd5c52098cbb0e716d66bac29b189ae23c24c4fee4815a1ed927821359e51e",
+      "key": "3d-builder/library/poses/a3d_pose_dynamic-float-arch-33dd5c52.json",
+      "cover": "covers/a3d_pose_dynamic-float-arch.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-leaping-forward-arms-extended-backwa",
+      "kind": "pose",
+      "name": "Leaping Forward, Arms Extended Backwards",
+      "file": "poses/a3d_pose_dyn-leaping-forward-arms-extended-backwa.json",
+      "bytes": 3938,
+      "sha256": "7b52969ad36e8fd4f73d006e1a2f1ce953c70c231ef5503a8384f10e6333e1ef",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-leaping-forward-arms-extended-backwa-7b52969a.json",
+      "cover": "covers/a3d_pose_dyn-leaping-forward-arms-extended-backwa.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-floating-legs-bent-and-arms-spread",
+      "kind": "pose",
+      "name": "Floating, Legs Bent And Arms Spread",
+      "file": "poses/a3d_pose_dyn-floating-legs-bent-and-arms-spread.json",
+      "bytes": 3924,
+      "sha256": "627341f407dc691bfd3906bce2068d5711b201d3feff7499bdb98a7f91d1555f",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-floating-legs-bent-and-arms-spread-627341f4.json",
+      "cover": "covers/a3d_pose_dyn-floating-legs-bent-and-arms-spread.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-floating-left-leg-bent-hands-spread",
+      "kind": "pose",
+      "name": "Floating, Left Leg Bent, Hands Spread",
+      "file": "poses/a3d_pose_dyn-floating-left-leg-bent-hands-spread.json",
+      "bytes": 3894,
+      "sha256": "e9b79d25450c8a031053539c241eed0c11b461ecefe6611da4996671baf9a53d",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-floating-left-leg-bent-hands-spread-e9b79d25.json",
+      "cover": "covers/a3d_pose_dyn-floating-left-leg-bent-hands-spread.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-floating-bent-forwards",
+      "kind": "pose",
+      "name": "Floating, Bent Forwards",
+      "file": "poses/a3d_pose_dyn-floating-bent-forwards.json",
+      "bytes": 3900,
+      "sha256": "f41ec85a4c9208bfc35de2a4c3e6cec342b04dff67b9acb9f943d9918b64dbf7",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-floating-bent-forwards-f41ec85a.json",
+      "cover": "covers/a3d_pose_dyn-floating-bent-forwards.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dyn-l-toe-look-l",
+      "kind": "pose",
+      "name": "On Left Toes, Looking Left",
+      "file": "poses/a3d_pose_dyn-l-toe-look-l.json",
+      "bytes": 3900,
+      "sha256": "44b4d5a7e4c1092b2a37f11c76471794a75b2dfb069d9560a669c386f6716dc8",
+      "key": "3d-builder/library/poses/a3d_pose_dyn-l-toe-look-l-44b4d5a7.json",
+      "cover": "covers/a3d_pose_dyn-l-toe-look-l.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-toes-reach",
+      "kind": "pose",
+      "name": "Dance, Toes Reaching",
+      "file": "poses/a3d_pose_dance-toes-reach.json",
+      "bytes": 3958,
+      "sha256": "1327074ec55a43f0511af1cd3834f736200c165cf82e003cded4e2f45d6299e3",
+      "key": "3d-builder/library/poses/a3d_pose_dance-toes-reach-1327074e.json",
+      "cover": "covers/a3d_pose_dance-toes-reach.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-r-toe-l-leg-up",
+      "kind": "pose",
+      "name": "On Right Toes, Left Leg Raised",
+      "file": "poses/a3d_pose_dance-r-toe-l-leg-up.json",
+      "bytes": 3973,
+      "sha256": "40cd96942b5cc9b757069bae8fa547f68964b31f7bc64d2555563230e24869db",
+      "key": "3d-builder/library/poses/a3d_pose_dance-r-toe-l-leg-up-40cd9694.json",
+      "cover": "covers/a3d_pose_dance-r-toe-l-leg-up.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-r-toe-arms-up",
+      "kind": "pose",
+      "name": "On Right Toe, Arms Raised",
+      "file": "poses/a3d_pose_dance-r-toe-arms-up.json",
+      "bytes": 3930,
+      "sha256": "c912ac75c7dc1f17b5cebea53ab30e9e7ef67eb4b35747e288bfada150e09451",
+      "key": "3d-builder/library/poses/a3d_pose_dance-r-toe-arms-up-c912ac75.json",
+      "cover": "covers/a3d_pose_dance-r-toe-arms-up.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-legs-x",
+      "kind": "pose",
+      "name": "Legs Crossed",
+      "file": "poses/a3d_pose_dance-legs-x.json",
+      "bytes": 3863,
+      "sha256": "bb97bb885f5697180325698199f3b63546f9e8e1799df1b34bf96449a0f33661",
+      "key": "3d-builder/library/poses/a3d_pose_dance-legs-x-bb97bb88.json",
+      "cover": "covers/a3d_pose_dance-legs-x.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-legs-spread-lean-r",
+      "kind": "pose",
+      "name": "Legs Spread Leaning Right",
+      "file": "poses/a3d_pose_dance-legs-spread-lean-r.json",
+      "bytes": 3950,
+      "sha256": "a51c87b08f8272a482190819da858d1e45f15306516e9cfe147c57eb432a57ce",
+      "key": "3d-builder/library/poses/a3d_pose_dance-legs-spread-lean-r-a51c87b0.json",
+      "cover": "covers/a3d_pose_dance-legs-spread-lean-r.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-legs-spread-lean-l",
+      "kind": "pose",
+      "name": "Legs Spread Leaning Left",
+      "file": "poses/a3d_pose_dance-legs-spread-lean-l.json",
+      "bytes": 3893,
+      "sha256": "a55d7bd0e96c773033d962deaf76dfad3bf1a6a9856ad4263d3ec79445b25113",
+      "key": "3d-builder/library/poses/a3d_pose_dance-legs-spread-lean-l-a55d7bd0.json",
+      "cover": "covers/a3d_pose_dance-legs-spread-lean-l.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-toes-arch",
+      "kind": "pose",
+      "name": "Dance, Toes Arched",
+      "file": "poses/a3d_pose_dance-toes-arch.json",
+      "bytes": 3957,
+      "sha256": "4cc4534defbab0e0e5430900f6490fc67bcf9b1e00dedf02443dc53d509a8db5",
+      "key": "3d-builder/library/poses/a3d_pose_dance-toes-arch-4cc4534d.json",
+      "cover": "covers/a3d_pose_dance-toes-arch.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-r-foot-arms-extended-backwards",
+      "kind": "pose",
+      "name": "On Right Foot, Arms Extended Backwards",
+      "file": "poses/a3d_pose_dance-r-foot-arms-extended-backwards.json",
+      "bytes": 3914,
+      "sha256": "db144ddeac6825971f0439e38f400e3136ea978517784e7d2713e17e3811f48c",
+      "key": "3d-builder/library/poses/a3d_pose_dance-r-foot-arms-extended-backwards-db144dde.json",
+      "cover": "covers/a3d_pose_dance-r-foot-arms-extended-backwards.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_dance-l-toe-top-of-right-foot",
+      "kind": "pose",
+      "name": "On Left Toes, Top Of Right Foot",
+      "file": "poses/a3d_pose_dance-l-toe-top-of-right-foot.json",
+      "bytes": 3931,
+      "sha256": "08aad344219e8ee254c768e7881f2d63ead4ed1e4e12aa87e38083c67192662a",
+      "key": "3d-builder/library/poses/a3d_pose_dance-l-toe-top-of-right-foot-08aad344.json",
+      "cover": "covers/a3d_pose_dance-l-toe-top-of-right-foot.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-holding-bow",
+      "kind": "pose",
+      "name": "Holding Bow",
+      "file": "poses/a3d_pose_action-holding-bow.json",
+      "bytes": 3941,
+      "sha256": "de0efa20f469dfebbb4b3e55e4110897c52bff6b761c9878c01afa26a0a94bca",
+      "key": "3d-builder/library/poses/a3d_pose_action-holding-bow-de0efa20.json",
+      "cover": "covers/a3d_pose_action-holding-bow.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-jab-with-right-hand",
+      "kind": "pose",
+      "name": "Jab With Right Hand",
+      "file": "poses/a3d_pose_action-jab-with-right-hand.json",
+      "bytes": 3949,
+      "sha256": "f1d82d99ffd82096fc6d5536354d1e104bf0ecd5b17bdb69b602b7e42af8e7f2",
+      "key": "3d-builder/library/poses/a3d_pose_action-jab-with-right-hand-f1d82d99.json",
+      "cover": "covers/a3d_pose_action-jab-with-right-hand.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-exaggerated-punch-with-right-hand",
+      "kind": "pose",
+      "name": "Exaggerated Punch With Right Hand",
+      "file": "poses/a3d_pose_action-exaggerated-punch-with-right-hand.json",
+      "bytes": 3956,
+      "sha256": "da5995db783f2572263d291bc92a19d14a61913504000b437254c81e6c447fdf",
+      "key": "3d-builder/library/poses/a3d_pose_action-exaggerated-punch-with-right-hand-da5995db.json",
+      "cover": "covers/a3d_pose_action-exaggerated-punch-with-right-hand.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-attack-rear",
+      "kind": "pose",
+      "name": "Attack, Rear Swing",
+      "file": "poses/a3d_pose_action-attack-rear.json",
+      "bytes": 3931,
+      "sha256": "8b649f61efd36b3f4695227faa5f53da0fbcd6cfc781c98a7895966f690bd2fe",
+      "key": "3d-builder/library/poses/a3d_pose_action-attack-rear-8b649f61.json",
+      "cover": "covers/a3d_pose_action-attack-rear.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-attack-lunge",
+      "kind": "pose",
+      "name": "Attack Lunge",
+      "file": "poses/a3d_pose_action-attack-lunge.json",
+      "bytes": 3882,
+      "sha256": "b82e17bcdb0682d679f1bb05df5b0f2c72dd08bc1c03059e97620034a945a3dd",
+      "key": "3d-builder/library/poses/a3d_pose_action-attack-lunge-b82e17bc.json",
+      "cover": "covers/a3d_pose_action-attack-lunge.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-attack-jab",
+      "kind": "pose",
+      "name": "Attack Jab",
+      "file": "poses/a3d_pose_action-attack-jab.json",
+      "bytes": 3961,
+      "sha256": "2a94890d55d4c69e5e2a8f52de8e88cc70618e61da393912a87814f6391ab9fd",
+      "key": "3d-builder/library/poses/a3d_pose_action-attack-jab-2a94890d.json",
+      "cover": "covers/a3d_pose_action-attack-jab.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-crawling-forward-reaching-with-le",
+      "kind": "pose",
+      "name": "Crawling Forward Reaching With Left Hand",
+      "file": "poses/a3d_pose_action-crawling-forward-reaching-with-le.json",
+      "bytes": 3929,
+      "sha256": "7d81e924295d46d7463b0a9aa6ba9719183c8f9c15a08da5122080c8787abe45",
+      "key": "3d-builder/library/poses/a3d_pose_action-crawling-forward-reaching-with-le-7d81e924.json",
+      "cover": "covers/a3d_pose_action-crawling-forward-reaching-with-le.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-sliding",
+      "kind": "pose",
+      "name": "Sliding",
+      "file": "poses/a3d_pose_action-sliding.json",
+      "bytes": 3954,
+      "sha256": "4ff1c2d898fb2f91cb75ac4121b7b03480526eeca44df16ff7315cb8417d62bd",
+      "key": "3d-builder/library/poses/a3d_pose_action-sliding-4ff1c2d8.json",
+      "cover": "covers/a3d_pose_action-sliding.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-push-up",
+      "kind": "pose",
+      "name": "Push Up",
+      "file": "poses/a3d_pose_action-push-up.json",
+      "bytes": 3910,
+      "sha256": "887962d7354c7a8ea00e3b99ccdf6eda4fe283450a4ea3f8fa643cdf44c6ec8f",
+      "key": "3d-builder/library/poses/a3d_pose_action-push-up-887962d7.json",
+      "cover": "covers/a3d_pose_action-push-up.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-stomach-elbows-supporting",
+      "kind": "pose",
+      "name": "On Stomach, Elbows Supporting",
+      "file": "poses/a3d_pose_lay-on-stomach-elbows-supporting.json",
+      "bytes": 3954,
+      "sha256": "0608c963e34c38492b09e10fd58c96e8ea87da91547b1f520e3487d44ec3085d",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-stomach-elbows-supporting-0608c963.json",
+      "cover": "covers/a3d_pose_lay-on-stomach-elbows-supporting.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-pushing-with-left-side-of-body",
+      "kind": "pose",
+      "name": "Pushing With Left Side Of Body",
+      "file": "poses/a3d_pose_action-pushing-with-left-side-of-body.json",
+      "bytes": 3934,
+      "sha256": "6b6f381270228510b50c01f680d06be54bdd2391aa98f3341ef2cec85c403899",
+      "key": "3d-builder/library/poses/a3d_pose_action-pushing-with-left-side-of-body-6b6f3812.json",
+      "cover": "covers/a3d_pose_action-pushing-with-left-side-of-body.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-pushing-with-both-hands",
+      "kind": "pose",
+      "name": "Pushing With Both Hands",
+      "file": "poses/a3d_pose_action-pushing-with-both-hands.json",
+      "bytes": 3948,
+      "sha256": "e8f0b3da1ec72d060f857d3d9fbcc4ab74ce4b9e31c7fa067ca54b728c6e2ee7",
+      "key": "3d-builder/library/poses/a3d_pose_action-pushing-with-both-hands-e8f0b3da.json",
+      "cover": "covers/a3d_pose_action-pushing-with-both-hands.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-pushing-backwards",
+      "kind": "pose",
+      "name": "Pushing Backwards",
+      "file": "poses/a3d_pose_action-pushing-backwards.json",
+      "bytes": 3961,
+      "sha256": "8ada74e4523cf4bfe22abf2dff377cec3aec96ba5b614a1d20cb2d68202aab48",
+      "key": "3d-builder/library/poses/a3d_pose_action-pushing-backwards-8ada74e4.json",
+      "cover": "covers/a3d_pose_action-pushing-backwards.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-on-right-leg",
+      "kind": "pose",
+      "name": "On Right Leg",
+      "file": "poses/a3d_pose_action-on-right-leg.json",
+      "bytes": 3953,
+      "sha256": "cc3c5317fb0e215d048a69def6958119796c15a7550b758a47d0671db908fbe9",
+      "key": "3d-builder/library/poses/a3d_pose_action-on-right-leg-cc3c5317.json",
+      "cover": "covers/a3d_pose_action-on-right-leg.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-on-hands-and-toes-right-leg-forwa",
+      "kind": "pose",
+      "name": "On Hands And Toes, Right Leg Forward",
+      "file": "poses/a3d_pose_action-on-hands-and-toes-right-leg-forwa.json",
+      "bytes": 3936,
+      "sha256": "2b2cc781da197d39f92404a3f96befa2cd06147bc9d334c04e9134301da6a994",
+      "key": "3d-builder/library/poses/a3d_pose_action-on-hands-and-toes-right-leg-forwa-2b2cc781.json",
+      "cover": "covers/a3d_pose_action-on-hands-and-toes-right-leg-forwa.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_action-examine-fwd",
+      "kind": "pose",
+      "name": "Examine Forwards",
+      "file": "poses/a3d_pose_action-examine-fwd.json",
+      "bytes": 3945,
+      "sha256": "2993335a6399adcf684dd99f4c500e8f7cf024e10f8bebbc568fdaa48d5af631",
+      "key": "3d-builder/library/poses/a3d_pose_action-examine-fwd-2993335a.json",
+      "cover": "covers/a3d_pose_action-examine-fwd.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-back-legs-x-hands-head",
+      "kind": "pose",
+      "name": "On Back, Legs Crossed, Hands Behind Head",
+      "file": "poses/a3d_pose_lay-on-back-legs-x-hands-head.json",
+      "bytes": 3967,
+      "sha256": "850974b3a4e456ca36c660bc13a6621b9ba90ab358f667843122d58317089787",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-back-legs-x-hands-head-850974b3.json",
+      "cover": "covers/a3d_pose_lay-on-back-legs-x-hands-head.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-right-arm-supporting-l-arm-up",
+      "kind": "pose",
+      "name": "Right Arm Supporting, Left Arm Raised",
+      "file": "poses/a3d_pose_lay-right-arm-supporting-l-arm-up.json",
+      "bytes": 3897,
+      "sha256": "22622a6e4c4991ed9c113eafebdb6cdecf68a01802949602baa8b9fdbeee5942",
+      "key": "3d-builder/library/poses/a3d_pose_lay-right-arm-supporting-l-arm-up-22622a6e.json",
+      "cover": "covers/a3d_pose_lay-right-arm-supporting-l-arm-up.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-back-left-leg-bent-hands-head",
+      "kind": "pose",
+      "name": "On Back, Left Leg Bent, Hands Behind Head",
+      "file": "poses/a3d_pose_lay-on-back-left-leg-bent-hands-head.json",
+      "bytes": 3923,
+      "sha256": "1991bb2095cb4cc92d45258e0bf1d681f66fd02026580f21dec9db9cceedba0c",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-back-left-leg-bent-hands-head-1991bb20.json",
+      "cover": "covers/a3d_pose_lay-on-back-left-leg-bent-hands-head.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-legs-x-arms-supp",
+      "kind": "pose",
+      "name": "Legs Crossed, Arms Supporting",
+      "file": "poses/a3d_pose_lay-legs-x-arms-supp.json",
+      "bytes": 3912,
+      "sha256": "107764f811a2cff08139f100fbec586232ee4d53d6502fb185fae92663366c13",
+      "key": "3d-builder/library/poses/a3d_pose_lay-legs-x-arms-supp-107764f8.json",
+      "cover": "covers/a3d_pose_lay-legs-x-arms-supp.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-legs-to-side-arms-up",
+      "kind": "pose",
+      "name": "Legs To Side, Arms Raised",
+      "file": "poses/a3d_pose_lay-legs-to-side-arms-up.json",
+      "bytes": 3924,
+      "sha256": "3783a0dd22bb38703815be226933e9a74ca2ed2b31b77b80d04b2cb76260ce0d",
+      "key": "3d-builder/library/poses/a3d_pose_lay-legs-to-side-arms-up-3783a0dd.json",
+      "cover": "covers/a3d_pose_lay-legs-to-side-arms-up.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-right-leg-forward-arms-supp",
+      "kind": "pose",
+      "name": "Right Leg Forward, Arms Supporting",
+      "file": "poses/a3d_pose_lay-right-leg-forward-arms-supp.json",
+      "bytes": 3914,
+      "sha256": "61e83b457d66f5d84d304306719cdefcfe87db721d44b6af51348415531eaf9a",
+      "key": "3d-builder/library/poses/a3d_pose_lay-right-leg-forward-arms-supp-61e83b45.json",
+      "cover": "covers/a3d_pose_lay-right-leg-forward-arms-supp.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-right-side-right-hand-supporting",
+      "kind": "pose",
+      "name": "On Right Side, Right Hand Supporting Head",
+      "file": "poses/a3d_pose_lay-on-right-side-right-hand-supporting.json",
+      "bytes": 3957,
+      "sha256": "eacab11357476b56811503ec7b4c88c9a5438fcd30ee5609e03c553f7d0955c0",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-right-side-right-hand-supporting-eacab113.json",
+      "cover": "covers/a3d_pose_lay-on-right-side-right-hand-supporting.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-right-side-right-arm-supporting",
+      "kind": "pose",
+      "name": "On Right Side, Right Arm Supporting",
+      "file": "poses/a3d_pose_lay-on-right-side-right-arm-supporting.json",
+      "bytes": 3920,
+      "sha256": "e44aea278ce4f2e7e8c1581860391ec0d7c0c50d9dace94b836046898f3c919a",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-right-side-right-arm-supporting-e44aea27.json",
+      "cover": "covers/a3d_pose_lay-on-right-side-right-arm-supporting.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-left-side-left-arm-supporting-hea",
+      "kind": "pose",
+      "name": "On Left Side, Left Arm Supporting Head",
+      "file": "poses/a3d_pose_lay-on-left-side-left-arm-supporting-hea.json",
+      "bytes": 3942,
+      "sha256": "30011dfd483713151efd31f76a7b5639f3a0df104d1477a20468793db4991726",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-left-side-left-arm-supporting-hea-30011dfd.json",
+      "cover": "covers/a3d_pose_lay-on-left-side-left-arm-supporting-hea.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-left-side-left-arm-supporting",
+      "kind": "pose",
+      "name": "On Left Side, Left Arm Supporting",
+      "file": "poses/a3d_pose_lay-on-left-side-left-arm-supporting.json",
+      "bytes": 3930,
+      "sha256": "d1ee37aa0b7a52f926013232322f8edb59bd54744a09dbfefb128d31ee01106e",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-left-side-left-arm-supporting-d1ee37aa.json",
+      "cover": "covers/a3d_pose_lay-on-left-side-left-arm-supporting.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-back-arched-arms-supp",
+      "kind": "pose",
+      "name": "Back Arched, Arms Supporting",
+      "file": "poses/a3d_pose_lay-back-arched-arms-supp.json",
+      "bytes": 3925,
+      "sha256": "fbe84ed04b086afb04f31ea87dc56e376ceb0ef88a230b498ed1a1f5fc553601",
+      "key": "3d-builder/library/poses/a3d_pose_lay-back-arched-arms-supp-fbe84ed0.json",
+      "cover": "covers/a3d_pose_lay-back-arched-arms-supp.webp",
+      "category": "lie",
+      "tags": [
+        "lie"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-elbows-on-legs-lean-l",
+      "kind": "pose",
+      "name": "Elbows On Legs Leaning Left",
+      "file": "poses/a3d_pose_sit-elbows-on-legs-lean-l.json",
+      "bytes": 3880,
+      "sha256": "68ba64d5af40e37a31ec5b176a7c10435865593f7f6b159d7aec119c3acb7523",
+      "key": "3d-builder/library/poses/a3d_pose_sit-elbows-on-legs-lean-l-68ba64d5.json",
+      "cover": "covers/a3d_pose_sit-elbows-on-legs-lean-l.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-elbows-on-legs-lean-fwd",
+      "kind": "pose",
+      "name": "Elbows On Legs Leaning Forward",
+      "file": "poses/a3d_pose_sit-elbows-on-legs-lean-fwd.json",
+      "bytes": 3896,
+      "sha256": "7e796b95311c2743bf871f60f63d071827c41789efc4f7b0de15dfb8ff79b45e",
+      "key": "3d-builder/library/poses/a3d_pose_sit-elbows-on-legs-lean-fwd-7e796b95.json",
+      "cover": "covers/a3d_pose_sit-elbows-on-legs-lean-fwd.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-facepalm",
+      "kind": "pose",
+      "name": "Reclined, Facepalm",
+      "file": "poses/a3d_pose_sit-reclined-facepalm.json",
+      "bytes": 3875,
+      "sha256": "024e74c72e9169b2f95e8afc2d9e041c8a2baf5d1bdb21c3f5dea8c0f04d8557",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-facepalm-024e74c7.json",
+      "cover": "covers/a3d_pose_sit-reclined-facepalm.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-leaning-against-object-look-l",
+      "kind": "pose",
+      "name": "Leaning Against Object, Looking Left",
+      "file": "poses/a3d_pose_crouch-leaning-against-object-look-l.json",
+      "bytes": 3953,
+      "sha256": "c5eaba1c2bc010af1d0f127fe53ef197594f7a94be35a4e5dfcc5a0e1ce0797c",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-leaning-against-object-look-l-c5eaba1c.json",
+      "cover": "covers/a3d_pose_crouch-leaning-against-object-look-l.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-left-elbow-resting-obj",
+      "kind": "pose",
+      "name": "Left Elbow Resting On Object",
+      "file": "poses/a3d_pose_stand-left-elbow-resting-obj.json",
+      "bytes": 3905,
+      "sha256": "4064141642c66f9179296483d98da4721308843c0ed57f653758ca607bbded7f",
+      "key": "3d-builder/library/poses/a3d_pose_stand-left-elbow-resting-obj-40641416.json",
+      "cover": "covers/a3d_pose_stand-left-elbow-resting-obj.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-on-knees-arms-up",
+      "kind": "pose",
+      "name": "On Knees, Arms Raised",
+      "file": "poses/a3d_pose_crouch-on-knees-arms-up.json",
+      "bytes": 3920,
+      "sha256": "1357a1f616e655a93bd799c65bfb1ec891bbe0a8f1c32bc9d8c30e72f044e2d7",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-on-knees-arms-up-1357a1f6.json",
+      "cover": "covers/a3d_pose_crouch-on-knees-arms-up.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-lean-fwd-right-hand-supporting",
+      "kind": "pose",
+      "name": "Leaning Forward, Right Hand Supporting",
+      "file": "poses/a3d_pose_crouch-lean-fwd-right-hand-supporting.json",
+      "bytes": 3726,
+      "sha256": "eaebf678b1c9fc983925ec4951bc17ca28c601d23f7894b2fa2ce49d01c168b8",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-lean-fwd-right-hand-supporting-eaebf678.json",
+      "cover": "covers/a3d_pose_crouch-lean-fwd-right-hand-supporting.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-sneaking",
+      "kind": "pose",
+      "name": "Sneaking",
+      "file": "poses/a3d_pose_crouch-sneaking.json",
+      "bytes": 3948,
+      "sha256": "f9675fc0a9d7fe580a3a0ae10acdb8d34296f2d89e02fe514fd7aa468acf6949",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-sneaking-f9675fc0.json",
+      "cover": "covers/a3d_pose_crouch-sneaking.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-look-down-back",
+      "kind": "pose",
+      "name": "Crouch, Look Down Back",
+      "file": "poses/a3d_pose_crouch-look-down-back.json",
+      "bytes": 3959,
+      "sha256": "c0ca3fa85b64854f24558a83945c37c52f9ad0237d74aa784f82f304c31e526a",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-look-down-back-c0ca3fa8.json",
+      "cover": "covers/a3d_pose_crouch-look-down-back.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-look-back",
+      "kind": "pose",
+      "name": "Crouch, Look Back",
+      "file": "poses/a3d_pose_crouch-look-back.json",
+      "bytes": 3892,
+      "sha256": "103ecbdb963537ad82fe69ff7fce523fe325a2833e0a099aad80eb51c1528928",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-look-back-103ecbdb.json",
+      "cover": "covers/a3d_pose_crouch-look-back.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-examine-fwd",
+      "kind": "pose",
+      "name": "Examine Forwards",
+      "file": "poses/a3d_pose_crouch-examine-fwd.json",
+      "bytes": 3923,
+      "sha256": "866c933bda5cf37cd40a3f13d1ee33e106606110efe6cfadd67ade17c193e631",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-examine-fwd-866c933b.json",
+      "cover": "covers/a3d_pose_crouch-examine-fwd.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-arms-spread-looking-upwards",
+      "kind": "pose",
+      "name": "Arms Spread Looking Upwards",
+      "file": "poses/a3d_pose_crouch-arms-spread-looking-upwards.json",
+      "bytes": 3972,
+      "sha256": "0ccb7b70c5bb4c1f60dd2ee34047a3c7043d7877ec6df56d446fe8e316537ed5",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-arms-spread-looking-upwards-0ccb7b70.json",
+      "cover": "covers/a3d_pose_crouch-arms-spread-looking-upwards.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-right-leg-crossed-hands-hea",
+      "kind": "pose",
+      "name": "Reclined, Right Leg Crossed, Hands Behind Head",
+      "file": "poses/a3d_pose_sit-reclined-right-leg-crossed-hands-hea.json",
+      "bytes": 3935,
+      "sha256": "49419a9c642c3fedadc89fdcdbdee940e7c3fa11af873f6d57c06170542fba02",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-right-leg-crossed-hands-hea-49419a9c.json",
+      "cover": "covers/a3d_pose_sit-reclined-right-leg-crossed-hands-hea.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-left-leg-crossed-hands-head",
+      "kind": "pose",
+      "name": "Reclined, Left Leg Crossed, Hands Behind Head",
+      "file": "poses/a3d_pose_sit-reclined-left-leg-crossed-hands-head.json",
+      "bytes": 3949,
+      "sha256": "103a1624292e758b119b726c791a5a8f4dfffcd87deec7c221fefd0d58cc3e4a",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-left-leg-crossed-hands-head-103a1624.json",
+      "cover": "covers/a3d_pose_sit-reclined-left-leg-crossed-hands-head.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-legs-x-hold",
+      "kind": "pose",
+      "name": "Legs Crossed, Holding Object",
+      "file": "poses/a3d_pose_sit-legs-x-hold.json",
+      "bytes": 3945,
+      "sha256": "e4be0480276c94368a32b45a3862b1a041464b67bb63a102bed85f2718cf8464",
+      "key": "3d-builder/library/poses/a3d_pose_sit-legs-x-hold-e4be0480.json",
+      "cover": "covers/a3d_pose_sit-legs-x-hold.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-left-leg-crossed",
+      "kind": "pose",
+      "name": "Reclined, Left Leg Crossed",
+      "file": "poses/a3d_pose_sit-reclined-left-leg-crossed.json",
+      "bytes": 3915,
+      "sha256": "e3da11c2782b18c27fd92ed2a79b91b1d5d9ba7d018222c93f34a08704c9c55f",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-left-leg-crossed-e3da11c2.json",
+      "cover": "covers/a3d_pose_sit-reclined-left-leg-crossed.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-hands-head",
+      "kind": "pose",
+      "name": "Reclined, Hands Behind Head",
+      "file": "poses/a3d_pose_sit-reclined-hands-head.json",
+      "bytes": 3931,
+      "sha256": "85aa5eaa652b1741876dde594982e2ba62b31e13593cb0513a59f3f11377861f",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-hands-head-85aa5eaa.json",
+      "cover": "covers/a3d_pose_sit-reclined-hands-head.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-legs-x-hands-head",
+      "kind": "pose",
+      "name": "Legs Crossed, Hands Behind Head",
+      "file": "poses/a3d_pose_sit-legs-x-hands-head.json",
+      "bytes": 3913,
+      "sha256": "98e7c04af0edd7f56a56044312bf126c13a552fda1a9ca9087c5e459ae7c466b",
+      "key": "3d-builder/library/poses/a3d_pose_sit-legs-x-hands-head-98e7c04a.json",
+      "cover": "covers/a3d_pose_sit-legs-x-hands-head.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-knees-up-hold",
+      "kind": "pose",
+      "name": "Knees Up, Holding Object",
+      "file": "poses/a3d_pose_sit-knees-up-hold.json",
+      "bytes": 3946,
+      "sha256": "1e424a0d37d44b6ad1dd9b8f5b755b37b5280ac9fe4347162b489394438f9a67",
+      "key": "3d-builder/library/poses/a3d_pose_sit-knees-up-hold-1e424a0d.json",
+      "cover": "covers/a3d_pose_sit-knees-up-hold.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reclined-look-down",
+      "kind": "pose",
+      "name": "Reclined Looking Downwards",
+      "file": "poses/a3d_pose_sit-reclined-look-down.json",
+      "bytes": 3885,
+      "sha256": "b3cb3a1b009675422cf576b5d2a4f59f573ace7b108ae60e8dda89d354bdc572",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reclined-look-down-b3cb3a1b.json",
+      "cover": "covers/a3d_pose_sit-reclined-look-down.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reaching-left-hand-towards-right-toe",
+      "kind": "pose",
+      "name": "Reaching Left Hand Towards Right Toes",
+      "file": "poses/a3d_pose_sit-reaching-left-hand-towards-right-toe.json",
+      "bytes": 3964,
+      "sha256": "2a19085b7b1dbf791ceecd65aa1fe44f294092eb924c47d3f40a6246ffeee4c5",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reaching-left-hand-towards-right-toe-2a19085b.json",
+      "cover": "covers/a3d_pose_sit-reaching-left-hand-towards-right-toe.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-reaching-hands-towards-toes",
+      "kind": "pose",
+      "name": "Reaching Hands Towards Toes",
+      "file": "poses/a3d_pose_sit-reaching-hands-towards-toes.json",
+      "bytes": 3937,
+      "sha256": "7d807c42d723de265411f877c7f898ee012f6651b68416717110502bde5418e0",
+      "key": "3d-builder/library/poses/a3d_pose_sit-reaching-hands-towards-toes-7d807c42.json",
+      "cover": "covers/a3d_pose_sit-reaching-hands-towards-toes.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-legs-x-right-arm-over-knee",
+      "kind": "pose",
+      "name": "Legs Crossed, Right Arm Over Knee",
+      "file": "poses/a3d_pose_sit-legs-x-right-arm-over-knee.json",
+      "bytes": 3975,
+      "sha256": "06ac772099e10950ce3f16e234d2f89bbd5c251240cc4fbb88b499eefcc790e8",
+      "key": "3d-builder/library/poses/a3d_pose_sit-legs-x-right-arm-over-knee-06ac7720.json",
+      "cover": "covers/a3d_pose_sit-legs-x-right-arm-over-knee.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-legs-x-reclining",
+      "kind": "pose",
+      "name": "Legs Crossed, Reclining",
+      "file": "poses/a3d_pose_sit-legs-x-reclining.json",
+      "bytes": 3895,
+      "sha256": "c87fe3b880b99790912ab326300e13d7c45b2d58135d4f84e5ced05b4602a994",
+      "key": "3d-builder/library/poses/a3d_pose_sit-legs-x-reclining-c87fe3b8.json",
+      "cover": "covers/a3d_pose_sit-legs-x-reclining.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-legs-x-arms-x",
+      "kind": "pose",
+      "name": "Legs Crossed, Arms Crossed",
+      "file": "poses/a3d_pose_sit-legs-x-arms-x.json",
+      "bytes": 3941,
+      "sha256": "d317bbb8d62f2e6661ed0f4123346a89d7136c5cec3911b5c7bd675924d89b49",
+      "key": "3d-builder/library/poses/a3d_pose_sit-legs-x-arms-x-d317bbb8.json",
+      "cover": "covers/a3d_pose_sit-legs-x-arms-x.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-lean-fwd-hands-in-front",
+      "kind": "pose",
+      "name": "Leaning Forwards Hands In Front",
+      "file": "poses/a3d_pose_sit-lean-fwd-hands-in-front.json",
+      "bytes": 3922,
+      "sha256": "fb9847cbedbd9869b0f045497cb09f427da127e30360923aebc5a6cf021a7031",
+      "key": "3d-builder/library/poses/a3d_pose_sit-lean-fwd-hands-in-front-fb9847cb.json",
+      "cover": "covers/a3d_pose_sit-lean-fwd-hands-in-front.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-lean-back-arms-supp",
+      "kind": "pose",
+      "name": "Leaning Backwards, Arms Supporting",
+      "file": "poses/a3d_pose_sit-lean-back-arms-supp.json",
+      "bytes": 3960,
+      "sha256": "b5dbfdc60dedfc81a6417937d354446ef5c839147e0e3c2d913da5b17de83862",
+      "key": "3d-builder/library/poses/a3d_pose_sit-lean-back-arms-supp-b5dbfdc6.json",
+      "cover": "covers/a3d_pose_sit-lean-back-arms-supp.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-arms-up",
+      "kind": "pose",
+      "name": "Arms Raised",
+      "file": "poses/a3d_pose_sit-arms-up.json",
+      "bytes": 3938,
+      "sha256": "b860b2ca1a457e37ab455058d08a0873c57b6f81677f7a68c038da213e9d2b1f",
+      "key": "3d-builder/library/poses/a3d_pose_sit-arms-up-b860b2ca.json",
+      "cover": "covers/a3d_pose_sit-arms-up.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-arms-holding-right-knee",
+      "kind": "pose",
+      "name": "Arms Holding Right Knee",
+      "file": "poses/a3d_pose_sit-arms-holding-right-knee.json",
+      "bytes": 3967,
+      "sha256": "8dcb764617bad806c41c7f0c094cdc8f6a5a7ca2f851ed3449eac1c8c035118d",
+      "key": "3d-builder/library/poses/a3d_pose_sit-arms-holding-right-knee-8dcb7646.json",
+      "cover": "covers/a3d_pose_sit-arms-holding-right-knee.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-arms-holding-left-knee-reclining",
+      "kind": "pose",
+      "name": "Arms Holding Left Knee, Reclining",
+      "file": "poses/a3d_pose_sit-arms-holding-left-knee-reclining.json",
+      "bytes": 3994,
+      "sha256": "8b5f587048331334afbd94ddf21715e15d3b8ceb330c04b474cd882b1737be37",
+      "key": "3d-builder/library/poses/a3d_pose_sit-arms-holding-left-knee-reclining-8b5f5870.json",
+      "cover": "covers/a3d_pose_sit-arms-holding-left-knee-reclining.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-walking-arms-on-hips",
+      "kind": "pose",
+      "name": "Walking, Arms On Hips",
+      "file": "poses/a3d_pose_loco-walking-arms-on-hips.json",
+      "bytes": 3940,
+      "sha256": "c09c9bdf7cbdf2cfe490dabee564f29d2dd044aca0e4ce0674e1e6081b170146",
+      "key": "3d-builder/library/poses/a3d_pose_loco-walking-arms-on-hips-c09c9bdf.json",
+      "cover": "covers/a3d_pose_loco-walking-arms-on-hips.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-stepping-forward-look-l",
+      "kind": "pose",
+      "name": "Stepping Forward Looking Left",
+      "file": "poses/a3d_pose_loco-stepping-forward-look-l.json",
+      "bytes": 3928,
+      "sha256": "5fc35d11e0e1366fac382554bcd20df90ff2c5ffe7fd04820137a4adbc423dd8",
+      "key": "3d-builder/library/poses/a3d_pose_loco-stepping-forward-look-l-5fc35d11.json",
+      "cover": "covers/a3d_pose_loco-stepping-forward-look-l.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-legs-x-left-arm-obj-r-hip",
+      "kind": "pose",
+      "name": "Legs Crossed, Left Arm On Object, Right Hand On Hip",
+      "file": "poses/a3d_pose_stand-legs-x-left-arm-obj-r-hip.json",
+      "bytes": 3914,
+      "sha256": "85b173cff08be9da86d1b18170cae955dcc9618eea4f155de7460b3b27583042",
+      "key": "3d-builder/library/poses/a3d_pose_stand-legs-x-left-arm-obj-r-hip-85b173cf.json",
+      "cover": "covers/a3d_pose_stand-legs-x-left-arm-obj-r-hip.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-legs-x-leaning-obj",
+      "kind": "pose",
+      "name": "Legs Crossed, Leaning On Object",
+      "file": "poses/a3d_pose_stand-legs-x-leaning-obj.json",
+      "bytes": 3886,
+      "sha256": "6a5f74a9d60447b5ae8f359620605bdc520aee448328cf950be9f06f61dc8032",
+      "key": "3d-builder/library/poses/a3d_pose_stand-legs-x-leaning-obj-6a5f74a9.json",
+      "cover": "covers/a3d_pose_stand-legs-x-leaning-obj.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-right-leg-obj-l-hip-right-hand-on",
+      "kind": "pose",
+      "name": "Right Leg On Object, Left Hand On Hip, Right Hand On Chin",
+      "file": "poses/a3d_pose_stand-right-leg-obj-l-hip-right-hand-on.json",
+      "bytes": 3953,
+      "sha256": "583441c4dcbd9642f02451168f02c424f91b01437aad6772496d86af568ba90d",
+      "key": "3d-builder/library/poses/a3d_pose_stand-right-leg-obj-l-hip-right-hand-on-583441c4.json",
+      "cover": "covers/a3d_pose_stand-right-leg-obj-l-hip-right-hand-on.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-right-leg-obj-arms-x",
+      "kind": "pose",
+      "name": "Right Leg On Object, Hands Crossed",
+      "file": "poses/a3d_pose_stand-right-leg-obj-arms-x.json",
+      "bytes": 3901,
+      "sha256": "3270d996409b08509ad97ff6e8a96173c5415be9259f962628e705db611b8150",
+      "key": "3d-builder/library/poses/a3d_pose_stand-right-leg-obj-arms-x-3270d996.json",
+      "cover": "covers/a3d_pose_stand-right-leg-obj-arms-x.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-r-hip-l-arm-up",
+      "kind": "pose",
+      "name": "Right Hand On Hip, Left Arm Raised",
+      "file": "poses/a3d_pose_stand-r-hip-l-arm-up.json",
+      "bytes": 3914,
+      "sha256": "8a3d5945b82f2698b7a021e3159ea9542e6518518896a458614b987892bb793d",
+      "key": "3d-builder/library/poses/a3d_pose_stand-r-hip-l-arm-up-8a3d5945.json",
+      "cover": "covers/a3d_pose_stand-r-hip-l-arm-up.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-r-arm-up-l-hip",
+      "kind": "pose",
+      "name": "Right Arm Raised, Left Hand On Hip",
+      "file": "poses/a3d_pose_stand-r-arm-up-l-hip.json",
+      "bytes": 3912,
+      "sha256": "507cdf37b972900f0114bc82d1e706722c308a99b74d9706ee133cb162916ccb",
+      "key": "3d-builder/library/poses/a3d_pose_stand-r-arm-up-l-hip-507cdf37.json",
+      "cover": "covers/a3d_pose_stand-r-arm-up-l-hip.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-legs-x-l-hip",
+      "kind": "pose",
+      "name": "Legs Crossed, Left Hand On Hip",
+      "file": "poses/a3d_pose_stand-legs-x-l-hip.json",
+      "bytes": 3899,
+      "sha256": "48d63b91d983aee5bbfa5af2215696f68103cf022045f65c08175b89679440c7",
+      "key": "3d-builder/library/poses/a3d_pose_stand-legs-x-l-hip-48d63b91.json",
+      "cover": "covers/a3d_pose_stand-legs-x-l-hip.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-legs-x-arms-up",
+      "kind": "pose",
+      "name": "Legs Crossed, Arms Raised",
+      "file": "poses/a3d_pose_stand-legs-x-arms-up.json",
+      "bytes": 3925,
+      "sha256": "d2605973a22ee0645bdcd0d013800db36d9999a9e725a0bb291fae4f9c4a14ec",
+      "key": "3d-builder/library/poses/a3d_pose_stand-legs-x-arms-up-d2605973.json",
+      "cover": "covers/a3d_pose_stand-legs-x-arms-up.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-left-leg-obj-left-hand-on-knee-r-h",
+      "kind": "pose",
+      "name": "Left Leg On Object, Left Hand On Knee, Right Hand On Hip",
+      "file": "poses/a3d_pose_stand-left-leg-obj-left-hand-on-knee-r-h.json",
+      "bytes": 3949,
+      "sha256": "09110f84dac7cecc32939f4eae066be6732ddbc7da9c073ab5fb0cd9ca715cb9",
+      "key": "3d-builder/library/poses/a3d_pose_stand-left-leg-obj-left-hand-on-knee-r-h-09110f84.json",
+      "cover": "covers/a3d_pose_stand-left-leg-obj-left-hand-on-knee-r-h.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-lean-back-l-hip",
+      "kind": "pose",
+      "name": "Leaning Back, Left Hand On Hip",
+      "file": "poses/a3d_pose_stand-lean-back-l-hip.json",
+      "bytes": 3938,
+      "sha256": "eac5743463fd7180f08208768618a5be2dda981803a55897344f21cbc9d60a9e",
+      "key": "3d-builder/library/poses/a3d_pose_stand-lean-back-l-hip-eac57434.json",
+      "cover": "covers/a3d_pose_stand-lean-back-l-hip.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-lean-back-arms-behind",
+      "kind": "pose",
+      "name": "Leaning Back, Arms Behind",
+      "file": "poses/a3d_pose_stand-lean-back-arms-behind.json",
+      "bytes": 3987,
+      "sha256": "56f6f485d3ffe88ee59d77cb736c4eb9a174306bb7a9140af04c928327809c30",
+      "key": "3d-builder/library/poses/a3d_pose_stand-lean-back-arms-behind-56f6f485.json",
+      "cover": "covers/a3d_pose_stand-lean-back-arms-behind.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-l-leg-r-hip-l-arm-up",
+      "kind": "pose",
+      "name": "On Left Leg, Right Hand On Hip, Left Arm Raised",
+      "file": "poses/a3d_pose_stand-l-leg-r-hip-l-arm-up.json",
+      "bytes": 3941,
+      "sha256": "7eb92835891df7c62cd6654cbdc414db2619b6d306e3146da27809755788008b",
+      "key": "3d-builder/library/poses/a3d_pose_stand-l-leg-r-hip-l-arm-up-7eb92835.json",
+      "cover": "covers/a3d_pose_stand-l-leg-r-hip-l-arm-up.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-rev-sit-hands-relaxed",
+      "kind": "pose",
+      "name": "Sitting Backwards On Chair, Hands Relaxed",
+      "file": "poses/a3d_pose_sit-rev-sit-hands-relaxed.json",
+      "bytes": 3884,
+      "sha256": "7d0102f51b30e5fbb6c056a9730d9ae7ab6ae35a6d519ef72460e328ce8e7dc9",
+      "key": "3d-builder/library/poses/a3d_pose_sit-rev-sit-hands-relaxed-7d0102f5.json",
+      "cover": "covers/a3d_pose_sit-rev-sit-hands-relaxed.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-rev-sit-hands-grasping",
+      "kind": "pose",
+      "name": "Sitting Backwards On Chair, Hands Grasping",
+      "file": "poses/a3d_pose_sit-rev-sit-hands-grasping.json",
+      "bytes": 3905,
+      "sha256": "d4a198fdd974260a7536555ea42584fc99e3eb719f15ec0851762eca11b1a6e1",
+      "key": "3d-builder/library/poses/a3d_pose_sit-rev-sit-hands-grasping-d4a198fd.json",
+      "cover": "covers/a3d_pose_sit-rev-sit-hands-grasping.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-right-hand-behind-head",
+      "kind": "pose",
+      "name": "Right Hand Behind Head",
+      "file": "poses/a3d_pose_stand-right-hand-behind-head.json",
+      "bytes": 3925,
+      "sha256": "3d846917a39650e78ce09f766ca335b5902f15195e1358d89c77635b498adc65",
+      "key": "3d-builder/library/poses/a3d_pose_stand-right-hand-behind-head-3d846917.json",
+      "cover": "covers/a3d_pose_stand-right-hand-behind-head.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-r-foot-up",
+      "kind": "pose",
+      "name": "Right Foot Raised",
+      "file": "poses/a3d_pose_stand-r-foot-up.json",
+      "bytes": 3957,
+      "sha256": "092c52509c7e8784691db5ad87be7f6a45e59a1096be075f57c904af60634998",
+      "key": "3d-builder/library/poses/a3d_pose_stand-r-foot-up-092c5250.json",
+      "cover": "covers/a3d_pose_stand-r-foot-up.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-r-foot-l-leg-up",
+      "kind": "pose",
+      "name": "On Right Foot, Left Leg Raised",
+      "file": "poses/a3d_pose_stand-r-foot-l-leg-up.json",
+      "bytes": 3977,
+      "sha256": "29ceaf9b568c1d63e2d739ead9e2a0bd8bc71145b53695ff9c4fb60c76cf41dd",
+      "key": "3d-builder/library/poses/a3d_pose_stand-r-foot-l-leg-up-29ceaf9b.json",
+      "cover": "covers/a3d_pose_stand-r-foot-l-leg-up.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-left-leg-obj-left-hand-on-knee",
+      "kind": "pose",
+      "name": "Left Leg On Object, Left Hand On Knee",
+      "file": "poses/a3d_pose_stand-left-leg-obj-left-hand-on-knee.json",
+      "bytes": 3983,
+      "sha256": "13ed73beb2dd62de58f7204f1fb8179204b88fa2d131dbb93608345447994cd6",
+      "key": "3d-builder/library/poses/a3d_pose_stand-left-leg-obj-left-hand-on-knee-13ed73be.json",
+      "cover": "covers/a3d_pose_stand-left-leg-obj-left-hand-on-knee.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-bending-forward-arms-x-over-knees",
+      "kind": "pose",
+      "name": "Bending Forward, Arms Crossed Over Knees",
+      "file": "poses/a3d_pose_stand-bending-forward-arms-x-over-knees.json",
+      "bytes": 3987,
+      "sha256": "0d2fd9d0f8a5459c10fd00d4340e4fd31ebdda916f02bac96361f79756310e0f",
+      "key": "3d-builder/library/poses/a3d_pose_stand-bending-forward-arms-x-over-knees-0d2fd9d0.json",
+      "cover": "covers/a3d_pose_stand-bending-forward-arms-x-over-knees.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-arms-behind-back",
+      "kind": "pose",
+      "name": "Arms Behind Back",
+      "file": "poses/a3d_pose_stand-arms-behind-back.json",
+      "bytes": 3905,
+      "sha256": "a9ecdea9d8f491e6c5d47297cc8a2cda7c6c666cfa64f92f6af932b06dbb082d",
+      "key": "3d-builder/library/poses/a3d_pose_stand-arms-behind-back-a9ecdea9.json",
+      "cover": "covers/a3d_pose_stand-arms-behind-back.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-look-down-r",
+      "kind": "pose",
+      "name": "Looking Down To The Right",
+      "file": "poses/a3d_pose_stand-look-down-r.json",
+      "bytes": 3864,
+      "sha256": "d1b5193aee9b4eeb172fee4c61784dd7785f68d0525d05afe49f69a7f7992afc",
+      "key": "3d-builder/library/poses/a3d_pose_stand-look-down-r-d1b5193a.json",
+      "cover": "covers/a3d_pose_stand-look-down-r.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-walking-right-arm-on-hip",
+      "kind": "pose",
+      "name": "Walking, Right Arm On Hip",
+      "file": "poses/a3d_pose_loco-walking-right-arm-on-hip.json",
+      "bytes": 3918,
+      "sha256": "a655da46cf5c4a8173647c98219abf0b81c61a7cfee629b9b0dc0d34edb46014",
+      "key": "3d-builder/library/poses/a3d_pose_loco-walking-right-arm-on-hip-a655da46.json",
+      "cover": "covers/a3d_pose_loco-walking-right-arm-on-hip.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-sneaking-forward",
+      "kind": "pose",
+      "name": "Sneaking Forward",
+      "file": "poses/a3d_pose_loco-sneaking-forward.json",
+      "bytes": 3948,
+      "sha256": "69c41d0394f33f2abe66a531d774d8c956423528202051bdbcae279d7ae83008",
+      "key": "3d-builder/library/poses/a3d_pose_loco-sneaking-forward-69c41d03.json",
+      "cover": "covers/a3d_pose_loco-sneaking-forward.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-l-hip-m",
+      "kind": "pose",
+      "name": "Left Hand On Hip (Male)",
+      "file": "poses/a3d_pose_stand-l-hip-m.json",
+      "bytes": 3873,
+      "sha256": "f250bb8c06b2b08d3a516bd1007a066ab4f40a16fddac875973db206a1239a68",
+      "key": "3d-builder/library/poses/a3d_pose_stand-l-hip-m-f250bb8c.json",
+      "cover": "covers/a3d_pose_stand-l-hip-m.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-l-hip-f",
+      "kind": "pose",
+      "name": "Left Hand On Hip (Female)",
+      "file": "poses/a3d_pose_stand-l-hip-f.json",
+      "bytes": 3920,
+      "sha256": "72b9e31019592f1bb3925b87b931f3567b2f9658df9fa8e720bfe0edef913244",
+      "key": "3d-builder/library/poses/a3d_pose_stand-l-hip-f-72b9e310.json",
+      "cover": "covers/a3d_pose_stand-l-hip-f.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-run-reach",
+      "kind": "pose",
+      "name": "Run, Reaching",
+      "file": "poses/a3d_pose_loco-run-reach.json",
+      "bytes": 3937,
+      "sha256": "6b34ee6b1098580afa857f9f6c163327d9e9ad586e1ca1b3542104143abe5f2c",
+      "key": "3d-builder/library/poses/a3d_pose_loco-run-reach-6b34ee6b.json",
+      "cover": "covers/a3d_pose_loco-run-reach.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-arms-supp",
+      "kind": "pose",
+      "name": "Arms Supporting",
+      "file": "poses/a3d_pose_sit-arms-supp.json",
+      "bytes": 3896,
+      "sha256": "66cbcd6f7f853f725197edf36a55403074079aebd1fc0a84a0925a39af767839",
+      "key": "3d-builder/library/poses/a3d_pose_sit-arms-supp-66cbcd6f.json",
+      "cover": "covers/a3d_pose_sit-arms-supp.webp",
+      "category": "sit",
+      "tags": [
+        "sit"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-sprinting",
+      "kind": "pose",
+      "name": "Sprinting",
+      "file": "poses/a3d_pose_loco-sprinting.json",
+      "bytes": 3940,
+      "sha256": "19c0043fdde3a40a589133f17ca33e52f1e7a8dec3f184aa9c1d45f80860e434",
+      "key": "3d-builder/library/poses/a3d_pose_loco-sprinting-19c0043f.json",
+      "cover": "covers/a3d_pose_loco-sprinting.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-look-fwd-m",
+      "kind": "pose",
+      "name": "Looking Forward (Male)",
+      "file": "poses/a3d_pose_crouch-look-fwd-m.json",
+      "bytes": 3957,
+      "sha256": "7827d95310b16cd8e1a385a3c015a3a005e16cc01d3c910952251eb387a48098",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-look-fwd-m-7827d953.json",
+      "cover": "covers/a3d_pose_crouch-look-fwd-m.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_crouch-look-fwd-f",
+      "kind": "pose",
+      "name": "Looking Forward (Female)",
+      "file": "poses/a3d_pose_crouch-look-fwd-f.json",
+      "bytes": 3944,
+      "sha256": "a926af8afd8f51ae43cb22bff111002a83b6c9a2d914378e16f55296e578431b",
+      "key": "3d-builder/library/poses/a3d_pose_crouch-look-fwd-f-a926af8a.json",
+      "cover": "covers/a3d_pose_crouch-look-fwd-f.webp",
+      "category": "action",
+      "tags": [
+        "action"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_lay-on-back-left-leg-bent",
+      "kind": "pose",
+      "name": "On Back, Left Leg Bent",
+      "file": "poses/a3d_pose_lay-on-back-left-leg-bent.json",
+      "bytes": 3951,
+      "sha256": "8647a46541455397bc65f4c7685d90ebea86cab586ba79b25754b90337456401",
+      "key": "3d-builder/library/poses/a3d_pose_lay-on-back-left-leg-bent-8647a465.json",
+      "cover": "covers/a3d_pose_lay-on-back-left-leg-bent.webp",
+      "category": "lie",
+      "tags": [
+        "lie",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-walk-fwd-look-r",
+      "kind": "pose",
+      "name": "Walking Forward, Looking Right",
+      "file": "poses/a3d_pose_loco-walk-fwd-look-r.json",
+      "bytes": 3935,
+      "sha256": "4963b07e9bab2640c83cf24e0ea6a43be43e515be721a5ca7edbf7adae8900ff",
+      "key": "3d-builder/library/poses/a3d_pose_loco-walk-fwd-look-r-4963b07e.json",
+      "cover": "covers/a3d_pose_loco-walk-fwd-look-r.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-lean-fwd-elbows-on-knees",
+      "kind": "pose",
+      "name": "Leaning Forward, Elbows On Knees",
+      "file": "poses/a3d_pose_sit-lean-fwd-elbows-on-knees.json",
+      "bytes": 3981,
+      "sha256": "f567617d68137fe6efc6dd5021a290a0b9263d58bbd360b7f4bdd8321957a64b",
+      "key": "3d-builder/library/poses/a3d_pose_sit-lean-fwd-elbows-on-knees-f567617d.json",
+      "cover": "covers/a3d_pose_sit-lean-fwd-elbows-on-knees.webp",
+      "category": "sit",
+      "tags": [
+        "sit",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-look-r",
+      "kind": "pose",
+      "name": "Looking Right",
+      "file": "poses/a3d_pose_stand-look-r.json",
+      "bytes": 3918,
+      "sha256": "733279afa52e2437d8113b86ff4eb272c1f1d72e41e08e8cf145c09a57074485",
+      "key": "3d-builder/library/poses/a3d_pose_stand-look-r-733279af.json",
+      "cover": "covers/a3d_pose_stand-look-r.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_sit-arms-resting-on-knees",
+      "kind": "pose",
+      "name": "Arms Resting On Knees",
+      "file": "poses/a3d_pose_sit-arms-resting-on-knees.json",
+      "bytes": 3898,
+      "sha256": "d18e8e7114a4556f5ac9cebf8254408d5cdc8679dee6e1536a0b546eb3dd1bbd",
+      "key": "3d-builder/library/poses/a3d_pose_sit-arms-resting-on-knees-d18e8e71.json",
+      "cover": "covers/a3d_pose_sit-arms-resting-on-knees.webp",
+      "category": "sit",
+      "tags": [
+        "sit",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-look-l",
+      "kind": "pose",
+      "name": "Looking Left",
+      "file": "poses/a3d_pose_stand-look-l.json",
+      "bytes": 3915,
+      "sha256": "bffd6cc7541e07e4aac3bbec06f598d5bf2adf473ab53ea46718770147d9e4c5",
+      "key": "3d-builder/library/poses/a3d_pose_stand-look-l-bffd6cc7.json",
+      "cover": "covers/a3d_pose_stand-look-l.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-walking",
+      "kind": "pose",
+      "name": "Walking",
+      "file": "poses/a3d_pose_loco-walking.json",
+      "bytes": 3953,
+      "sha256": "53ae1f5b9a0306b2cadeb69ff29da973ecd1ff4c6ff2c407f2cc35e3d30ccaa9",
+      "key": "3d-builder/library/poses/a3d_pose_loco-walking-53ae1f5b.json",
+      "cover": "covers/a3d_pose_loco-walking.webp",
+      "category": "move",
+      "tags": [
+        "move",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-arms-slightly-spread",
+      "kind": "pose",
+      "name": "Arms Slightly Spread",
+      "file": "poses/a3d_pose_stand-arms-slightly-spread.json",
+      "bytes": 3930,
+      "sha256": "e31bbd26592a6436d90d9c08dc90b472e5e5e421ae688da84a813ece47136b4a",
+      "key": "3d-builder/library/poses/a3d_pose_stand-arms-slightly-spread-e31bbd26.json",
+      "cover": "covers/a3d_pose_stand-arms-slightly-spread.webp",
+      "category": "stand",
+      "tags": [
+        "stand"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-run-fwd",
+      "kind": "pose",
+      "name": "Run Forward",
+      "file": "poses/a3d_pose_loco-run-fwd.json",
+      "bytes": 3942,
+      "sha256": "148d7bdac21d9c0a6e9e7335a28c0b623c8133f06cd532ba0d29f5701e1cf92a",
+      "key": "3d-builder/library/poses/a3d_pose_loco-run-fwd-148d7bda.json",
+      "cover": "covers/a3d_pose_loco-run-fwd.webp",
+      "category": "move",
+      "tags": [
+        "move"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_loco-walk-fwd",
+      "kind": "pose",
+      "name": "Walking Forward",
+      "file": "poses/a3d_pose_loco-walk-fwd.json",
+      "bytes": 3918,
+      "sha256": "a5d1da4f590165a0a413cda3e2225bccd7658e9ac1af13af043dc06f151240e2",
+      "key": "3d-builder/library/poses/a3d_pose_loco-walk-fwd-a5d1da4f.json",
+      "cover": "covers/a3d_pose_loco-walk-fwd.webp",
+      "category": "move",
+      "tags": [
+        "move",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-hands-on-hips-look-back",
+      "kind": "pose",
+      "name": "Hands On Hips Looking Over Shoulder",
+      "file": "poses/a3d_pose_stand-hands-on-hips-look-back.json",
+      "bytes": 3943,
+      "sha256": "82d3fb4479da92bfac7d2cdbf5c84be86a0d20d559c912249b3692734e007abe",
+      "key": "3d-builder/library/poses/a3d_pose_stand-hands-on-hips-look-back-82d3fb44.json",
+      "cover": "covers/a3d_pose_stand-hands-on-hips-look-back.webp",
+      "category": "stand",
+      "tags": [
+        "stand",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-r-hip",
+      "kind": "pose",
+      "name": "Right Hand On Hip",
+      "file": "poses/a3d_pose_stand-r-hip.json",
+      "bytes": 3907,
+      "sha256": "88ed9d7eb1f7c1b91b04839ab1d217c7967e669c7bf077c4005a81f0f1f7892c",
+      "key": "3d-builder/library/poses/a3d_pose_stand-r-hip-88ed9d7e.json",
+      "cover": "covers/a3d_pose_stand-r-hip.webp",
+      "category": "stand",
+      "tags": [
+        "stand",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-arms-down",
+      "kind": "pose",
+      "name": "Arms Down",
+      "file": "poses/a3d_pose_stand-arms-down.json",
+      "bytes": 3895,
+      "sha256": "0f4e5bb97094e033244e4a0ae4320f7255622264230d29635f6c3e5e48fc84f8",
+      "key": "3d-builder/library/poses/a3d_pose_stand-arms-down-0f4e5bb9.json",
+      "cover": "covers/a3d_pose_stand-arms-down.webp",
+      "category": "stand",
+      "tags": [
+        "stand",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_stand-look-fwd",
+      "kind": "pose",
+      "name": "Looking Forward",
+      "file": "poses/a3d_pose_stand-look-fwd.json",
+      "bytes": 3874,
+      "sha256": "ce071b625e7122d37abc019b4e16bf25006be50c7dcf018685103023fe8e0809",
+      "key": "3d-builder/library/poses/a3d_pose_stand-look-fwd-ce071b62.json",
+      "cover": "covers/a3d_pose_stand-look-fwd.webp",
+      "category": "stand",
+      "tags": [
+        "stand",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    },
+    {
+      "id": "a3d_pose_t-pose",
+      "kind": "pose",
+      "name": "T-Pose",
+      "file": "poses/a3d_pose_t-pose.json",
+      "bytes": 61,
+      "sha256": "c5e8b8f26fd8c0054eb57f40bc46aa7b3d266dc5536dfa2623e56e4d55bda193",
+      "key": "3d-builder/library/poses/a3d_pose_t-pose-c5e8b8f2.json",
+      "cover": "covers/a3d_pose_t-pose.webp",
+      "category": "stand",
+      "tags": [
+        "stand",
+        "common"
+      ],
+      "rig": "mixamorig",
+      "license": "CC-BY-4.0",
+      "source": "Topview (self-made)",
+      "attribution": "© Topview, CC BY 4.0"
+    }
+  ]
+}

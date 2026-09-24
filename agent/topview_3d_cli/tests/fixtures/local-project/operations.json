@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 2,
+  "batchId": "fixture_local_project",
+  "operations": [
+    {
+      "operationId": "fixture_box",
+      "entityId": "box-1",
+      "kind": "director.node.upsert",
+      "payload": {
+        "node": {
+          "id": "box-1",
+          "type": "primitive",
+          "name": "Box",
+          "transform": {
+            "position": {"x": 0, "y": 0.5, "z": 0},
+            "rotation": {"x": 0, "y": 0, "z": 0},
+            "scale": {"x": 1, "y": 1, "z": 1}
+          },
+          "primitive": {"kind": "BoxGeometry", "parameters": {"width": 1, "height": 1, "depth": 1}}
+        }
+      }
+    },
+    {
+      "operationId": "fixture_box_curves",
+      "entityId": "fcurves__box-1",
+      "kind": "director.fcurves.set",
+      "payload": {
+        "version": 1,
+        "encoding": "compact-v1",
+        "fcurves": [
+          {"id": "box-1-x", "t": ["node", "box-1"], "p": "transform.position", "i": 0, "k": [[0, 0, "linear"], [48, 2, "linear"]]}
+        ]
+      }
+    }
+  ]
+}

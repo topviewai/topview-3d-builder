@@ -1,0 +1,236 @@
+.t3d-tutorial {
+  position: fixed;
+  inset: 0;
+  z-index: var(--t3d-z-dialog);
+  overflow: hidden;
+}
+
+.t3d-tutorial-hole {
+  position: fixed;
+  border-radius: 10px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.58);
+  outline: 1px solid rgba(255, 255, 255, 0.16);
+  pointer-events: none;
+}
+
+.t3d-tutorial-card {
+  position: fixed;
+  width: 340px;
+  padding: 16px 16px 14px;
+  border-radius: 16px;
+  background: #1c1c1c;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  color: var(--t3d-text);
+  z-index: calc(var(--t3d-z-dialog) + 1);
+}
+
+.t3d-tutorial-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.t3d-tutorial-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  color: var(--t3d-text-muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.t3d-tutorial-dots {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.t3d-tutorial-dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  cursor: pointer;
+}
+
+.t3d-tutorial-dot.is-active {
+  width: 14px;
+  background: #ffffff;
+}
+
+.t3d-tutorial-close {
+  width: 24px;
+  height: 24px;
+  margin: -4px -4px 0 0;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t3d-text-muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.t3d-tutorial-close:hover {
+  color: var(--t3d-text);
+  background: var(--t3d-ui-hover);
+}
+
+.t3d-tutorial-title {
+  margin: 14px 0 6px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.t3d-tutorial-card.is-viewport {
+  width: 360px;
+}
+
+.t3d-tutorial-card.is-viewport .t3d-tutorial-title {
+  margin: 10px 0 4px;
+}
+
+.t3d-tutorial-card.is-viewport .t3d-tutorial-footer {
+  margin-top: 12px;
+}
+
+.t3d-tutorial-body {
+  margin: 0;
+  color: var(--t3d-text-muted);
+  font-size: 13px;
+  line-height: 20px;
+}
+
+.t3d-tutorial-hints {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.t3d-tutorial-hint-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.t3d-tutorial-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--t3d-text-secondary);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.t3d-tutorial-mouse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 20px;
+  flex: none;
+  color: #f2f2f2;
+}
+
+.t3d-tutorial-mouse-svg {
+  width: 12px;
+  height: 17px;
+}
+
+.t3d-tutorial-hints kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 4px;
+  background: #2a2a2a;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.t3d-tutorial-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+
+.t3d-tutorial-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.t3d-tutorial-skip,
+.t3d-tutorial-back {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--t3d-text-muted);
+  font-size: 13px;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.t3d-tutorial-skip:hover,
+.t3d-tutorial-back:hover:not(:disabled) {
+  color: var(--t3d-text);
+}
+
+.t3d-tutorial-back:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.t3d-tutorial-nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.t3d-tutorial-next {
+  min-width: 76px;
+  height: 32px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 32px;
+  cursor: pointer;
+}
+
+.t3d-tutorial-next:hover {
+  background: #f3f3f3;
+}
+
+.t3d-tutorial-next:focus-visible,
+.t3d-tutorial-back:focus-visible,
+.t3d-tutorial-skip:focus-visible,
+.t3d-tutorial-close:focus-visible,
+.t3d-tutorial-dot:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.55);
+  outline-offset: 2px;
+}

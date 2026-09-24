@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    // 测试跑在 Node 下：需要 node:assert / node:fs 等内置模块类型，
+    // 以及 ES2022 的 Array.prototype.at（主 lib 停在 ES2020 是为了约束浏览器产物）。
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

@@ -1,0 +1,105 @@
+{
+  "$ref": "#/definitions/FCurvesCompactV1",
+  "definitions": {
+    "FCurvesCompactV1": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "number",
+          "const": 1
+        },
+        "encoding": {
+          "type": "string",
+          "const": "compact-v1"
+        },
+        "fcurves": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "t": {
+                "anyOf": [
+                  {
+                    "type": "array",
+                    "minItems": 2,
+                    "maxItems": 2,
+                    "items": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "p": {
+                "type": "string"
+              },
+              "i": {
+                "type": "number"
+              },
+              "k": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y"
+                        ],
+                        "additionalProperties": true
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "minItems": 3
+                }
+              }
+            },
+            "required": [
+              "id",
+              "t",
+              "p",
+              "k"
+            ],
+            "additionalProperties": true
+          }
+        }
+      },
+      "required": [
+        "version",
+        "encoding",
+        "fcurves"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

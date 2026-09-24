@@ -1,0 +1,33 @@
+{
+  "name": "topview-3d-builder",
+  "owner": {
+    "name": "Topview",
+    "url": "https://www.topview.ai"
+  },
+  "metadata": {
+    "description": "Scene3D by TopView: local 3D director scenes with the topview-3d-cli command."
+  },
+  "plugins": [
+    {
+      "name": "topview-3d-builder",
+      "source": "./",
+      "description": "Build, check and render 3D director scenes on your own machine with the topview-3d-cli command: characters, poses, props, cameras and keyframes, fully offline.",
+      "homepage": "https://www.topview.ai/topview-3d-builder",
+      "license": "Apache-2.0",
+      "category": "creativity",
+      "keywords": [
+        "3d",
+        "scene",
+        "previs",
+        "storyboard",
+        "camera",
+        "pose",
+        "character",
+        "keyframe",
+        "render",
+        "offline",
+        "cli"
+      ]
+    }
+  ]
+}

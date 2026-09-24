@@ -1,0 +1,27 @@
+{
+  "encoding": "compact-v1",
+  "fcurves": [
+    {
+      "i": 0,
+      "id": "box-1-x",
+      "k": [
+        [
+          0,
+          0,
+          "linear"
+        ],
+        [
+          48,
+          2,
+          "linear"
+        ]
+      ],
+      "p": "transform.position",
+      "t": [
+        "node",
+        "box-1"
+      ]
+    }
+  ],
+  "version": 1
+}

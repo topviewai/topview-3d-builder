@@ -1,0 +1,111 @@
+{
+  "content": {
+    "activeShotCameraNodeId": "cam-main",
+    "aspectRatio": "16:9",
+    "asset": {
+      "motionPath": []
+    },
+    "environment": {
+      "background": {
+        "mode": "color",
+        "skyColor": "#87CEEB"
+      },
+      "display": {
+        "characterLabelsVisible": true,
+        "groundHeight": 0.0,
+        "groundOpacity": 1.0,
+        "groundVisible": true
+      }
+    },
+    "nodes": [
+      {
+        "camera": {
+          "far": 2000.0,
+          "fov": 50.0,
+          "fovAxis": "vertical",
+          "isPrimary": true,
+          "lookAt": {
+            "x": 0.0,
+            "y": 1.2,
+            "z": 0.0
+          },
+          "near": 0.1,
+          "projection": "perspective"
+        },
+        "id": "cam-main",
+        "locked": false,
+        "name": "主相机",
+        "transform": {
+          "position": {
+            "x": 0.0,
+            "y": 1.8,
+            "z": 5.0
+          },
+          "rotation": {
+            "x": -8.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "type": "camera",
+        "visible": true
+      },
+      {
+        "id": "box-1",
+        "locked": false,
+        "name": "Box",
+        "primitive": {
+          "kind": "BoxGeometry",
+          "parameters": {
+            "depth": 1,
+            "height": 1,
+            "width": 1
+          }
+        },
+        "transform": {
+          "position": {
+            "x": 0.0,
+            "y": 0.5,
+            "z": 0.0
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          }
+        },
+        "type": "primitive",
+        "visible": true
+      }
+    ],
+    "physicalConstraints": [],
+    "timeline": {
+      "animation": {
+        "cameraMotionClips": [],
+        "fcurves": [],
+        "motionClips": [],
+        "motionTransitions": [],
+        "pathMotionClips": []
+      },
+      "fps": 24,
+      "frameEnd": 120,
+      "frameStart": 0,
+      "usePreviewRange": false,
+      "version": 1
+    },
+    "version": 1
+  },
+  "extra": {},
+  "pippitAssetId": "local_director",
+  "type": "biz/scene3d-director-document"
+}

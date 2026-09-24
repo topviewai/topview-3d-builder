@@ -1,0 +1,87 @@
+.t3d-tooltip-hit {
+  display: contents;
+}
+
+.t3d-tooltip-hit.is-disabled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.t3d-tooltip {
+  position: fixed;
+  z-index: var(--t3d-z-tooltip);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: max-content;
+  max-width: min(480px, calc(100vw - 16px));
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: #262626;
+  color: #fff;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  box-shadow: var(--t3d-shadow-float);
+}
+
+.t3d-tooltip-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: var(--t3d-bg-wash);
+  color: var(--t3d-text-secondary);
+  font: 11px/18px ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.t3d-tooltip-description {
+  width: max-content;
+  max-width: min(480px, calc(100vw - 16px));
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.t3d-field-help {
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+  margin-inline-start: 4px;
+  color: var(--t3d-text-secondary);
+  cursor: help;
+}
+
+.t3d-field-help:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.t3d-camera-aim-toast,
+.t3d-camera-motion-toast {
+  position: fixed;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--t3d-z-toast);
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #262626;
+  color: #fff;
+  font-size: 13px;
+  line-height: 20px;
+  box-shadow: var(--t3d-shadow-float);
+  pointer-events: none;
+}
+
+.t3d-dropdown > .t3d-tooltip-hit.is-disabled {
+  display: flex;
+  width: 100%;
+}

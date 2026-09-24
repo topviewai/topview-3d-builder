@@ -1,0 +1,1097 @@
+{
+  "$ref": "#/definitions/DirectorDocument",
+  "definitions": {
+    "DirectorDocument": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "pippitAssetId": {
+          "type": "string"
+        },
+        "extra": {},
+        "content": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "number"
+            },
+            "aspectRatio": {
+              "type": "string"
+            },
+            "activeShotCameraNodeId": {
+              "type": "string"
+            },
+            "generate": {
+              "type": "string"
+            },
+            "scenePlan": {},
+            "settings": {},
+            "environment": {
+              "type": "object",
+              "properties": {
+                "background": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "type": "string"
+                    },
+                    "skyColor": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "mode",
+                    "skyColor"
+                  ],
+                  "additionalProperties": true
+                },
+                "display": {
+                  "type": "object",
+                  "properties": {
+                    "characterLabelsVisible": {
+                      "type": "boolean"
+                    },
+                    "groundVisible": {
+                      "type": "boolean"
+                    },
+                    "groundHeight": {
+                      "type": "number"
+                    },
+                    "groundOpacity": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "characterLabelsVisible",
+                    "groundVisible",
+                    "groundHeight",
+                    "groundOpacity"
+                  ],
+                  "additionalProperties": true
+                },
+                "sphere": {},
+                "transform": {
+                  "type": "object",
+                  "properties": {
+                    "position": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "z": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "z"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "rotation": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "z": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "z"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "scale": {
+                      "type": "object",
+                      "properties": {
+                        "x": {
+                          "type": "number"
+                        },
+                        "y": {
+                          "type": "number"
+                        },
+                        "z": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "x",
+                        "y",
+                        "z"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "position",
+                    "rotation",
+                    "scale"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "background",
+                "display"
+              ],
+              "additionalProperties": true
+            },
+            "asset": {
+              "type": "object",
+              "properties": {
+                "motionPath": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "path"
+                    ],
+                    "additionalProperties": true
+                  }
+                }
+              },
+              "required": [
+                "motionPath"
+              ],
+              "additionalProperties": true
+            },
+            "nodes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "camera",
+                      "character",
+                      "prop",
+                      "path",
+                      "group",
+                      "primitive"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "visible": {
+                    "type": "boolean"
+                  },
+                  "locked": {
+                    "type": "boolean"
+                  },
+                  "transform": {
+                    "type": "object",
+                    "properties": {
+                      "position": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "rotation": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "scale": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "position",
+                      "rotation",
+                      "scale"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "metadata": {},
+                  "parentId": {
+                    "type": "string"
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "group": {
+                    "type": "object",
+                    "properties": {
+                      "appearance": {
+                        "type": "object",
+                        "properties": {
+                          "color": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "color"
+                        ],
+                        "additionalProperties": true
+                      },
+                      "kind": {
+                        "type": "string"
+                      },
+                      "label": {
+                        "type": "object",
+                        "properties": {
+                          "showLabel": {
+                            "type": "boolean"
+                          },
+                          "scale": {
+                            "type": "number"
+                          },
+                          "yOffset": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "showLabel",
+                          "scale",
+                          "yOffset"
+                        ],
+                        "additionalProperties": true
+                      },
+                      "layout": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "appearance",
+                      "kind"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "primitive": {
+                    "type": "object",
+                    "properties": {
+                      "kind": {
+                        "type": "string"
+                      },
+                      "parameters": {
+                        "type": "object",
+                        "additionalProperties": {}
+                      }
+                    },
+                    "required": [
+                      "kind",
+                      "parameters"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "camera": {
+                    "type": "object",
+                    "properties": {
+                      "projection": {
+                        "type": "string"
+                      },
+                      "fov": {
+                        "type": "number"
+                      },
+                      "fovAxis": {
+                        "type": "string"
+                      },
+                      "near": {
+                        "type": "number"
+                      },
+                      "far": {
+                        "type": "number"
+                      },
+                      "isPrimary": {
+                        "type": "boolean"
+                      },
+                      "lookAt": {
+                        "type": "object",
+                        "properties": {
+                          "x": {
+                            "type": "number"
+                          },
+                          "y": {
+                            "type": "number"
+                          },
+                          "z": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "x",
+                          "y",
+                          "z"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "projection",
+                      "fov",
+                      "fovAxis",
+                      "near",
+                      "far",
+                      "isPrimary",
+                      "lookAt"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "character": {
+                    "type": "object",
+                    "properties": {
+                      "placeholder": {
+                        "type": "boolean"
+                      },
+                      "gender": {
+                        "type": "string"
+                      },
+                      "motionId": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "appearance": {
+                        "type": "object",
+                        "properties": {
+                          "color": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "color"
+                        ],
+                        "additionalProperties": true
+                      },
+                      "label": {
+                        "type": "object",
+                        "properties": {
+                          "showLabel": {
+                            "type": "boolean"
+                          },
+                          "scale": {
+                            "type": "number"
+                          },
+                          "yOffset": {
+                            "type": "number"
+                          }
+                        },
+                        "required": [
+                          "showLabel",
+                          "scale",
+                          "yOffset"
+                        ],
+                        "additionalProperties": true
+                      },
+                      "animation": {
+                        "type": "object",
+                        "properties": {
+                          "mode": {
+                            "type": "string"
+                          },
+                          "controlValues": {
+                            "type": "object",
+                            "additionalProperties": {
+                              "type": "number"
+                            }
+                          }
+                        },
+                        "required": [
+                          "mode",
+                          "controlValues"
+                        ],
+                        "additionalProperties": true
+                      }
+                    },
+                    "required": [
+                      "placeholder",
+                      "gender",
+                      "appearance",
+                      "label",
+                      "animation"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "prop": {
+                    "type": "object",
+                    "properties": {
+                      "category": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "category"
+                    ],
+                    "additionalProperties": true
+                  },
+                  "path": {
+                    "type": "object",
+                    "properties": {
+                      "source": {
+                        "type": "string"
+                      },
+                      "curve": {
+                        "type": "string"
+                      },
+                      "closed": {
+                        "type": "boolean"
+                      },
+                      "groundSnap": {
+                        "type": "boolean"
+                      },
+                      "parameterization": {
+                        "type": "string"
+                      },
+                      "smoothing": {
+                        "type": "number"
+                      },
+                      "points": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "position": {
+                              "type": "object",
+                              "properties": {
+                                "x": {
+                                  "type": "number"
+                                },
+                                "y": {
+                                  "type": "number"
+                                },
+                                "z": {
+                                  "type": "number"
+                                }
+                              },
+                              "required": [
+                                "x",
+                                "y",
+                                "z"
+                              ],
+                              "additionalProperties": false
+                            },
+                            "timeRatio": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "position"
+                          ],
+                          "additionalProperties": true
+                        }
+                      }
+                    },
+                    "required": [
+                      "source",
+                      "curve",
+                      "closed",
+                      "groundSnap",
+                      "parameterization",
+                      "smoothing",
+                      "points"
+                    ],
+                    "additionalProperties": true
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "name",
+                  "visible",
+                  "locked",
+                  "transform"
+                ],
+                "additionalProperties": true
+              }
+            },
+            "physicalConstraints": {
+              "type": "array",
+              "items": {}
+            },
+            "timeline": {
+              "type": "object",
+              "properties": {
+                "version": {
+                  "type": "number"
+                },
+                "fps": {
+                  "type": "number"
+                },
+                "frameStart": {
+                  "type": "number"
+                },
+                "frameEnd": {
+                  "type": "number"
+                },
+                "usePreviewRange": {
+                  "type": "boolean"
+                },
+                "animation": {
+                  "type": "object",
+                  "properties": {
+                    "fcurves": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "fcurvesRef": {},
+                    "cameraMotionClips": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "target": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "nodeId": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "nodeId"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "focusTarget": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "frameStart": {
+                            "type": "number"
+                          },
+                          "frameEnd": {
+                            "type": "number"
+                          },
+                          "trimStartMs": {
+                            "type": "number"
+                          },
+                          "trimEndMs": {
+                            "type": "number"
+                          },
+                          "playback": {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "type": "number"
+                              },
+                              "speed": {
+                                "type": "number"
+                              },
+                              "loop": {
+                                "type": "boolean"
+                              },
+                              "loopMode": {
+                                "type": "string"
+                              },
+                              "baseDurationFrames": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "speed",
+                              "loop",
+                              "loopMode"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "motion": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "version": {
+                                "type": "number"
+                              },
+                              "presetId": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "timeUnit": {
+                                "type": "string"
+                              },
+                              "durationMs": {
+                                "type": "number"
+                              },
+                              "metadata": {},
+                              "source": {},
+                              "warnings": {
+                                "anyOf": [
+                                  {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  {
+                                    "type": "null"
+                                  }
+                                ]
+                              },
+                              "curves": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "id": {
+                                      "type": "string"
+                                    },
+                                    "group": {
+                                      "type": "string",
+                                      "enum": [
+                                        "position",
+                                        "lookAt",
+                                        "lens",
+                                        "rotation"
+                                      ]
+                                    },
+                                    "dataPath": {
+                                      "type": "string"
+                                    },
+                                    "arrayIndex": {
+                                      "type": "number"
+                                    },
+                                    "extrapolation": {
+                                      "type": "string"
+                                    },
+                                    "keyframes": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "id": {
+                                            "type": "string"
+                                          },
+                                          "time": {
+                                            "type": "number"
+                                          },
+                                          "value": {
+                                            "type": "number"
+                                          },
+                                          "interpolation": {
+                                            "type": "string",
+                                            "enum": [
+                                              "linear",
+                                              "bezier"
+                                            ]
+                                          }
+                                        },
+                                        "required": [
+                                          "id",
+                                          "time",
+                                          "value",
+                                          "interpolation"
+                                        ],
+                                        "additionalProperties": true
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "id",
+                                    "group",
+                                    "dataPath",
+                                    "arrayIndex",
+                                    "extrapolation",
+                                    "keyframes"
+                                  ],
+                                  "additionalProperties": true
+                                }
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "version",
+                              "presetId",
+                              "label",
+                              "timeUnit",
+                              "durationMs",
+                              "curves"
+                            ],
+                            "additionalProperties": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "target",
+                          "frameStart",
+                          "frameEnd",
+                          "trimStartMs",
+                          "trimEndMs",
+                          "playback",
+                          "motion"
+                        ],
+                        "additionalProperties": true
+                      }
+                    },
+                    "motionTransitions": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "motionClips": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "sourceDuration": {
+                            "type": "number"
+                          },
+                          "frameStart": {
+                            "type": "number"
+                          },
+                          "frameEnd": {
+                            "type": "number"
+                          },
+                          "target": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "nodeId": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "nodeId"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "playback": {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "type": "number"
+                              },
+                              "speed": {
+                                "type": "number"
+                              },
+                              "loop": {
+                                "type": "boolean"
+                              },
+                              "loopMode": {
+                                "type": "string"
+                              },
+                              "baseDurationFrames": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "speed",
+                              "loop",
+                              "loopMode"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "motion": {
+                            "type": "object",
+                            "properties": {
+                              "assetId": {
+                                "type": "string"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "source": {
+                                "type": "string"
+                              },
+                              "sourceRig": {
+                                "type": "string"
+                              },
+                              "url": {
+                                "type": "string"
+                              },
+                              "inPlace": {
+                                "type": "boolean"
+                              },
+                              "loop": {
+                                "type": "boolean"
+                              },
+                              "speed": {
+                                "type": "number"
+                              },
+                              "time": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "assetId",
+                              "name",
+                              "source",
+                              "sourceRig",
+                              "url",
+                              "inPlace",
+                              "loop",
+                              "speed",
+                              "time"
+                            ],
+                            "additionalProperties": true
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "source",
+                          "sourceDuration",
+                          "frameStart",
+                          "frameEnd",
+                          "target",
+                          "playback",
+                          "motion"
+                        ],
+                        "additionalProperties": true
+                      }
+                    },
+                    "pathMotionClips": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "status": {
+                            "type": "string"
+                          },
+                          "locked": {
+                            "type": "boolean"
+                          },
+                          "lockedReason": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "target": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string"
+                              },
+                              "nodeId": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "nodeId"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "pathNodeId": {
+                            "type": "string"
+                          },
+                          "pathName": {
+                            "type": "string"
+                          },
+                          "pathLength": {
+                            "type": "number"
+                          },
+                          "pathStartPercent": {
+                            "type": "number"
+                          },
+                          "pathEndPercent": {
+                            "type": "number"
+                          },
+                          "direction": {
+                            "type": "string"
+                          },
+                          "facing": {
+                            "type": "string"
+                          },
+                          "frameStart": {
+                            "type": "number"
+                          },
+                          "frameEnd": {
+                            "type": "number"
+                          },
+                          "playback": {
+                            "type": "object",
+                            "properties": {
+                              "version": {
+                                "type": "number"
+                              },
+                              "speed": {
+                                "type": "number"
+                              },
+                              "loop": {
+                                "type": "boolean"
+                              },
+                              "loopMode": {
+                                "type": "string"
+                              },
+                              "baseDurationFrames": {
+                                "type": "number"
+                              }
+                            },
+                            "required": [
+                              "version",
+                              "speed",
+                              "loop",
+                              "loopMode"
+                            ],
+                            "additionalProperties": true
+                          },
+                          "derivedSource": {}
+                        },
+                        "required": [
+                          "id",
+                          "status",
+                          "locked",
+                          "source",
+                          "target",
+                          "pathNodeId",
+                          "pathName",
+                          "pathLength",
+                          "pathStartPercent",
+                          "pathEndPercent",
+                          "direction",
+                          "facing",
+                          "frameStart",
+                          "frameEnd",
+                          "playback"
+                        ],
+                        "additionalProperties": true
+                      }
+                    }
+                  },
+                  "required": [
+                    "fcurves",
+                    "cameraMotionClips",
+                    "motionClips",
+                    "pathMotionClips"
+                  ],
+                  "additionalProperties": true
+                }
+              },
+              "required": [
+                "version",
+                "fps",
+                "frameStart",
+                "frameEnd",
+                "usePreviewRange",
+                "animation"
+              ],
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "version",
+            "aspectRatio",
+            "activeShotCameraNodeId",
+            "environment",
+            "asset",
+            "nodes",
+            "physicalConstraints",
+            "timeline"
+          ],
+          "additionalProperties": true
+        }
+      },
+      "required": [
+        "type",
+        "pippitAssetId",
+        "content"
+      ],
+      "additionalProperties": true
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
