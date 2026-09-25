@@ -95,8 +95,9 @@ Do this once at the end of a scene, not after every edit.
 - `STUDIO_UNAVAILABLE` and the error says Studio is not part of this install: this copy has no
   `editor/apps/studio` (the published package does not include it). Say so and stop; do not build
   another viewer.
-- `STUDIO_PROJECT_MISSING`: a Studio is already running without this project. Ask the user to
-  stop it, then run the command again.
+- `STUDIO_PROJECT_MISSING`: a Studio is already running and does not see this project yet
+  (often one started from another directory before this registry existed). Ask the user to stop
+  it, then run the command again. Do not start a second Studio on the same port.
 - `STUDIO_START_FAILED`: Node did not bring Studio up. Report the error and do not retry in a loop.
 
 ## When the browser is blocked

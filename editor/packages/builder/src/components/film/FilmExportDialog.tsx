@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Tooltip } from '../common/Tooltip'
+import { CanvasExportPicker } from '../dialogs/CanvasExportPicker'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { Dropdown } from '../common/Dropdown'
 import { Modal } from '../common/Modal'
@@ -12,6 +14,7 @@ export function FilmExportDialog({
   onClose: () => void
 }) {
   const s = useFilmExportDialog(sequenceId, onClose)
+  const [picking, setPicking] = useState(false)
   if (!s.sequence) return null
 
   return (
@@ -47,7 +50,7 @@ export function FilmExportDialog({
               type="button"
               className="t3d-dialog-solid"
               disabled={!s.canExport}
-              onClick={() => void s.start()}
+              onClick={() => (s.supportsTopviewCanvas ? setPicking(true) : void s.start())}
             >
               {s.t('export.sendToCanvas')}
             </button>
@@ -122,6 +125,17 @@ export function FilmExportDialog({
               onChange={s.setAspectRatio}
             />
           </div>
+          {picking && s.supportsTopviewCanvas ? (
+            <CanvasExportPicker
+              adapter={s.adapter}
+              busy={s.exporting}
+              onCancel={() => setPicking(false)}
+              onConfirm={(canvas) => {
+                setPicking(false)
+                s.sendToCanvas(canvas.id)
+              }}
+            />
+          ) : null}
           {s.issues.length > 0 ? (
             <div className="t3d-film-issues" role="alert">
               {s.issues.map((issue) => <div key={issue.code}>{issue.message}</div>)}

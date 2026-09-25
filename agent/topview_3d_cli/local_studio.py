@@ -7,9 +7,9 @@ caller opens that URL in the In-App Browser.
 """
 from __future__ import annotations
 
+import hashlib
 import json
 import os
-import re
 import shutil
 import socket
 import sys
@@ -27,9 +27,26 @@ STUDIO_PORT = 3002
 STUDIO_HOST = "127.0.0.1"
 
 
-def studio_project_id(directory_name: str) -> str:
-    slug = re.sub(r"[^a-z0-9]+", "-", directory_name.lower()).strip("-") or "project"
-    return f"cli-{slug[:48]}"
+def studio_project_id(root: Path) -> str:
+    """Stable id from the absolute path, so two folders with the same name stay distinct."""
+    digest = hashlib.sha256(str(root).encode("utf-8")).hexdigest()[:16]
+    return f"cli-{digest}"
+
+
+def project_registry_path() -> Path:
+    return user_cache_dir() / "studio" / "projects.txt"
+
+
+def register_studio_project(root: Path) -> None:
+    """Remember this absolute project path for every Studio process on this machine."""
+    registry = project_registry_path()
+    registry.parent.mkdir(parents=True, exist_ok=True)
+    current = registry.read_text(encoding="utf-8").splitlines() if registry.is_file() else []
+    paths = [line.strip() for line in current if line.strip()]
+    resolved = str(root)
+    if resolved not in paths:
+        paths.append(resolved)
+        registry.write_text("\n".join(paths) + "\n", encoding="utf-8")
 
 
 def _studio_dir() -> Path:
@@ -95,6 +112,7 @@ def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / "studio.log"
     env = dict(os.environ)
+    env["TOPVIEW3D_CACHE_DIR"] = str(user_cache_dir())
     env["TOPVIEW3D_PROJECTS"] = str(project_root)
     env["TOPVIEW3D_CLI"] = shutil.which("topview-3d-cli") or sys.argv[0]
     try:
@@ -119,7 +137,8 @@ def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
 def open_studio(directory: str) -> dict:
     project = open_project(directory)
     root = project.paths.root
-    project_id = studio_project_id(root.name)
+    register_studio_project(root)
+    project_id = studio_project_id(root)
     url = f"http://{STUDIO_HOST}:{STUDIO_PORT}/?project={project_id}"
     started = False
     pid = None
@@ -128,7 +147,7 @@ def open_studio(directory: str) -> dict:
         if not any(item.get("id") == project_id for item in listed if isinstance(item, dict)):
             raise LocalProjectError(
                 "STUDIO_PROJECT_MISSING",
-                f"Studio is already running on port {STUDIO_PORT} without this project; stop it and run studio open again",
+                f"Studio on port {STUDIO_PORT} does not see this project yet; stop it and run studio open again",
             )
     else:
         studio = _studio_dir()

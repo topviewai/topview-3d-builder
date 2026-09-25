@@ -79,6 +79,21 @@ def test_init_status_get_validate(capsys, tmp_path):
     assert disk == got["document"]
 
 
+def test_studio_project_id_follows_the_absolute_path(tmp_path, monkeypatch):
+    from topview_3d_cli.local_studio import project_registry_path, register_studio_project, studio_project_id
+
+    monkeypatch.setenv("TOPVIEW3D_CACHE_DIR", str(tmp_path / "cache"))
+    first = (tmp_path / "agent-a" / "scene").resolve()
+    second = (tmp_path / "agent-b" / "scene").resolve()
+    assert studio_project_id(first) != studio_project_id(second)
+    assert studio_project_id(first) == studio_project_id(first)
+    register_studio_project(first)
+    register_studio_project(second)
+    register_studio_project(first)
+    listed = project_registry_path().read_text(encoding="utf-8").splitlines()
+    assert listed == [str(first), str(second)]
+
+
 def test_studio_open_needs_a_checkout(capsys, project, monkeypatch):
     monkeypatch.setattr("topview_3d_cli.local_studio.REPO_ROOT", project)
     monkeypatch.setattr("topview_3d_cli.local_studio._port_open", lambda _port: False)

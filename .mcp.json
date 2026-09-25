@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "topview-browser": {
+      "type": "http",
+      "url": "https://mcp-browser.topview.ai",
+      "oauth_resource": "https://mcp-browser.topview.ai",
+      "scopes": [
+        "mcp:tools"
+      ],
+      "http_headers": {
+        "X-Topview-Plugin-Version": "1.0.4",
+        "X-Topview-Plugin-Client": "codex"
+      }
+    }
+  }
+}

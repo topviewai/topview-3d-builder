@@ -149,8 +149,10 @@ def check_manifests(root: Path) -> list[str]:
         if "skills" in data and data["skills"] != "./skills/":
             errors.append(f"{rel}: skills must be ./skills/")
         for key in ("apps", "mcpServers"):
-            if key in data:
+            if key in data and not (rel == ".codex-plugin/plugin.json" and key == "mcpServers"):
                 errors.append(f"{rel}: must not declare {key}")
+        if rel == ".codex-plugin/plugin.json" and data.get("mcpServers") != "./.mcp.json":
+            errors.append(f"{rel}: mcpServers must be ./.mcp.json")
     return errors
 
 

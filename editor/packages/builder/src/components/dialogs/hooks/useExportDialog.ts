@@ -14,7 +14,7 @@ import { nodesOfType } from '../../../contract/parser'
 import { useDirector } from '../../../bridge/DirectorContext'
 import { EDITOR_EXPORT_CAMERA_ID, useEngine, type DirectorEngine } from '../../../bridge/useEngine'
 import { useT, type TranslateFn } from '../../../locale'
-import type { HostAdapter } from '../../../host/types'
+import type { ExportMeta, HostAdapter } from '../../../host/types'
 import type { StudioView } from '../../../stores/types'
 import { resolveDefaultExportCameraId } from '../utils'
 import { PREVIEW_HEIGHT, useExportPreview } from './useExportPreview'
@@ -107,6 +107,8 @@ export function useExportDialog() {
     previewLoading,
     previewCanvasRef,
     ...actions,
+    adapter,
+    supportsTopviewCanvas: Boolean(adapter.listTopviewCanvases && adapter.uploadToTopviewCanvas),
     editorCameraId: EDITOR_EXPORT_CAMERA_ID,
     frameStart: fs,
     frameEnd: fe,
@@ -130,10 +132,10 @@ function useExportActions(input: {
   const [status, setStatus] = useState('')
   const abortRef = useRef<AbortController | null>(null)
 
-  const common = (localDownload: boolean) => {
+  const common = (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
     const s = input.useStore.getState()
     return {
-      onExport: localDownload ? undefined : input.adapter.onExport?.bind(input.adapter),
+      onExport: localDownload ? undefined : upload ?? input.adapter.onExport?.bind(input.adapter),
       cameraId: input.cameraId,
       label: input.label,
       width: input.width,
@@ -157,11 +159,11 @@ function useExportActions(input: {
     input.engine.seek(s.frame)
   }
 
-  const runImage = async (localDownload: boolean) => {
+  const runImage = async (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
     beginExport()
     try {
-      await input.engine.captureFrame({ ...common(localDownload), frame: input.currentFrame })
-      setStatus(input.t('export.pngDone', { frame: Math.round(input.currentFrame) }))
+      await input.engine.captureFrame({ ...common(localDownload, upload), frame: input.currentFrame })
+      setStatus(input.t(upload ? 'export.sentToCanvas' : 'export.pngDone', { frame: Math.round(input.currentFrame) }))
     } catch (e) {
       setStatus(input.t('export.failed', { error: localizeMessage(input.t, e) }))
     } finally {
@@ -169,21 +171,21 @@ function useExportActions(input: {
     }
   }
 
-  const runVideo = async (localDownload: boolean) => {
+  const runVideo = async (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
     if (input.fps == null) return
     beginExport()
     const ac = new AbortController()
     abortRef.current = ac
     try {
       const res = await input.engine.recordRange({
-        ...common(localDownload),
+        ...common(localDownload, upload),
         frameStart: input.start,
         frameEnd: input.end,
         fps: input.fps,
         signal: ac.signal,
         onProgress: (p) => setProgress(p),
       })
-      setStatus(res.cancelled ? input.t('export.cancelled') : input.t('export.videoDone', { frames: res.frames }))
+      setStatus(res.cancelled ? input.t('export.cancelled') : input.t(upload ? 'export.sentToCanvas' : 'export.videoDone', { frames: res.frames }))
     } catch (e) {
       setStatus(input.t('export.failed', { error: localizeMessage(input.t, e) }))
     } finally {
@@ -201,5 +203,12 @@ function useExportActions(input: {
     onDownloadImage: () => runImage(true),
     onExportVideo: () => runVideo(false),
     onDownloadVideo: () => runVideo(true),
+    sendToCanvas: (canvasId: string, kind: ExportOutputKind) => {
+      const upload = (blob: Blob, meta: ExportMeta) => {
+        if (!input.adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas 上传不可用')
+        return input.adapter.uploadToTopviewCanvas(canvasId, blob, meta)
+      }
+      return kind === 'image' ? runImage(false, upload) : runVideo(false, upload)
+    },
   }
 }

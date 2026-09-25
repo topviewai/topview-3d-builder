@@ -1,9 +1,10 @@
 // CLI 项目入口（仅服务端）。TOPVIEW3D_PROJECTS 列出项目目录（用系统路径分隔符隔开）。
 // 读取 .topview-3d/document.json 与 fcurves.json。保存时调用 topview-3d-cli project adopt，
 // 把 Studio 的编辑写回实体库，之后 Agent 再读这份项目就是编辑后的结果。
+import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
+import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
+import { homedir, tmpdir } from 'node:os'
 import path from 'node:path'
 import { summarizeDraft, type DraftSummary } from './draftStore'
 
@@ -17,28 +18,50 @@ export function projectStateDir(root: string): string | null {
   return existsSync(path.join(dir, 'document.json')) ? dir : null
 }
 
-function slug(value: string): string {
-  const ascii = value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-  return (ascii || 'project').slice(0, 48)
+function cacheDir(): string {
+  const override = process.env.TOPVIEW3D_CACHE_DIR?.trim()
+  if (override) return override
+  if (process.platform === 'darwin') return path.join(homedir(), 'Library', 'Caches', 'topview-3d-cli')
+  if (process.platform === 'win32') {
+    const base = process.env.LOCALAPPDATA || path.join(homedir(), 'AppData', 'Local')
+    return path.join(base, 'topview-3d-cli', 'Cache')
+  }
+  return path.join(process.env.XDG_CACHE_HOME || path.join(homedir(), '.cache'), 'topview-3d-cli')
+}
+
+/** Same id the CLI puts in the Studio URL: sha256 of the absolute path, first 16 hex chars. */
+export function projectId(root: string): string {
+  return `cli-${createHash('sha256').update(root).digest('hex').slice(0, 16)}`
+}
+
+function remember(roots: Map<string, string>, candidate: string): void {
+  const trimmed = candidate.trim()
+  if (!trimmed) return
+  try {
+    const resolved = realpathSync(path.resolve(trimmed))
+    roots.set(resolved, resolved)
+  } catch {
+    // A listed directory that is not on disk yet is ignored.
+  }
 }
 
 export function projectRoots(): string[] {
+  const roots = new Map<string, string>()
   const raw = process.env.TOPVIEW3D_PROJECTS?.trim()
-  if (!raw) return []
-  return raw.split(path.delimiter).map((item) => item.trim()).filter(Boolean).map((item) => path.resolve(item))
+  if (raw) raw.split(path.delimiter).forEach((item) => remember(roots, item))
+  try {
+    const text = readFileSync(path.join(cacheDir(), 'studio', 'projects.txt'), 'utf8')
+    text.split('\n').forEach((item) => remember(roots, item))
+  } catch {
+    // No shared registry yet.
+  }
+  return [...roots.values()]
 }
 
 export function listProjects(): LocalProject[] {
-  const used = new Set<string>()
   return projectRoots()
     .filter((root) => projectStateDir(root))
-    .map((root) => {
-      const base = `cli-${slug(path.basename(root))}`
-      let id = base
-      for (let n = 2; used.has(id); n += 1) id = `${base}-${n}`
-      used.add(id)
-      return { id, root }
-    })
+    .map((root) => ({ id: projectId(root), root }))
 }
 
 function readJson(file: string): unknown | null {

@@ -9,7 +9,7 @@ import {
   resolveAspectRatio,
   widthFromAspectHeight,
 } from '../../../contract/aspectRatio'
-import type { HostAdapter } from '../../../host/types'
+import type { ExportMeta, HostAdapter } from '../../../host/types'
 import type { StudioView } from '../../../stores/types'
 import {
   getEditSequence,
@@ -50,6 +50,7 @@ interface FilmExportRunInput {
   setExporting: (value: boolean) => void
   onClose: () => void
   localDownload: boolean
+  upload?: (blob: Blob, meta: ExportMeta) => Promise<void>
 }
 
 async function runFilmExport(input: FilmExportRunInput): Promise<void> {
@@ -74,7 +75,7 @@ async function runFilmExport(input: FilmExportRunInput): Promise<void> {
         total: item.total,
         sourceFrame: item.sourceFrame,
       }),
-      onExport: input.localDownload ? undefined : input.adapter.onExport?.bind(input.adapter),
+      onExport: input.localDownload ? undefined : input.upload ?? input.adapter.onExport?.bind(input.adapter),
     })
     if (!result.cancelled && !input.localDownload) input.onClose()
   } catch (err) {
@@ -177,6 +178,34 @@ export function useFilmExportDialog(sequenceId: string, onClose: () => void) {
     exporting,
     abort: () => abortRef.current?.abort(),
     start,
+    supportsTopviewCanvas: Boolean(adapter.listTopviewCanvases && adapter.uploadToTopviewCanvas),
+    adapter,
+    sendToCanvas: (canvasId: string) => {
+      if (!sequence || issues.length > 0) return
+      void runFilmExport({
+        t,
+        engine,
+        useStore,
+        adapter,
+        session,
+        sequenceId,
+        fileName,
+        fallbackName: versionName,
+        width,
+        height: exportHeight,
+        fps,
+        abortRef,
+        setError,
+        setProgress,
+        setExporting,
+        onClose,
+        localDownload: false,
+        upload: (blob, meta) => {
+          if (!adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas 上传不可用')
+          return adapter.uploadToTopviewCanvas(canvasId, blob, meta)
+        },
+      })
+    },
     versionName,
     durationLabel: t('film.durationSeconds', { seconds: Number((duration / fps).toFixed(2)) }),
     canExport: !exporting && issues.length === 0 && duration > 0,

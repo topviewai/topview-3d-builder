@@ -41,15 +41,21 @@ def test_manifests_parse_and_share_the_plugin_name():
         data = json.loads((ROOT / rel).read_text(encoding="utf-8"))
         names = [data["name"]] + [plugin["name"] for plugin in data.get("plugins", [])]
         assert set(names) == {"topview-3d-builder"}, rel
-        assert "mcpServers" not in data and "apps" not in data, rel
+        assert "apps" not in data, rel
+        if rel == ".codex-plugin/plugin.json":
+            assert data["mcpServers"] == "./.mcp.json", rel
+        else:
+            assert "mcpServers" not in data, rel
     codex = json.loads((ROOT / ".codex-plugin/plugin.json").read_text(encoding="utf-8"))
     assert codex["interface"]["displayName"] == "Topview 3D Builder"
     assert codex["skills"] == "./skills/"
+    mcp = json.loads((ROOT / ".mcp.json").read_text(encoding="utf-8"))
+    assert mcp["mcpServers"]["topview-browser"]["url"] == "https://mcp-browser.topview.ai"
     assert codex["interface"]["capabilities"] == ["Read", "Write"]
     for key in ("composerIcon", "logo"):
         assert (ROOT / codex["interface"][key]).is_file()
     tracked = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True, check=True).stdout
-    assert not [line for line in tracked.splitlines() if Path(line).name in {".mcp.json", ".app.json"}]
+    assert not [line for line in tracked.splitlines() if Path(line).name == ".app.json"]
 
 
 def test_versions_are_consistent():
@@ -105,6 +111,7 @@ def _plugin_repo(tmp_path: Path, icon: bytes | None = None, logo: bytes | None =
     (repo / "scripts").mkdir(parents=True)
     shutil.copy2(ROOT / "scripts" / "package-codex-plugin.mjs", repo / "scripts")
     shutil.copytree(ROOT / ".codex-plugin", repo / ".codex-plugin", ignore=IGNORE)
+    shutil.copy2(ROOT / ".mcp.json", repo / ".mcp.json")
     if todo:
         manifest_path = repo / ".codex-plugin" / "plugin.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -141,7 +148,7 @@ def test_package_builds_zip_with_only_plugin_files(tmp_path):
         names = [name for name in archive.namelist() if not name.endswith("/")]
     assert all(name.startswith("topview-3d-builder/") for name in names)
     tops = {name.split("/")[1] for name in names}
-    assert tops == {".codex-plugin", "assets", "skills"}
+    assert tops == {".codex-plugin", ".mcp.json", "assets", "skills"}
     assert "topview-3d-builder/assets/README.md" not in names
     assert {"topview-3d-builder/assets/icon.png", "topview-3d-builder/assets/logo.png"} <= set(names)
     assert "topview-3d-builder/skills/topview-3d-cli/SKILL.md" in names

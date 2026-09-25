@@ -7,6 +7,11 @@ export interface ExportMeta {
   mimeType: string
 }
 
+export interface TopviewCanvasSummary {
+  id: string
+  name: string
+}
+
 export interface CharacterLibEntry {
   id: string
   name: string
@@ -127,6 +132,11 @@ export interface HostAdapter<TDocument = unknown> {
   loadPoseById?(poseId: string): Promise<PoseBonesPayload | null>
 
   onExport?(blob: Blob, meta: ExportMeta): Promise<void>
+  /** 本地 Studio：用 Topview MCP 列出当前用户的 Canvas。未登录时抛出 message 为 TOPVIEW_CANVAS_AUTH 的错误。 */
+  listTopviewCanvases?(): Promise<TopviewCanvasSummary[]>
+  createTopviewCanvas?(name: string): Promise<TopviewCanvasSummary>
+  uploadToTopviewCanvas?(canvasId: string, blob: Blob, meta: ExportMeta): Promise<void>
+  topviewCanvasLoginUrl?(): string
   /** 文档或用户关键帧变更后通知宿主；节流由宿主自己做。交互拖拽中不会触发。 */
   onDocumentChange?(documentId: string, doc: TDocument, fcurves: unknown): void
 }

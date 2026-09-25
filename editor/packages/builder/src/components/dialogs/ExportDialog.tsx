@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { Tooltip } from '../common/Tooltip'
+import { CanvasExportPicker } from './CanvasExportPicker'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { DualRangeSlider } from '../common/DualRangeSlider'
 import { Dropdown } from '../common/Dropdown'
@@ -10,7 +12,12 @@ import { useExportDialog } from './hooks/useExportDialog'
 
 export function ExportDialog({ onClose }: { onClose: () => void }) {
   const s = useExportDialog()
+  const [picking, setPicking] = useState(false)
   if (!s.doc || !s.tl) return null
+  const send = () => {
+    if (s.supportsTopviewCanvas) setPicking(true)
+    else void (s.output === 'image' ? s.onExportImage() : s.onExportVideo())
+  }
 
   return (
     <Modal
@@ -41,7 +48,7 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               type="button"
               className="t3d-dialog-solid"
               disabled={s.exporting}
-              onClick={() => void (s.output === 'image' ? s.onExportImage() : s.onExportVideo())}
+              onClick={send}
             >
               {s.t('export.sendToCanvas')}
             </button>
@@ -167,6 +174,17 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               onChange={s.setAspectRatio}
             />
           </div>
+          {picking && s.supportsTopviewCanvas ? (
+            <CanvasExportPicker
+              adapter={s.adapter}
+              busy={s.exporting}
+              onCancel={() => setPicking(false)}
+              onConfirm={(canvas) => {
+                setPicking(false)
+                void s.sendToCanvas(canvas.id, s.output)
+              }}
+            />
+          ) : null}
           {s.status ? <div className="t3d-dialog-status">{s.status}</div> : null}
         </div>
       </div>

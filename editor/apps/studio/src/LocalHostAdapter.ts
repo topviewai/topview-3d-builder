@@ -12,6 +12,8 @@ import {
   type PoseBonesPayload,
   type PoseLibEntry,
   type PropLibEntry,
+  type ExportMeta,
+  type TopviewCanvasSummary,
 } from '@topview/3d-builder'
 
 const LOCAL_ASSET_ROUTE = '/api/local-assets'
@@ -24,6 +26,17 @@ async function fetchJson(url: string, init?: RequestInit): Promise<unknown> {
 
 const getInflight = new Map<string, Promise<unknown>>()
 const poseJsonByUrl = new Map<string, Promise<unknown>>()
+
+async function canvasJson(url: string, init?: RequestInit): Promise<unknown> {
+  const res = await fetch(url, { cache: 'no-store', ...init })
+  const body = await res.json().catch(() => null)
+  if (res.status === 401) throw new Error('TOPVIEW_CANVAS_AUTH')
+  if (!res.ok) {
+    const message = isRecord(body) && typeof body.error === 'string' ? body.error : `HTTP ${res.status}`
+    throw new Error(message)
+  }
+  return body
+}
 
 function fetchJsonOnce(url: string): Promise<unknown> {
   const pending = getInflight.get(url)
@@ -151,6 +164,35 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
       hips: [hips[0], hips[1], hips[2]],
       bones: payload.bones as PoseBonesPayload['bones'],
     }
+  }
+
+  topviewCanvasLoginUrl = (): string => '/api/topview-canvas/login'
+
+  async listTopviewCanvases(): Promise<TopviewCanvasSummary[]> {
+    const body = await canvasJson('/api/topview-canvas/canvases')
+    const rows = isRecord(body) && Array.isArray(body.canvases) ? body.canvases : []
+    return rows.flatMap((row) => {
+      if (!isRecord(row) || typeof row.id !== 'string') return []
+      return [{ id: row.id, name: typeof row.name === 'string' ? row.name : row.id }]
+    })
+  }
+
+  async createTopviewCanvas(name: string): Promise<TopviewCanvasSummary> {
+    const body = await canvasJson('/api/topview-canvas/canvases', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name }),
+    })
+    const canvas = isRecord(body) ? body.canvas : null
+    if (!isRecord(canvas) || typeof canvas.id !== 'string') throw new Error('新建 Canvas 失败')
+    return { id: canvas.id, name: typeof canvas.name === 'string' ? canvas.name : name }
+  }
+
+  async uploadToTopviewCanvas(canvasId: string, blob: Blob, meta: ExportMeta): Promise<void> {
+    const form = new FormData()
+    form.set('canvasId', canvasId)
+    form.set('file', new File([blob], meta.filename, { type: meta.mimeType }))
+    await canvasJson('/api/topview-canvas/upload', { method: 'POST', body: form })
   }
 
   async listAssetFacets(kind: AssetQuery['kind']): Promise<AssetFacets> {

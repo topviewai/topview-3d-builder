@@ -5,6 +5,7 @@ export { DEFAULT_LOCALE, listLocales, resolveLocale } from './locale'
 export type {
   HostAdapter,
   ExportMeta,
+  TopviewCanvasSummary,
   CharacterLibEntry,
   PropLibEntry,
   MotionLibEntry,

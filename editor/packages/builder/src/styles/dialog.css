@@ -517,6 +517,38 @@
   font-size: 12px;
 }
 
+.t3d-canvas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 160px;
+  overflow: auto;
+}
+
+.t3d-canvas-list label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.t3d-canvas-create,
+.t3d-canvas-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.t3d-canvas-create input {
+  flex: 1;
+}
+
+.t3d-canvas-login {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  text-decoration: none;
+}
+
 .t3d-export-form {
   display: flex;
   flex-direction: column;

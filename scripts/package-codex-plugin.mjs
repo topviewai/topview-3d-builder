@@ -24,8 +24,8 @@ const IMAGE_MAX = 4096
 const MAX_SKILL_ID = 64
 const MAX_DESCRIPTION = 1024
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$/
-const FORBIDDEN_KEYS = ['apps', 'mcpServers']
-const FORBIDDEN_FILES = ['.mcp.json', '.app.json']
+const FORBIDDEN_KEYS = ['apps']
+const FORBIDDEN_FILES = ['.app.json']
 
 const release = process.argv.includes('--release')
 const errors = []
@@ -122,6 +122,8 @@ if (typeof manifest.version !== 'string' || !SEMVER.test(manifest.version)) {
   errors.push(`plugin.json version ${JSON.stringify(manifest.version)} is not a semantic version.`)
 }
 if (manifest.skills !== './skills/') errors.push(`plugin.json skills is ${JSON.stringify(manifest.skills)}; expected "./skills/".`)
+if (manifest.mcpServers !== './.mcp.json') errors.push(`plugin.json mcpServers is ${JSON.stringify(manifest.mcpServers)}; expected "./.mcp.json".`)
+if (!headBlob('.mcp.json')) errors.push('.mcp.json is missing from HEAD.')
 for (const key of FORBIDDEN_KEYS) {
   if (key in manifest) errors.push(`plugin.json must not declare "${key}".`)
 }
@@ -157,7 +159,7 @@ for (const [field, value] of imageFields) {
 }
 
 // —— skills ——
-const pluginPaths = ['.codex-plugin', ...assetPaths.sort(), 'skills']
+const pluginPaths = ['.codex-plugin', '.mcp.json', ...assetPaths.sort(), 'skills']
 const entries = headTree(pluginPaths.filter((p) => allFiles.some((file) => file === p || file.startsWith(`${p}/`))))
 const skillDirs = new Set()
 for (const entry of entries) {
