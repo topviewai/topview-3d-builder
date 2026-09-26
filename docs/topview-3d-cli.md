@@ -34,7 +34,7 @@ renaming or removing a command or option fails the lint until the skill is updat
 | `topview-3d-cli --version` | Print the CLI version. |
 | `topview-3d-cli doctor [--json]` | Check python ≥ 3.11, node ≥ 20.6, the renderer runtime (`packaged` or `workspace`, see below), the built-in assets, the pinned Playwright, and Chromium; in a checkout also pnpm. Each failing check carries a `hint`. |
 | `topview-3d-cli browser ensure [--with-deps]` | Idempotent. Installs the pinned Playwright into the user cache (packaged runtime only, with the `npm` that ships with Node) and then Chromium into Playwright's browser cache. `--with-deps` also installs Linux system packages. `render` never downloads anything; it fails with `BROWSER_NOT_INSTALLED` instead. |
-| `topview-3d-cli studio open <dir>` | From a repository checkout, start `editor/apps/studio` with Node on `127.0.0.1:3002` when that port is free. It records the absolute project path in the user cache, so a Studio already running for another directory can open this one. The `url` uses an id of that path, not the folder name. It does not open a browser. Fails with `STUDIO_UNAVAILABLE` outside a checkout, `STUDIO_PROJECT_MISSING` when the running Studio does not see this project yet, or `STUDIO_START_FAILED` when it does not become ready. |
+| `topview-3d-cli studio open <dir>` | Start Studio with Node on `127.0.0.1:3002` when that port is free: the prebuilt `server.js` inside the package, or `next dev` in `editor/apps/studio` from a repository checkout. Drafts of the packaged Studio live in the user cache. It records the absolute project path in the user cache, so a Studio already running for another directory can open this one. The `url` uses an id of that path, not the folder name. It does not open a browser. Fails with `STUDIO_UNAVAILABLE` when neither is usable, `STUDIO_PROJECT_MISSING` when the running Studio does not see this project yet, or `STUDIO_START_FAILED` when it does not become ready. |
 | `topview-3d-cli project init <dir> [--force]` | Create `<dir>/.topview-3d/` holding the empty director document and default camera (`cam-main`). |
 | `topview-3d-cli project status <dir>` | Metadata, a document summary, and dangling references. |
 | `topview-3d-cli project adopt <dir> <edit.json\|->` | Write a Studio edit back into the entity store. The JSON object has `document`, `fcurves`, or both; the omitted side stays as stored. Later CLI commands then continue from that edit. `adopted` is false when nothing changed. |
@@ -246,7 +246,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `RENDER_RESULT_MISSING` | 1 | The Node renderer printed no result. |
 | `RENDER_RESULT_INVALID` | 1 | The Node renderer printed a non-JSON result. |
 | `DOCTOR_FAILED` | 1 | Plain `doctor` found a missing or outdated dependency (`doctor --json` always exits 0). |
-| `STUDIO_UNAVAILABLE` | 1 | Studio is not in this install: it lives in editor/apps/studio of a checkout with Next.js installed. |
+| `STUDIO_UNAVAILABLE` | 1 | Studio cannot start: the package has no Studio build, a checkout lacks Next.js, or Node is not on PATH. |
 | `STUDIO_START_FAILED` | 1 | Node started Studio, but it did not list this project on port 3002. |
 | `STUDIO_PROJECT_MISSING` | 1 | Studio is already running on port 3002 without this project; stop it and retry. |
 | `INTERNAL_ERROR` | 1 | Unexpected failure; the message carries the exception. |

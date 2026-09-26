@@ -6,8 +6,10 @@
 1. builds the builder (`pnpm -C editor --filter @topview/3d-builder build`);
 2. stages the renderer, builder files, Draco and built-in assets into
    agent/topview_3d_cli/_runtime/ (editor/packages/director-cli/scripts/stage-runtime.mjs);
-3. runs `python -m build` on agent/ (needs the `build` package: pip install build);
-4. removes the staged runtime again unless --keep-runtime.
+3. builds Studio as a standalone Next.js server into _runtime/studio/
+   (editor/apps/studio/scripts/stage-standalone.mjs), so `studio open` works without a checkout;
+4. runs `python -m build` on agent/ (needs the `build` package: pip install build);
+5. removes the staged runtime again unless --keep-runtime.
 
 Nothing is published.
 """
@@ -53,6 +55,10 @@ def main() -> int:
     staged = run([tool("node"), str(ROOT / "editor/packages/director-cli/scripts/stage-runtime.mjs"),
                   str(STAGED), "--assets", str(ROOT / "builtin-assets")], stdout=subprocess.PIPE)
     print(staged.stdout.strip())
+    studio = run([tool("node"), str(ROOT / "editor/apps/studio/scripts/stage-standalone.mjs"), str(STAGED / "studio")],
+                 stdout=subprocess.PIPE)
+    studio_summary = json.loads(studio.stdout.strip().splitlines()[-1])
+    print(f"studio: {studio_summary['files']} files, {studio_summary['bytes'] / 1e6:.1f} MB")
     outdir = Path(args.outdir).resolve()
     try:
         run([sys.executable, "-m", "build", "--outdir", str(outdir), str(AGENT)])

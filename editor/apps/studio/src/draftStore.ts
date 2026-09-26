@@ -19,7 +19,8 @@ export function isValidDraftId(id: string): boolean {
 }
 
 function draftsDir(): string {
-  return path.resolve(process.cwd(), 'drafts')
+  const override = process.env.TOPVIEW3D_DRAFTS_DIR?.trim()
+  return override ? path.resolve(override) : path.resolve(process.cwd(), 'drafts')
 }
 
 function draftPath(id: string): string {

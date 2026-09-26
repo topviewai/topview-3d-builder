@@ -33,6 +33,7 @@ class Runtime:
     builtin_assets: Path
     builder_dist: Path
     node_prefix: Path
+    studio: Path
 
     @property
     def playwright_package(self) -> Path:
@@ -57,7 +58,7 @@ def _workspace() -> Runtime | None:
     if not (director_cli / "cli.mjs").is_file() or not assets.is_dir():
         return None
     return Runtime("workspace", director_cli, assets, REPO_ROOT / "editor" / "packages" / "builder" / "dist",
-                   director_cli)
+                   director_cli, REPO_ROOT / "editor" / "apps" / "studio")
 
 
 def _packaged() -> Runtime | None:
@@ -66,7 +67,7 @@ def _packaged() -> Runtime | None:
         return None
     return Runtime("packaged", director_cli, STAGED_ROOT / "builtin-assets",
                    director_cli / "node_modules" / "@topview" / "3d-builder" / "dist",
-                   user_cache_dir() / "node" / __version__)
+                   user_cache_dir() / "node" / __version__, STAGED_ROOT / "studio")
 
 
 def runtime() -> Runtime:

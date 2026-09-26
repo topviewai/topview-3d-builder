@@ -88,7 +88,7 @@ ERROR_CODES: dict[str, tuple[int, str]] = {
     "RENDER_RESULT_MISSING": (1, "The Node renderer printed no result."),
     "RENDER_RESULT_INVALID": (1, "The Node renderer printed a non-JSON result."),
     "DOCTOR_FAILED": (1, "Plain `doctor` found a missing or outdated dependency (`doctor --json` always exits 0)."),
-    "STUDIO_UNAVAILABLE": (1, "Studio is not in this install: it lives in editor/apps/studio of a checkout with Next.js installed."),
+    "STUDIO_UNAVAILABLE": (1, "Studio cannot start: the package has no Studio build, a checkout lacks Next.js, or Node is not on PATH."),
     "STUDIO_START_FAILED": (1, "Node started Studio, but it did not list this project on port 3002."),
     "STUDIO_PROJECT_MISSING": (1, "Studio is already running on port 3002 without this project; stop it and retry."),
     "INTERNAL_ERROR": (1, "Unexpected failure; the message carries the exception."),

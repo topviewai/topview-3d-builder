@@ -94,11 +94,33 @@ def test_studio_project_id_follows_the_absolute_path(tmp_path, monkeypatch):
     assert listed == [str(first), str(second)]
 
 
-def test_studio_open_needs_a_checkout(capsys, project, monkeypatch):
-    monkeypatch.setattr("topview_3d_cli.local_studio.REPO_ROOT", project)
+def packaged_runtime(tmp_path):
+    from topview_3d_cli.runtime import Runtime
+
+    staged = tmp_path / "_runtime"
+    return Runtime("packaged", staged / "director-cli", staged / "builtin-assets", staged / "builder-dist",
+                   tmp_path / "node", staged / "studio")
+
+
+def test_studio_open_reports_a_package_without_studio(capsys, project, tmp_path, monkeypatch):
+    monkeypatch.setenv("TOPVIEW3D_CACHE_DIR", str(tmp_path / "cache"))
+    monkeypatch.setattr("topview_3d_cli.local_studio.runtime", lambda: packaged_runtime(tmp_path))
     monkeypatch.setattr("topview_3d_cli.local_studio._port_open", lambda _port: False)
     code, body = run(capsys, "studio", "open", project)
     assert code == 1 and body["code"] == "STUDIO_UNAVAILABLE"
+
+
+def test_packaged_studio_runs_server_js_with_drafts_in_the_cache(tmp_path, monkeypatch):
+    from topview_3d_cli.local_studio import STUDIO_HOST, STUDIO_PORT, _studio_command
+
+    monkeypatch.setenv("TOPVIEW3D_CACHE_DIR", str(tmp_path / "cache"))
+    rt = packaged_runtime(tmp_path)
+    rt.studio.mkdir(parents=True)
+    (rt.studio / "server.js").write_text("", encoding="utf-8")
+    command, cwd, env = _studio_command(rt)
+    assert command == ["node", str(rt.studio / "server.js")] and cwd == rt.studio
+    assert env["PORT"] == str(STUDIO_PORT) and env["HOSTNAME"] == STUDIO_HOST
+    assert Path(env["TOPVIEW3D_DRAFTS_DIR"]) == tmp_path / "cache" / "studio" / "drafts"
 
 
 def test_adopt_studio_edit_is_what_the_cli_reads_next(capsys, project, tmp_path):

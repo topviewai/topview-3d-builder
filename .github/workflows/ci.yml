@@ -227,6 +227,23 @@ jobs:
       - name: uvx --from <wheel> smoke sequence
         shell: bash
         run: python scripts/wheel_smoke.py dist/topview_3d_cli-*.whl --workdir "$RUNNER_TEMP/topview3d-smoke"
+      # No editor/ in this checkout: studio open must run the Studio build inside the wheel.
+      - name: studio open from the wheel
+        shell: bash
+        env:
+          TOPVIEW3D_CACHE_DIR: ${{ runner.temp }}/studio-cache
+        run: python scripts/studio_smoke.py start "$RUNNER_TEMP/wheel-studio" --wheel dist/topview_3d_cli-*.whl
+      - name: Studio still up, serves the page, saves the project
+        env:
+          TOPVIEW3D_CACHE_DIR: ${{ runner.temp }}/studio-cache
+        run: python scripts/studio_smoke.py check "${{ runner.temp }}/wheel-studio"
+      - name: Studio log
+        if: failure()
+        shell: bash
+        run: cat "$RUNNER_TEMP/studio-cache/studio/studio.log" || true
+      - name: Stop Studio
+        if: always()
+        run: python scripts/studio_smoke.py stop "${{ runner.temp }}/wheel-studio"
 
   secrets:
     name: Secret scan (gitleaks)

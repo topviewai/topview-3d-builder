@@ -30,3 +30,6 @@ editor/apps/studio/public/draco/
 .idea/
 .vscode/
 agent/topview_3d_cli/_runtime/
+
+# Studio standalone build (scripts/stage-standalone.mjs)
+editor/apps/studio/next-build/

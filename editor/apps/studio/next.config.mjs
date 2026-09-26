@@ -1,8 +1,21 @@
+import { fileURLToPath } from 'node:url'
 import { PHASE_DEVELOPMENT_SERVER } from 'next/constants.js'
 
 /** @type {import('next').NextConfig} */
+// STUDIO_STANDALONE=1 builds the copy shipped inside the topview-3d-cli wheel
+// (scripts/stage-standalone.mjs). sharp is native and per-platform, so image optimization is off.
+const standalone = process.env.STUDIO_STANDALONE
+  ? {
+      output: 'standalone',
+      outputFileTracingRoot: fileURLToPath(new URL('../..', import.meta.url)),
+      outputFileTracingExcludes: { '*': ['**/node_modules/sharp/**', '**/node_modules/@img/**', 'drafts/**'] },
+      images: { unoptimized: true },
+    }
+  : {}
+
 const nextConfig = {
   reactStrictMode: true,
+  ...standalone,
 
   // 以下两项经阶段 0 验收实测「当前并不必需」：three 0.184 的 package.json 带
   // "./addons/*" exports 映射，webpack 5 能直接解析 three/addons/**/*.js，

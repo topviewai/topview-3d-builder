@@ -15,12 +15,15 @@ pnpm dev                                    # http://localhost:3002
 pnpm build && pnpm --filter @topview/3d-studio start
 ```
 
+wheel 里带的是独立构建：`node apps/studio/scripts/stage-standalone.mjs <outDir>` 用 `STUDIO_STANDALONE=1` 构建，把 pnpm 的符号链接依赖摊平成普通 `node_modules`（不含 sharp，图片不做优化），产物用 `node <outDir>/server.js` 启动。`scripts/build_dist.py` 会调用它。
+
 可选配置写在 `apps/studio/.env.local`（从 `.env.example` 复制，不要提交）：
 
 | 变量 | 作用 | 缺省 |
 |---|---|---|
 | `TOPVIEW3D_BUILTIN_ASSETS` | 内置素材库目录（含 `manifest.json`） | 仓库根 `builtin-assets/` |
 | `TOPVIEW3D_PROJECTS` | 要只读打开的 CLI 项目目录（绝对路径），多个用系统路径分隔符隔开 | 空 |
+| `TOPVIEW3D_DRAFTS_DIR` | 草稿目录；wheel 里的 Studio 由 `studio open` 设到用户缓存下 | 工作目录下的 `drafts/` |
 
 改了变量要重启服务。
 
