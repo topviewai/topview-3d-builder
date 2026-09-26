@@ -10,10 +10,11 @@ again after it is built. `topview-3d-cli` (Python) owns that project. A Node
 renderer, built on the 3D Builder, writes the PNG frames. Open the same project
 in the local Studio to look at it and keep editing.
 
-The Codex plugin is **Topview 3D Builder** (`topview-3d-builder`). It is a skill
-that runs this CLI: no MCP server, no login, and no uploads. The same skill works
-in the Codex CLI, Cursor, and Claude Code. Install the CLI from PyPI as
-`topview-3d-cli`.
+The plugin is **Topview 3D Builder** (`topview-3d-builder`). It is a skill that
+runs this CLI, and it works in ChatGPT (the Codex app), the Codex CLI, Cursor and
+Claude Code. Building and rendering need no account and upload nothing. Sending a
+finished render from the local Studio to a Topview Canvas is the one step that asks
+you to sign in to Topview. Install the CLI from PyPI as `topview-3d-cli`.
 
 ## Repository layout
 
@@ -38,22 +39,104 @@ execution path.
 
 ## Install the plugin
 
-The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent; it has no MCP server and no
-app. The skill's first step runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.2` (or a
-local wheel, see [Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+,
-Node.js 20.6+ and uv or pipx on the machine. The public repository is
-[topviewai/topview-3d-builder](https://github.com/topviewai/topview-3d-builder).
+The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent. The skill's first step
+runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.2` (or a local wheel, see
+[Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+, Node.js 20.6+ and uv
+or pipx on the machine. The local Studio (open and edit a scene, send renders to a Topview Canvas)
+needs a checkout set up with `scripts/install.sh`, which the skill does when it is asked to.
 
-| Agent | Manifest | Install |
-| --- | --- | --- |
-| ChatGPT / Codex app | `.codex-plugin/plugin.json` | Upload `dist/topview-3d-builder-plugin.zip` (below) in the plugin directory submission flow, or install from the directory once listed. |
-| Codex CLI | `.agents/plugins/marketplace.json` | `codex plugin marketplace add topviewai/topview-3d-builder` (or a local checkout path), then `codex plugin add topview-3d-builder@topview-3d-builder`. |
-| Claude Code | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` | `claude plugin marketplace add topviewai/topview-3d-builder`, then `claude plugin install topview-3d-builder@topview-3d-builder` (or `/plugin` inside a session). |
-| Cursor | `.cursor-plugin/plugin.json` | Install from the Cursor plugin marketplace once listed; for a local copy, put the checkout (or a symlink to it) at `~/.cursor/plugins/local/topview-3d-builder` and restart Cursor. |
-| Any agent with skills support | `skills/topview-3d-cli/SKILL.md` | `npx skills add topviewai/topview-3d-builder` and pick `topview-3d-cli`. |
+The repository [topviewai/topview-3d-builder](https://github.com/topviewai/topview-3d-builder) is
+private for now. The commands below clone it over SSH
+(`git@github.com:topviewai/topview-3d-builder.git`), so your GitHub account needs read access and an
+SSH key. The short `topviewai/topview-3d-builder` form clones over HTTPS and fails on a private repo.
 
-Start a new agent session after installing, then ask for a scene, for example "Build a scene with a
-character next to a box and render a front view".
+| Agent | Manifest the agent reads |
+| --- | --- |
+| ChatGPT (Codex app) and Codex CLI | `.codex-plugin/plugin.json`, `.agents/plugins/marketplace.json`, `.mcp.json` |
+| Cursor | `.cursor-plugin/plugin.json` |
+| Claude Code | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` |
+
+Only the Codex manifest declares an MCP server (`topview-browser`, in `.mcp.json`); Codex asks you to
+sign in to Topview the first time the plugin uses it. Cursor and Claude Code load the skill only.
+In every agent, the local Studio signs in to Topview on its own when you send a render to a Canvas.
+
+After installing in any agent, start a new session and ask for a scene, for example "Build a scene
+with a character next to a box and render a front view".
+
+### ChatGPT (Codex app)
+
+The ChatGPT desktop app runs plugins through Codex and shares its configuration (`~/.codex`) with the
+Codex CLI. Install once with the Codex CLI commands in the next section, then restart the app; the
+plugin shows up as **Topview 3D Builder**.
+
+For a workspace-wide install, an admin uploads the plugin archive in the plugin directory submission
+flow. Build it with `node scripts/package-codex-plugin.mjs --release` (see
+[Build the Codex upload archive](#build-the-codex-upload-archive)) and upload
+`dist/topview-3d-builder-plugin.zip`.
+
+### Codex CLI
+
+```bash
+codex plugin marketplace add git@github.com:topviewai/topview-3d-builder.git --ref main
+codex plugin add topview-3d-builder@topview-3d-builder
+```
+
+Replace `--ref main` with a tag such as `--ref v0.1.3` to pin a release, or pass a local checkout
+path instead of the Git URL. Restart Codex afterwards.
+
+To update, refresh the marketplace snapshot and reinstall:
+
+```bash
+codex plugin marketplace upgrade topview-3d-builder
+codex plugin add topview-3d-builder@topview-3d-builder
+```
+
+A marketplace pinned to a tag stays on that tag. To move it, remove and add it again:
+
+```bash
+codex plugin marketplace remove topview-3d-builder
+codex plugin marketplace add git@github.com:topviewai/topview-3d-builder.git --ref main
+codex plugin add topview-3d-builder@topview-3d-builder
+```
+
+### Cursor
+
+Cursor loads local plugins from `~/.cursor/plugins/local/`. Clone the repository there and restart
+Cursor:
+
+```bash
+git clone git@github.com:topviewai/topview-3d-builder.git ~/.cursor/plugins/local/topview-3d-builder
+```
+
+A symlink to an existing checkout works as well. To update, pull and restart Cursor:
+
+```bash
+git -C ~/.cursor/plugins/local/topview-3d-builder fetch origin main
+git -C ~/.cursor/plugins/local/topview-3d-builder checkout -B main origin/main
+```
+
+For a release, use `fetch origin tag v0.1.3` and `checkout v0.1.3` instead.
+
+### Claude Code
+
+```bash
+claude plugin marketplace add git@github.com:topviewai/topview-3d-builder.git
+claude plugin install topview-3d-builder@topview-3d-builder
+```
+
+Inside a session, `/plugin` opens the same install flow. Restart Claude Code afterwards.
+
+To update:
+
+```bash
+claude plugin marketplace update topview-3d-builder
+claude plugin update topview-3d-builder@topview-3d-builder
+```
+
+### Any agent with skills support
+
+`npx skills add git@github.com:topviewai/topview-3d-builder.git` and pick `topview-3d-cli`. This
+installs the skill only, without a plugin manifest or MCP server.
 
 ### Build the Codex upload archive
 
@@ -63,9 +146,10 @@ node scripts/package-codex-plugin.mjs --release  # fails on them
 ```
 
 This packs the committed `HEAD` (not the working tree) into `dist/topview-3d-builder-plugin.zip`
-with a single `topview-3d-builder/` root folder holding `.codex-plugin/`, the two images in
-`assets/` and `skills/`. It fails with a named reason when the manifest version is not semver,
-the manifest declares apps or MCP servers, an image is missing or not a square 48–4096 px PNG
+with a single `topview-3d-builder/` root folder holding `.codex-plugin/`, `.mcp.json`, the two images
+in `assets/` and `skills/`. It fails with a named reason when the manifest version is not semver,
+the manifest declares apps or does not point `mcpServers` at `./.mcp.json`, `.mcp.json` is missing,
+an image is missing or not a square 48–4096 px PNG
 of at most 5 MiB (see [assets/README.md](assets/README.md)), a skill directory is nested, hidden
 or has an over-long name or description, a file is a symlink or over 100 MiB, or the archive
 exceeds 100 MB.
