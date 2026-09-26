@@ -18,6 +18,7 @@ import type { ExportMeta, HostAdapter } from '../../../host/types'
 import type { StudioView } from '../../../stores/types'
 import { resolveDefaultExportCameraId } from '../utils'
 import { PREVIEW_HEIGHT, useExportPreview } from './useExportPreview'
+import type { TopviewCanvasSent } from './useTopviewCanvasSend'
 
 type StudioStore = { getState: () => StudioView }
 
@@ -159,22 +160,32 @@ function useExportActions(input: {
     input.engine.seek(s.frame)
   }
 
-  const runImage = async (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
+  const runImage = async (
+    localDownload: boolean,
+    upload?: (blob: Blob, meta: ExportMeta) => Promise<void>,
+    ac?: AbortController,
+  ): Promise<boolean> => {
     beginExport()
     try {
       await input.engine.captureFrame({ ...common(localDownload, upload), frame: input.currentFrame })
       setStatus(input.t(upload ? 'export.sentToCanvas' : 'export.pngDone', { frame: Math.round(input.currentFrame) }))
+      return true
     } catch (e) {
-      setStatus(input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      setStatus(ac?.signal.aborted ? input.t('export.cancelled') : input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      return false
     } finally {
+      if (abortRef.current === ac) abortRef.current = null
       endExport()
     }
   }
 
-  const runVideo = async (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
-    if (input.fps == null) return
+  const runVideo = async (
+    localDownload: boolean,
+    upload?: (blob: Blob, meta: ExportMeta) => Promise<void>,
+    ac = new AbortController(),
+  ): Promise<boolean> => {
+    if (input.fps == null) return false
     beginExport()
-    const ac = new AbortController()
     abortRef.current = ac
     try {
       const res = await input.engine.recordRange({
@@ -186,10 +197,12 @@ function useExportActions(input: {
         onProgress: (p) => setProgress(p),
       })
       setStatus(res.cancelled ? input.t('export.cancelled') : input.t(upload ? 'export.sentToCanvas' : 'export.videoDone', { frames: res.frames }))
+      return !res.cancelled
     } catch (e) {
-      setStatus(input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      setStatus(ac.signal.aborted ? input.t('export.cancelled') : input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      return false
     } finally {
-      abortRef.current = null
+      if (abortRef.current === ac) abortRef.current = null
       setProgress(null)
       endExport()
     }
@@ -203,12 +216,17 @@ function useExportActions(input: {
     onDownloadImage: () => runImage(true),
     onExportVideo: () => runVideo(false),
     onDownloadVideo: () => runVideo(true),
-    sendToCanvas: (canvasId: string, kind: ExportOutputKind) => {
-      const upload = (blob: Blob, meta: ExportMeta) => {
+    sendToCanvas: async (canvasId: string, kind: ExportOutputKind): Promise<TopviewCanvasSent | null> => {
+      const ac = new AbortController()
+      abortRef.current = ac
+      let canvasUrl = ''
+      const upload = async (blob: Blob, meta: ExportMeta) => {
         if (!input.adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas 上传不可用')
-        return input.adapter.uploadToTopviewCanvas(canvasId, blob, meta)
+        const res = await input.adapter.uploadToTopviewCanvas(canvasId, blob, meta, ac.signal)
+        canvasUrl = res?.canvasUrl ?? ''
       }
-      return kind === 'image' ? runImage(false, upload) : runVideo(false, upload)
+      const ok = kind === 'image' ? await runImage(false, upload, ac) : await runVideo(false, upload, ac)
+      return ok ? { canvasUrl } : null
     },
   }
 }

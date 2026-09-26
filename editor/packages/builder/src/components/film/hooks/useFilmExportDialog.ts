@@ -19,6 +19,7 @@ import {
 } from '../../../evaluate'
 import { useT } from '../../../locale'
 import { useViewportAspect } from '../../hooks/useViewportAspect'
+import type { TopviewCanvasSent } from '../../dialogs/hooks/useTopviewCanvasSend'
 
 const PREVIEW_HEIGHT = 360
 const DEFAULT_EXPORT_HEIGHT = 1080
@@ -51,12 +52,14 @@ interface FilmExportRunInput {
   onClose: () => void
   localDownload: boolean
   upload?: (blob: Blob, meta: ExportMeta) => Promise<void>
+  ac?: AbortController
 }
 
-async function runFilmExport(input: FilmExportRunInput): Promise<void> {
+/** 返回是否完整导出；发送到 Canvas 时不关窗口，由调用方接着显示结果。 */
+async function runFilmExport(input: FilmExportRunInput): Promise<boolean> {
   input.setError('')
   input.setExporting(true)
-  const ac = new AbortController()
+  const ac = input.ac ?? new AbortController()
   input.abortRef.current = ac
   const store = input.useStore.getState()
   try {
@@ -77,16 +80,19 @@ async function runFilmExport(input: FilmExportRunInput): Promise<void> {
       }),
       onExport: input.localDownload ? undefined : input.upload ?? input.adapter.onExport?.bind(input.adapter),
     })
-    if (!result.cancelled && !input.localDownload) input.onClose()
+    if (!result.cancelled && !input.localDownload && !input.upload) input.onClose()
+    return !result.cancelled
   } catch (err) {
-    input.setError(localizeMessage(input.t, err))
+    if (!ac.signal.aborted) input.setError(localizeMessage(input.t, err))
+    return false
   } finally {
     if (input.abortRef.current === ac) input.abortRef.current = null
     input.setProgress(null)
     input.setExporting(false)
-    if (input.useStore.getState().workspaceMode !== 'film') return
-    input.engine.beginProgramPreview()
-    input.useStore.getState().seekFilmSequence(input.session.playback.getSnapshot().sequenceFrame)
+    if (input.useStore.getState().workspaceMode === 'film') {
+      input.engine.beginProgramPreview()
+      input.useStore.getState().seekFilmSequence(input.session.playback.getSnapshot().sequenceFrame)
+    }
   }
 }
 
@@ -180,9 +186,11 @@ export function useFilmExportDialog(sequenceId: string, onClose: () => void) {
     start,
     supportsTopviewCanvas: Boolean(adapter.listTopviewCanvases && adapter.uploadToTopviewCanvas),
     adapter,
-    sendToCanvas: (canvasId: string) => {
-      if (!sequence || issues.length > 0) return
-      void runFilmExport({
+    sendToCanvas: async (canvasId: string): Promise<TopviewCanvasSent | null> => {
+      if (!sequence || issues.length > 0) return null
+      const ac = new AbortController()
+      let canvasUrl = ''
+      const ok = await runFilmExport({
         t,
         engine,
         useStore,
@@ -200,11 +208,14 @@ export function useFilmExportDialog(sequenceId: string, onClose: () => void) {
         setExporting,
         onClose,
         localDownload: false,
-        upload: (blob, meta) => {
+        ac,
+        upload: async (blob, meta) => {
           if (!adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas 上传不可用')
-          return adapter.uploadToTopviewCanvas(canvasId, blob, meta)
+          const res = await adapter.uploadToTopviewCanvas(canvasId, blob, meta, ac.signal)
+          canvasUrl = res?.canvasUrl ?? ''
         },
       })
+      return ok ? { canvasUrl } : null
     },
     versionName,
     durationLabel: t('film.durationSeconds', { seconds: Number((duration / fps).toFixed(2)) }),

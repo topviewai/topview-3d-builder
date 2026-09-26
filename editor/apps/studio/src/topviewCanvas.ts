@@ -4,6 +4,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import path from 'node:path'
+import { topviewRequest } from './topviewHttp'
 
 const MCP_URL = 'https://mcp-browser.topview.ai'
 const AUTH_ISSUER = 'https://mcp.topview.ai'
@@ -68,10 +69,20 @@ function writeJson(file: string, value: unknown): void {
   writeFileSync(file, JSON.stringify(value), 'utf8')
 }
 
-async function authMetadata(): Promise<{ authorization_endpoint: string; token_endpoint: string; registration_endpoint: string }> {
-  const res = await fetch(`${AUTH_ISSUER}/.well-known/oauth-authorization-server`)
+interface AuthMetadata {
+  authorization_endpoint: string
+  token_endpoint: string
+  registration_endpoint: string
+}
+
+let metadata: AuthMetadata | null = null
+
+async function authMetadata(): Promise<AuthMetadata> {
+  if (metadata) return metadata
+  const res = await topviewRequest(`${AUTH_ISSUER}/.well-known/oauth-authorization-server`)
   if (!res.ok) throw new Error(`OAuth metadata HTTP ${res.status}`)
-  return res.json() as Promise<{ authorization_endpoint: string; token_endpoint: string; registration_endpoint: string }>
+  metadata = res.json<AuthMetadata>()
+  return metadata
 }
 
 /** 授权服务只认注册时登记过的回调地址，所以 localhost 和 127.0.0.1 两种写法都登记上。 */
@@ -90,7 +101,7 @@ async function clientId(redirectUri: string, meta: { registration_endpoint: stri
   const saved = readJson<OAuthDoc>(authPath())
   if (saved?.clientId && saved.redirectUris?.includes(redirectUri)) return saved.clientId
   const redirectUris = loopbackVariants(redirectUri)
-  const res = await fetch(meta.registration_endpoint, {
+  const res = await topviewRequest(meta.registration_endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -102,7 +113,7 @@ async function clientId(redirectUri: string, meta: { registration_endpoint: stri
     }),
   })
   if (!res.ok) throw new Error(`OAuth register HTTP ${res.status}`)
-  const body = (await res.json()) as { client_id?: string }
+  const body = res.json<{ client_id?: string }>()
   if (!body.client_id) throw new Error('OAuth register returned no client_id')
   writeJson(authPath(), { clientId: body.client_id, redirectUris })
   return body.client_id
@@ -152,13 +163,13 @@ export async function finishLogin(code: string, state: string): Promise<string> 
     code_verifier: pending.verifier,
     resource: MCP_URL,
   })
-  const res = await fetch(meta.token_endpoint, {
+  const res = await topviewRequest(meta.token_endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body,
+    body: body.toString(),
   })
   if (!res.ok) throw new Error(`OAuth token HTTP ${res.status}`)
-  const token = (await res.json()) as { access_token?: string; refresh_token?: string; expires_in?: number }
+  const token = res.json<{ access_token?: string; refresh_token?: string; expires_in?: number }>()
   if (!token.access_token) throw new Error('OAuth token 为空')
   rmSync(pendingPath(), { force: true })
   writeJson(authPath(), {
@@ -177,7 +188,7 @@ async function accessToken(): Promise<string> {
   if (saved.expiresAt && saved.expiresAt > Date.now() + 30_000) return saved.accessToken
   if (!saved.refreshToken || !saved.clientId) throw new TopviewCanvasAuthError()
   const meta = await authMetadata()
-  const res = await fetch(meta.token_endpoint, {
+  const res = await topviewRequest(meta.token_endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
@@ -185,10 +196,10 @@ async function accessToken(): Promise<string> {
       refresh_token: saved.refreshToken,
       client_id: saved.clientId,
       resource: MCP_URL,
-    }),
+    }).toString(),
   })
   if (!res.ok) throw new TopviewCanvasAuthError()
-  const token = (await res.json()) as { access_token?: string; refresh_token?: string; expires_in?: number }
+  const token = res.json<{ access_token?: string; refresh_token?: string; expires_in?: number }>()
   if (!token.access_token) throw new TopviewCanvasAuthError()
   writeJson(authPath(), {
     ...saved,
@@ -215,6 +226,10 @@ interface McpResult {
   isError?: boolean
 }
 
+function firstHeader(value: string | string[] | undefined): string | undefined {
+  return (Array.isArray(value) ? value[0] : value) || undefined
+}
+
 function parseSse(text: string): unknown {
   const data = text
     .split('\n')
@@ -236,19 +251,19 @@ async function mcpCall(name: string, args: Record<string, unknown>): Promise<Mcp
     'X-Topview-Plugin-Client': 'codex',
   }
   const post = async (body: unknown, session?: string) => {
-    const res = await fetch(MCP_URL, {
+    const res = await topviewRequest(MCP_URL, {
       method: 'POST',
       headers: session ? { ...headers, 'Mcp-Session-Id': session } : headers,
       body: JSON.stringify(body),
     })
-    const text = await res.text()
+    const text = res.text()
     if (res.status === 401) throw new TopviewCanvasAuthError()
     if (!res.ok) throw new Error(`MCP HTTP ${res.status}: ${text.slice(0, 240)}`)
     const payload = (text.includes('data:') ? parseSse(text) : JSON.parse(text)) as {
       result?: McpResult
       error?: { message?: string }
     }
-    return { payload, session: res.headers.get('mcp-session-id') || undefined }
+    return { payload, session: firstHeader(res.headers['mcp-session-id']) }
   }
   const opened = await post({
     jsonrpc: '2.0',
@@ -305,14 +320,30 @@ export async function createCanvas(name: string): Promise<TopviewCanvasSummary> 
   const trimmed = name.trim()
   if (!trimmed || trimmed.length > 200) throw new Error('Canvas 名称需要 1 到 200 个字符')
   const result = await mcpCall('create_topview_canvas', { name: trimmed })
-  const created = canvasesFrom(result)[0]
-  if (created) return created
-  const id = textOf(result).match(/canvasId=([\w.:@-]{1,128})/)?.[1]
+  const fields = result.structuredContent ?? {}
+  const id =
+    (typeof fields.canvasId === 'string' && fields.canvasId) ||
+    textOf(result).match(/\(([\w.:@-]{1,128})\)\.?\s*$/)?.[1] ||
+    canvasesFrom(result)[0]?.id
   if (!id) throw new Error('新建 Canvas 没有返回 id')
-  return { id, name: trimmed }
+  return { id, name: typeof fields.name === 'string' && fields.name ? fields.name : trimmed }
 }
 
-export async function uploadRender(canvasId: string, fileName: string, mimeType: string, bytes: Buffer): Promise<string> {
+const CANVAS_WEB_BASE = 'https://www.topview.ai/canvas/'
+
+export function canvasWebUrl(canvasId: string): string {
+  return CANVAS_WEB_BASE + encodeURIComponent(canvasId)
+}
+
+/** 取消时在建节点之前停下，已经传上去的文件不会出现在 Canvas 里。 */
+export async function uploadRender(
+  canvasId: string,
+  fileName: string,
+  mimeType: string,
+  bytes: Buffer,
+  signal?: AbortSignal,
+): Promise<string> {
+  signal?.throwIfAborted()
   const prepared = await mcpCall('prepare_topview_canvas_media_upload', {
     canvasId,
     fileName,
@@ -337,8 +368,9 @@ export async function uploadRender(canvasId: string, fileName: string, mimeType:
       if (typeof value === 'string') headers[key] = value
     }
   }
-  const put = await fetch(uploadUrl, { method: 'PUT', headers, body: new Uint8Array(bytes) })
+  const put = await topviewRequest(uploadUrl, { method: 'PUT', headers, body: new Uint8Array(bytes), signal })
   if (!put.ok) throw new Error(`上传失败 HTTP ${put.status}`)
+  signal?.throwIfAborted()
   const created = await mcpCall('create_topview_canvas_media_node', {
     canvasId,
     mediaType,

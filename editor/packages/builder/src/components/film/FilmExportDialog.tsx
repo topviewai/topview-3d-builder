@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { CanvasExportPicker } from '../dialogs/CanvasExportPicker'
 import { TopviewCanvasSendButton } from '../dialogs/TopviewCanvasSendButton'
+import { TopviewCanvasSentDialog } from '../dialogs/TopviewCanvasSentDialog'
 import { useTopviewCanvasAuth } from '../dialogs/hooks/useTopviewCanvasAuth'
+import { useTopviewCanvasSend } from '../dialogs/hooks/useTopviewCanvasSend'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { Dropdown } from '../common/Dropdown'
 import { Modal } from '../common/Modal'
@@ -15,9 +15,10 @@ export function FilmExportDialog({
   onClose: () => void
 }) {
   const s = useFilmExportDialog(sequenceId, onClose)
-  const [picking, setPicking] = useState(false)
   const canvasAuth = useTopviewCanvasAuth(s.adapter, s.supportsTopviewCanvas)
+  const canvasSend = useTopviewCanvasSend((canvas) => s.sendToCanvas(canvas.id))
   if (!s.sequence) return null
+  if (canvasSend.sent) return <TopviewCanvasSentDialog canvasUrl={canvasSend.sent.canvasUrl} onClose={onClose} />
 
   return (
     <Modal
@@ -36,7 +37,7 @@ export function FilmExportDialog({
             className="t3d-dialog-ghost"
             onClick={() => (s.exporting ? s.abort() : onClose())}
           >
-            {s.t('common.cancel')}
+            {canvasSend.sending ? s.t('export.cancelSend') : s.t('common.cancel')}
           </button>
           <button
             type="button"
@@ -46,13 +47,22 @@ export function FilmExportDialog({
           >
             {s.t('export.download')}
           </button>
-          <TopviewCanvasSendButton
-            auth={s.supportsTopviewCanvas ? canvasAuth.auth : null}
-            loginUrl={canvasAuth.loginUrl}
-            disabled={!s.canExport}
-            tooltip={s.exporting ? s.t('help.exporting') : s.duration <= 0 ? s.t('help.needClip') : s.issues.length ? s.t('film.issue.' + s.issues[0].code) : ''}
-            onClick={() => (s.supportsTopviewCanvas ? setPicking(true) : void s.start())}
-          />
+          {s.supportsTopviewCanvas ? (
+            <TopviewCanvasSendButton
+              adapter={s.adapter}
+              auth={canvasAuth.auth}
+              loginUrl={canvasAuth.loginUrl}
+              disabled={!s.canExport}
+              sending={canvasSend.sending}
+              tooltip={s.exporting ? s.t('help.exporting') : s.duration <= 0 ? s.t('help.needClip') : s.issues.length ? s.t('film.issue.' + s.issues[0].code) : ''}
+              onSend={(canvas) => void canvasSend.start(canvas)}
+              onUnauthorized={canvasAuth.markUnauthorized}
+            />
+          ) : (
+            <button type="button" className="t3d-dialog-solid" disabled={!s.canExport} onClick={() => void s.start()}>
+              {s.t('export.sendToCanvas')}
+            </button>
+          )}
         </>
       }
     >
@@ -123,21 +133,6 @@ export function FilmExportDialog({
               onChange={s.setAspectRatio}
             />
           </div>
-          {picking && s.supportsTopviewCanvas ? (
-            <CanvasExportPicker
-              adapter={s.adapter}
-              busy={s.exporting}
-              onCancel={() => setPicking(false)}
-              onUnauthorized={() => {
-                setPicking(false)
-                canvasAuth.markUnauthorized()
-              }}
-              onConfirm={(canvas) => {
-                setPicking(false)
-                s.sendToCanvas(canvas.id)
-              }}
-            />
-          ) : null}
           {s.issues.length > 0 ? (
             <div className="t3d-film-issues" role="alert">
               {s.issues.map((issue) => <div key={issue.code}>{issue.message}</div>)}

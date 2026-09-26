@@ -193,11 +193,17 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
     return { id: canvas.id, name: typeof canvas.name === 'string' ? canvas.name : name }
   }
 
-  async uploadToTopviewCanvas(canvasId: string, blob: Blob, meta: ExportMeta): Promise<void> {
+  async uploadToTopviewCanvas(
+    canvasId: string,
+    blob: Blob,
+    meta: ExportMeta,
+    signal?: AbortSignal,
+  ): Promise<{ canvasUrl?: string }> {
     const form = new FormData()
     form.set('canvasId', canvasId)
     form.set('file', new File([blob], meta.filename, { type: meta.mimeType }))
-    await canvasJson('/api/topview-canvas/upload', { method: 'POST', body: form })
+    const body = await canvasJson('/api/topview-canvas/upload', { method: 'POST', body: form, signal })
+    return { canvasUrl: isRecord(body) && typeof body.canvasUrl === 'string' ? body.canvasUrl : undefined }
   }
 
   async listAssetFacets(kind: AssetQuery['kind']): Promise<AssetFacets> {

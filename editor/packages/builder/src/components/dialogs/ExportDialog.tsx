@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { CanvasExportPicker } from './CanvasExportPicker'
 import { TopviewCanvasSendButton } from './TopviewCanvasSendButton'
+import { TopviewCanvasSentDialog } from './TopviewCanvasSentDialog'
 import { useTopviewCanvasAuth } from './hooks/useTopviewCanvasAuth'
+import { useTopviewCanvasSend } from './hooks/useTopviewCanvasSend'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { DualRangeSlider } from '../common/DualRangeSlider'
 import { Dropdown } from '../common/Dropdown'
@@ -13,13 +13,10 @@ import { useExportDialog } from './hooks/useExportDialog'
 
 export function ExportDialog({ onClose }: { onClose: () => void }) {
   const s = useExportDialog()
-  const [picking, setPicking] = useState(false)
   const canvasAuth = useTopviewCanvasAuth(s.adapter, s.supportsTopviewCanvas)
+  const canvasSend = useTopviewCanvasSend((canvas) => s.sendToCanvas(canvas.id, s.output))
   if (!s.doc || !s.tl) return null
-  const send = () => {
-    if (s.supportsTopviewCanvas) setPicking(true)
-    else void (s.output === 'image' ? s.onExportImage() : s.onExportVideo())
-  }
+  if (canvasSend.sent) return <TopviewCanvasSentDialog canvasUrl={canvasSend.sent.canvasUrl} onClose={onClose} />
 
   return (
     <Modal
@@ -34,8 +31,13 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               ? s.t('export.hintImage')
               : s.t('export.hintVideo', { start: s.start, end: s.end })}
           </span>
-          <button type="button" className="t3d-dialog-ghost" onClick={onClose} disabled={s.exporting}>
-            {s.t('common.cancel')}
+          <button
+            type="button"
+            className="t3d-dialog-ghost"
+            onClick={canvasSend.sending ? s.abort : onClose}
+            disabled={s.exporting && !canvasSend.sending}
+          >
+            {canvasSend.sending ? s.t('export.cancelSend') : s.t('common.cancel')}
           </button>
           <button
             type="button"
@@ -45,13 +47,27 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
           >
             {s.t('export.download')}
           </button>
-          <TopviewCanvasSendButton
-            auth={s.supportsTopviewCanvas ? canvasAuth.auth : null}
-            loginUrl={canvasAuth.loginUrl}
-            disabled={s.exporting}
-            tooltip={s.exporting ? s.t('help.exporting') : ''}
-            onClick={send}
-          />
+          {s.supportsTopviewCanvas ? (
+            <TopviewCanvasSendButton
+              adapter={s.adapter}
+              auth={canvasAuth.auth}
+              loginUrl={canvasAuth.loginUrl}
+              disabled={s.exporting}
+              sending={canvasSend.sending}
+              tooltip={s.exporting ? s.t('help.exporting') : ''}
+              onSend={(canvas) => void canvasSend.start(canvas)}
+              onUnauthorized={canvasAuth.markUnauthorized}
+            />
+          ) : (
+            <button
+              type="button"
+              className="t3d-dialog-solid"
+              disabled={s.exporting}
+              onClick={() => void (s.output === 'image' ? s.onExportImage() : s.onExportVideo())}
+            >
+              {s.t('export.sendToCanvas')}
+            </button>
+          )}
         </>
       }
     >
@@ -173,21 +189,6 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               onChange={s.setAspectRatio}
             />
           </div>
-          {picking && s.supportsTopviewCanvas ? (
-            <CanvasExportPicker
-              adapter={s.adapter}
-              busy={s.exporting}
-              onCancel={() => setPicking(false)}
-              onUnauthorized={() => {
-                setPicking(false)
-                canvasAuth.markUnauthorized()
-              }}
-              onConfirm={(canvas) => {
-                setPicking(false)
-                void s.sendToCanvas(canvas.id, s.output)
-              }}
-            />
-          ) : null}
           {s.status ? <div className="t3d-dialog-status">{s.status}</div> : null}
         </div>
       </div>

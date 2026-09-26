@@ -135,7 +135,13 @@ export interface HostAdapter<TDocument = unknown> {
   /** 本地 Studio：用 Topview MCP 列出当前用户的 Canvas。未登录时抛出 message 为 TOPVIEW_CANVAS_AUTH 的错误。 */
   listTopviewCanvases?(): Promise<TopviewCanvasSummary[]>
   createTopviewCanvas?(name: string): Promise<TopviewCanvasSummary>
-  uploadToTopviewCanvas?(canvasId: string, blob: Blob, meta: ExportMeta): Promise<void>
+  /** signal 取消时应中止上传；返回的 canvasUrl 用于"前往 Canvas"。 */
+  uploadToTopviewCanvas?(
+    canvasId: string,
+    blob: Blob,
+    meta: ExportMeta,
+    signal?: AbortSignal,
+  ): Promise<{ canvasUrl?: string } | void>
   topviewCanvasLoginUrl?(): string
   /** 本地是否已有可用的 Topview MCP 授权；不访问 Canvas 列表。 */
   topviewCanvasAuthorized?(): Promise<boolean>

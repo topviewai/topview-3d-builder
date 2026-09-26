@@ -517,28 +517,79 @@
   font-size: 12px;
 }
 
-.t3d-canvas-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  max-height: 160px;
-  overflow: auto;
+.t3d-canvas-send {
+  display: inline-flex;
 }
 
-.t3d-canvas-list label {
+.t3d-canvas-send .t3d-dialog-solid {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.t3d-spinner {
+  display: inline-block;
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: t3d-spin 0.7s linear infinite;
+}
+
+.t3d-dropdown-option .t3d-spinner {
+  flex: none;
+  width: 12px;
+  min-width: 12px;
+}
+
+@keyframes t3d-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t3d-spinner {
+    animation-duration: 2s;
+  }
+}
+
+.t3d-canvas-menu-loading {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.t3d-canvas-create,
-.t3d-canvas-actions {
-  display: flex;
-  gap: 8px;
+.t3d-modal.t3d-canvas-sent-modal {
+  width: min(380px, calc(100vw - 48px));
 }
 
-.t3d-canvas-create input {
-  flex: 1;
+.t3d-canvas-sent-text {
+  margin: 0;
+  color: var(--t3d-text-secondary);
+  font-size: 13px;
+}
+
+.t3d-dropdown-menu.t3d-canvas-menu {
+  max-height: 280px;
+  padding: 4px;
+}
+
+.t3d-canvas-menu-create {
+  font-weight: 500;
+}
+
+.t3d-canvas-menu-divider {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--t3d-dropdown-border);
+}
+
+.t3d-canvas-menu-error {
+  color: var(--t3d-danger, #f87171);
+  white-space: normal;
 }
 
 .t3d-export-signin {
