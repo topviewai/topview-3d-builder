@@ -42,7 +42,7 @@ It always exits 0; gate on the top-level `ok`. When `ok` is false, read each fai
   shares. Look there before installing anything: `~/.local/share/topview-3d-cli/venv/bin/topview-3d-cli`
   on macOS and Linux, `$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts\topview-3d-cli.exe` on Windows.
   When it exists and its `doctor --json` reports the `cliVersion` of this skill's pin,
-  `topview-3d-cli==0.1.2`, use that path for every command.
+  `topview-3d-cli==0.1.4`, use that path for every command.
   Otherwise install it once as `references/doctor-browser.md` describes (Installing topview-3d-cli).
   Never create a virtual environment inside the user's project or workspace, and do not use
   `pip install --user`.
