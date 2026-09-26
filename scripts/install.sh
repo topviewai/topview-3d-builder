@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Developer install of the topview-3d-cli command from this checkout (macOS/Linux). Safe to re-run.
-# Users without a checkout install the wheel instead: `pipx install topview-3d-cli`.
+# Install the topview-3d-cli command from this checkout (macOS/Linux). Safe to re-run.
+# The CLI goes into one environment shared by every project on this machine:
+# ${XDG_DATA_HOME:-~/.local/share}/topview-3d-cli/venv. With --dev it goes into agent/.venv instead.
 #
 #   scripts/install.sh [--dev] [--install-uv] [--skip-node] [--skip-browser]
 #
-#   --dev           install the whole editor workspace (test tooling included) and pytest.
-#                   The default install already includes Studio (Next.js) and the renderer.
+#   --dev           install the whole editor workspace (test tooling included) and pytest, into
+#                   agent/.venv. The default install already includes Studio (Next.js) and the renderer.
 #   --install-uv    if no Python >= 3.11 is found, install uv (https://astral.sh/uv) and use it
 #   --skip-node     skip the Node/pnpm/builder steps
 #   --skip-browser  skip the Playwright Chromium download
@@ -14,7 +15,6 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 AGENT="$ROOT/agent"
 EDITOR="$ROOT/editor"
-VENV="$AGENT/.venv"
 DEV=0 INSTALL_UV=0 SKIP_NODE=0 SKIP_BROWSER=0
 
 for arg in "$@"; do
@@ -23,10 +23,16 @@ for arg in "$@"; do
     --install-uv) INSTALL_UV=1 ;;
     --skip-node) SKIP_NODE=1 ;;
     --skip-browser) SKIP_BROWSER=1 ;;
-    -h|--help) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
 done
+
+if [ "$DEV" = 1 ]; then
+  VENV="$AGENT/.venv"
+else
+  VENV="${XDG_DATA_HOME:-$HOME/.local/share}/topview-3d-cli/venv"
+fi
 
 step() { printf '\n==> %s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }
@@ -83,12 +89,13 @@ EOF
 fi
 if [ -n "$UV" ]; then
   echo "using uv: $UV"
-  [ -x "$VENV/bin/python" ] || "$UV" venv --python ">=3.11" "$VENV"
+  [ -x "$VENV/bin/python" ] || { mkdir -p "$(dirname "$VENV")"; "$UV" venv --python ">=3.11" "$VENV"; }
   "$UV" pip install --python "$VENV/bin/python" -e "$spec"
 else
   if [ ! -x "$VENV/bin/python" ]; then
     PYTHON="$(find_python)"
     echo "using $PYTHON"
+    mkdir -p "$(dirname "$VENV")"
     "$PYTHON" -m venv "$VENV"
   fi
   "$VENV/bin/python" -m pip --version >/dev/null 2>&1 || "$VENV/bin/python" -m ensurepip --upgrade >/dev/null

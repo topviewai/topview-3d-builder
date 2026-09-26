@@ -84,20 +84,18 @@ codex plugin add topview-3d-builder@topview-3d-builder
 Replace `--ref main` with a tag such as `--ref v0.1.3` to pin a release, or pass a local checkout
 path instead of the Git URL. Restart Codex afterwards.
 
-To update, refresh the marketplace snapshot and reinstall:
+To update, remove the old version first, then add it again. Codex caches an installed plugin by its
+version number (`~/.codex/plugins/cache/topview-3d-builder/topview-3d-builder/<version>`), and
+changes on `main` can ship under the same number, so reinstalling on top may keep the old files:
 
 ```bash
-codex plugin marketplace upgrade topview-3d-builder
-codex plugin add topview-3d-builder@topview-3d-builder
-```
-
-A marketplace pinned to a tag stays on that tag. To move it, remove and add it again:
-
-```bash
+codex plugin remove topview-3d-builder@topview-3d-builder
 codex plugin marketplace remove topview-3d-builder
 codex plugin marketplace add git@github.com:topviewai/topview-3d-builder.git --ref main
 codex plugin add topview-3d-builder@topview-3d-builder
 ```
+
+This also moves a marketplace that was pinned to a tag. Restart Codex (and the ChatGPT app) afterwards.
 
 ### Cursor
 
@@ -115,7 +113,17 @@ git -C ~/.cursor/plugins/local/topview-3d-builder fetch origin main
 git -C ~/.cursor/plugins/local/topview-3d-builder checkout -B main origin/main
 ```
 
-For a release, use `fetch origin tag v0.1.3` and `checkout v0.1.3` instead.
+For a release, use `fetch origin tag v0.1.3` and `checkout v0.1.3` instead. If the pull fails
+because of local edits in that folder, delete the old copy and clone again:
+
+```bash
+rm -rf ~/.cursor/plugins/local/topview-3d-builder
+git clone git@github.com:topviewai/topview-3d-builder.git ~/.cursor/plugins/local/topview-3d-builder
+```
+
+The clone also holds the Studio's `node_modules`; after cloning again, the skill runs
+`scripts/install.sh` the next time it needs the Studio. The CLI itself lives in the shared
+environment described under "Developer install from a checkout" and survives the re-clone.
 
 ### Claude Code
 
@@ -126,17 +134,62 @@ claude plugin install topview-3d-builder@topview-3d-builder
 
 Inside a session, `/plugin` opens the same install flow. Restart Claude Code afterwards.
 
-To update:
+To update, remove the old version and install again:
 
 ```bash
-claude plugin marketplace update topview-3d-builder
-claude plugin update topview-3d-builder@topview-3d-builder
+claude plugin uninstall topview-3d-builder@topview-3d-builder
+claude plugin marketplace remove topview-3d-builder
+claude plugin marketplace add git@github.com:topviewai/topview-3d-builder.git
+claude plugin install topview-3d-builder@topview-3d-builder
 ```
+
+`claude plugin marketplace update topview-3d-builder` followed by
+`claude plugin update topview-3d-builder@topview-3d-builder` also works when the version number
+changed.
 
 ### Any agent with skills support
 
 `npx skills add git@github.com:topviewai/topview-3d-builder.git` and pick `topview-3d-cli`. This
 installs the skill only, without a plugin manifest or MCP server.
+
+### Remove an old version
+
+Remove the plugin from each agent you installed it in:
+
+```bash
+# ChatGPT (Codex app) and Codex CLI
+codex plugin remove topview-3d-builder@topview-3d-builder
+codex plugin marketplace remove topview-3d-builder
+
+# Cursor
+rm -rf ~/.cursor/plugins/local/topview-3d-builder
+
+# Claude Code
+claude plugin uninstall topview-3d-builder@topview-3d-builder
+claude plugin marketplace remove topview-3d-builder
+```
+
+If `codex plugin list` still shows an old version after removing it, delete its cache folder
+`~/.codex/plugins/cache/topview-3d-builder` and restart Codex.
+
+Remove a CLI installed outside a checkout with the tool that installed it:
+
+```bash
+rm -rf ~/.local/share/topview-3d-cli/venv   # shared environment (Windows: %LOCALAPPDATA%\topview-3d-cli\venv)
+pipx uninstall topview-3d-cli               # pipx
+uv cache clean topview-3d-cli               # uvx keeps only a cache
+```
+
+Older skill versions could also leave a `work/.venv` inside a project folder or a
+`pip install --user` copy; delete that folder or run `pip uninstall topview-3d-cli`.
+
+The user cache (`~/Library/Caches/topview-3d-cli`, `%LOCALAPPDATA%\topview-3d-cli\Cache`, or
+`~/.cache/topview-3d-cli`) holds Playwright and Chromium, the Studio's list of project folders, and
+the Topview sign-in used to send renders to a Canvas. Delete it only when you want all of that gone;
+the next render downloads the browser again and the next send asks you to sign in again.
+
+Project folders are yours and are never removed by any of the above; each keeps its scene in
+`.topview-3d/`.
 
 ### Build the Codex upload archive
 
@@ -173,19 +226,24 @@ renderer, the builder files it needs, Draco, and the built-in assets. Playwright
 downloaded once into the user cache (`~/Library/Caches/topview-3d-cli`, `%LOCALAPPDATA%\topview-3d-cli\Cache`,
 or `~/.cache/topview-3d-cli`) by `topview-3d-cli browser ensure`.
 
-### Without a checkout (pipx / uvx / pip)
+### Without a checkout (pipx / uvx / shared environment)
 
 ```bash
 pipx install topview-3d-cli
 # or, without a permanent install:
 uvx --python 3.12 topview-3d-cli@0.1.2 doctor
+# or, with neither pipx nor uv: one environment shared by every project
+python3 -m venv ~/.local/share/topview-3d-cli/venv
+~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.2
 topview-3d-cli browser ensure          # installs Playwright into the user cache and downloads Chromium
 topview-3d-cli doctor
 ```
 
-A plain `uvx topview-3d-cli` fails when the default Python is older than 3.11, so pass
+On Windows the shared environment is `%LOCALAPPDATA%\topview-3d-cli\venv` and its command is
+`Scripts\topview-3d-cli.exe`. `pip install --user` is not used: many Python installs refuse it
+(PEP 668). A plain `uvx topview-3d-cli` fails when the default Python is older than 3.11, so pass
 `--python 3.12`. If pip is pointed at a mirror that does not have this version yet, retry
-with the official index: `python3 -m pip install --user --index-url https://pypi.org/simple/ topview-3d-cli==0.1.2`.
+with the official index: `pip install --index-url https://pypi.org/simple/ topview-3d-cli==0.1.2`.
 
 ### Developer install from a checkout
 
@@ -203,8 +261,11 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 
 The script:
 
-1. Creates `agent/.venv` and installs the CLI into it in editable mode. It uses `uv` when present,
-   otherwise `python -m venv` plus pip. An editable install uses the checkout as its runtime.
+1. Installs the CLI in editable mode into one environment shared by every project:
+   `~/.local/share/topview-3d-cli/venv` (`$XDG_DATA_HOME/topview-3d-cli/venv` when set) on macOS and
+   Linux, `%LOCALAPPDATA%\topview-3d-cli\venv` on Windows. With `--dev` it uses the checkout's
+   `agent/.venv` instead. It uses `uv` when present, otherwise `python -m venv` plus pip. An
+   editable install uses the checkout as its runtime.
 2. Installs the renderer and Studio (Next.js) with `pnpm install --frozen-lockfile`. `--dev` also installs the rest of the editor workspace.
 3. Builds `@topview/3d-builder`.
 4. Runs `topview-3d-cli browser ensure` to download Playwright Chromium.
@@ -219,7 +280,7 @@ Re-running the script is safe and only repeats what is missing or outdated. Opti
 Build the wheel and sdist into `dist/` (needs `pip install build`; nothing is published):
 
 ```bash
-agent/.venv/bin/python scripts/build_dist.py
+agent/.venv/bin/python scripts/build_dist.py   # after install.sh --dev
 ```
 
 ### Publishing
@@ -240,7 +301,7 @@ test.pypi.org (owner `topviewai`, repository `topview-3d-builder`, workflow `rel
 ### First scene
 
 ```bash
-export PATH="$PWD/agent/.venv/bin:$PATH"     # developer install; Windows: $env:Path = "$PWD\agent\.venv\Scripts;$env:Path"
+export PATH="$HOME/.local/share/topview-3d-cli/venv/bin:$PATH"   # Windows: $env:Path = "$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts;$env:Path"; after --dev use agent/.venv
 topview-3d-cli doctor
 topview-3d-cli project init my-scene
 topview-3d-cli document apply my-scene agent/topview_3d_cli/tests/fixtures/local-project/operations.json

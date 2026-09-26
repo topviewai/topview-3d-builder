@@ -1,13 +1,14 @@
 <#
 .SYNOPSIS
-  Developer install of the topview-3d-cli command from this checkout (Windows). Safe to re-run.
-  Users without a checkout install the wheel instead: `pipx install topview-3d-cli`.
+  Install the topview-3d-cli command from this checkout (Windows). Safe to re-run.
+  The CLI goes into one environment shared by every project on this machine:
+  %LOCALAPPDATA%\topview-3d-cli\venv. With -Dev it goes into agent\.venv instead.
 
 .EXAMPLE
   powershell -ExecutionPolicy Bypass -File scripts\install.ps1 [-Dev] [-InstallUv] [-SkipNode] [-SkipBrowser]
 
-  -Dev          install the whole editor workspace (test tooling included) and pytest.
-                The default install already includes Studio (Next.js) and the renderer.
+  -Dev          install the whole editor workspace (test tooling included) and pytest, into
+                agent\.venv. The default install already includes Studio (Next.js) and the renderer.
   -InstallUv    if no Python >= 3.11 is found, install uv (https://astral.sh/uv) and use it
   -SkipNode     skip the Node/pnpm/builder steps
   -SkipBrowser  skip the Playwright Chromium download
@@ -26,7 +27,12 @@ Set-StrictMode -Version 3.0
 $Root = Split-Path -Parent $PSScriptRoot
 $Agent = Join-Path $Root 'agent'
 $Editor = Join-Path $Root 'editor'
-$Venv = Join-Path $Agent '.venv'
+if ($Dev) {
+  $Venv = Join-Path $Agent '.venv'
+} else {
+  $DataRoot = if ($env:LOCALAPPDATA) { $env:LOCALAPPDATA } else { Join-Path $HOME 'AppData\Local' }
+  $Venv = Join-Path $DataRoot 'topview-3d-cli\venv'
+}
 $VenvPython = Join-Path $Venv 'Scripts\python.exe'
 $Cli = Join-Path $Venv 'Scripts\topview-3d-cli.exe'
 
@@ -112,13 +118,17 @@ error: Python 3.11 or newer was not found.
 }
 if ($uv) {
   Write-Host "using uv: $uv"
-  if (-not (Test-Path $VenvPython)) { Invoke-Native $uv @('venv', '--python', '>=3.11', $Venv) }
+  if (-not (Test-Path $VenvPython)) {
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Venv) | Out-Null
+    Invoke-Native $uv @('venv', '--python', '>=3.11', $Venv)
+  }
   Invoke-Native $uv @('pip', 'install', '--python', $VenvPython, '-e', $spec)
 } else {
   if (-not (Test-Path $VenvPython)) {
     Write-Host "using $($python -join ' ')"
     $rest = @()
     if ($python.Length -gt 1) { $rest = $python[1..($python.Length - 1)] }
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $Venv) | Out-Null
     Invoke-Native $python[0] ($rest + @('-m', 'venv', $Venv))
   }
   if (-not (Test-Native $VenvPython @('-m', 'pip', '--version'))) { Invoke-Native $VenvPython @('-m', 'ensurepip', '--upgrade') }

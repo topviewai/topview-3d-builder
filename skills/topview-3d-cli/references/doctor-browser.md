@@ -24,39 +24,60 @@ Playwright and Chromium.
 
 ## Installing topview-3d-cli
 
-Use this skill's pinned version, 0.1.2, and stop at the first route that works:
+Install once per machine and reuse that install in every project. Use this skill's pinned
+version, 0.1.2. The shared environment is:
 
-1. `uvx --python 3.12 topview-3d-cli@0.1.2 doctor --json`: runs without a permanent install;
-   `--python 3.12` makes uv use (or download) a Python it can run the package with.
-   Prefix every later command the same way (`uvx --python 3.12 topview-3d-cli@0.1.2 ...`).
-2. `pipx run --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`, or
-   `pipx install topview-3d-cli==0.1.2` for a permanent `topview-3d-cli` on PATH.
-3. `python3 -m pip install --user topview-3d-cli==0.1.2`, then make sure the user scripts
-   directory is on PATH.
+| System | Environment | Command |
+| --- | --- | --- |
+| macOS, Linux | `~/.local/share/topview-3d-cli/venv` (`$XDG_DATA_HOME/topview-3d-cli/venv` when that is set) | `<venv>/bin/topview-3d-cli` |
+| Windows | `$env:LOCALAPPDATA\topview-3d-cli\venv` | `<venv>\Scripts\topview-3d-cli.exe` |
 
-If step 2 or 3 fails because the configured index has no such version (a mirror that has not
-synced yet reports `Could not find a version` and `from versions: none`), retry that same
+Never create a virtual environment inside the user's project or the agent's workspace; the next
+project would install everything again. Do not use `pip install --user` either: many Python
+installs refuse it (PEP 668, `externally-managed-environment`).
+
+1. **Reuse.** When `topview-3d-cli` is on PATH or the shared command exists, run its
+   `doctor --json`. If `cliVersion` matches the pin `topview-3d-cli==0.1.2`, use it and stop here. If the version differs,
+   reinstall into the same environment with step 2 or 3; do not create another one.
+2. **Checkout.** When the folder that holds this skill also has `agent/` and `editor/` (agent
+   plugin installs are checkouts), run `scripts/install.sh` from that
+   folder, or `powershell -ExecutionPolicy Bypass -File scripts\install.ps1` on Windows. It installs
+   the CLI into the shared environment together with the renderer and Studio's Next.js, and
+   `studio open` needs this route. Do not install only the renderer package; that can render PNGs
+   and then fail `studio open` because Next.js is missing. Installing straight from the `agent/`
+   directory without that build step gives `RUNTIME_MISSING`.
+3. **No checkout.** Stop at the first route that works:
+   - `uvx --python 3.12 topview-3d-cli@0.1.2 doctor --json` runs from uv's cache without an install;
+     `--python 3.12` makes uv use (or download) a Python it can run the package with. Prefix every
+     later command the same way.
+   - `pipx install topview-3d-cli==0.1.2` gives a permanent `topview-3d-cli` on PATH.
+   - Otherwise create the shared environment with a Python 3.11 or newer and install into it:
+     - macOS, Linux: `python3 -m venv ~/.local/share/topview-3d-cli/venv`, then
+       `~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.2`
+     - Windows: `py -3.12 -m venv "$env:LOCALAPPDATA\topview-3d-cli\venv"` (or `python -m venv ...`
+       when the `py` launcher is missing), then
+       `& "$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts\python.exe" -m pip install topview-3d-cli==0.1.2`
+
+In an agent sandbox, creating the shared environment writes outside the workspace and downloads
+packages, so it may need the user's approval. Ask once; every later project reuses the install
+without asking again.
+
+If a pip or pipx install fails because the configured index has no such version (a mirror that
+has not synced yet reports `Could not find a version` and `from versions: none`), retry that same
 command against the official PyPI simple index and do not change the user's pip configuration.
 Build the index as scheme https, host `pypi.org`, path `/simple/`, and pass it like this:
 
-- pip: `python3 -m pip install --user --index-url <index> topview-3d-cli==0.1.2`
-- pipx run: `pipx run --pip-args '--index-url <index>' --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`
-- pipx install: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.2`
+- pip: `<venv-python> -m pip install --index-url <index> topview-3d-cli==0.1.2`
+- pipx: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.2`
 
 Other pip failures (no network, permissions, a broken environment) are not an index problem;
 do not switch the index for those.
 
-When the package index is not an option (no network to PyPI, or a build that is not published):
-
-- **A wheel file** the user provides (`topview_3d_cli-<version>-py3-none-any.whl`):
-  `uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json`, and the same prefix for
-  every later command; or `pipx install <path-to-wheel>` for a permanent command.
-- **A source checkout** of the repository: run `scripts/install.sh` (or `install.ps1` on
-  Windows) during setup, before the first scene. It installs the CLI into `agent/.venv`, the
-  renderer, and Studio's Next.js. Do not install only the renderer package; that can render PNGs
-  and then fail `studio open` because Next.js is missing. Installing straight from the `agent/`
-  directory without that build step gives
-  `RUNTIME_MISSING`.
+When the package index is not an option (no network to PyPI, or a build that is not published)
+and the user provides a wheel file (`topview_3d_cli-<version>-py3-none-any.whl`), install it into
+the shared environment with `<venv-python> -m pip install <path-to-wheel>`, or run it with
+`uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json` and the same prefix for
+every later command.
 
 Then run `topview-3d-cli browser ensure` once. It is idempotent: it installs the pinned Playwright into
 the user cache (`~/Library/Caches/topview-3d-cli` on macOS, `~/.cache/topview-3d-cli` on Linux,
@@ -87,9 +108,8 @@ scene you built before the Studio edit.
 Do this once at the end of a scene, not after every edit.
 
 - `STUDIO_UNAVAILABLE` and the error says Next.js is not installed: the checkout is there, but
-  `editor/` dependencies were not installed (a render-only setup does not include Studio). From
-  the checkout that contains this CLI — if the command is `<checkout>/agent/.venv/bin/topview-3d-cli`,
-  the checkout is `<checkout>` — run `pnpm install` in `<checkout>/editor` once (pnpm 8 or newer;
+  `editor/` dependencies were not installed (a render-only setup does not include Studio). The
+  error names that `editor` folder; run `pnpm install` there once (pnpm 8 or newer;
   `corepack enable pnpm` is enough when pnpm is missing). Then run `studio open` one more time
   and open the returned `url` in the In-App Browser. Do not treat this as a missing Studio.
 - `STUDIO_UNAVAILABLE` and the error says Studio is not part of this install: this copy has no

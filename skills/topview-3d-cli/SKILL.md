@@ -38,21 +38,19 @@ topview-3d-cli doctor --json
 It always exits 0; gate on the top-level `ok`. When `ok` is false, read each failing
 `checks.<name>.hint` and follow `references/doctor-browser.md`:
 
-- **`topview-3d-cli` not found:** run it without installing, pinned to this skill's version:
-  `uvx --python 3.12 topview-3d-cli@0.1.2 doctor --json` (`--python 3.12` lets uv fetch a suitable
-  Python when the default one is older than 3.11). Without `uvx`, use
-  `pipx run --spec topview-3d-cli==0.1.2 topview-3d-cli doctor --json`, then
-  `python3 -m pip install --user topview-3d-cli==0.1.2`. If that pip or pipx install fails
-  because the configured index has no such version (a mirror that has not synced yet reports
-  `from versions: none`), retry the same command with `--index-url` set to the official PyPI
-  simple index: scheme https, host `pypi.org`, path `/simple/`. For pipx, pass that index inside
-  `--pip-args`. Use the same prefix for every later command. When the user supplies a wheel file instead (for example before a release), run
-  `uvx --python 3.12 --from <path-to-wheel> topview-3d-cli doctor --json`; for a source checkout see
-  `references/doctor-browser.md`.
+- **`topview-3d-cli` not found:** it is installed once per machine, in an environment every project
+  shares. Look there before installing anything: `~/.local/share/topview-3d-cli/venv/bin/topview-3d-cli`
+  on macOS and Linux, `$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts\topview-3d-cli.exe` on Windows.
+  When it exists and its `doctor --json` reports the `cliVersion` of this skill's pin,
+  `topview-3d-cli==0.1.2`, use that path for every command.
+  Otherwise install it once as `references/doctor-browser.md` describes (Installing topview-3d-cli).
+  Never create a virtual environment inside the user's project or workspace, and do not use
+  `pip install --user`.
 - **`node` fails:** Node.js 20.6 or newer (with npm) is required; ask the user to install it.
-- **Source checkout:** during this setup step, run `scripts/install.sh` (or `install.ps1` on
-  Windows). It installs the renderer and Studio's Next.js together. Do not install only the
-  renderer package.
+- **Checkout:** when the folder that holds this skill also has `agent/` and `editor/` (plugin installs
+  are checkouts), install by running its `scripts/install.sh` (or `install.ps1` on Windows) once. It
+  puts the CLI into the shared environment and installs the renderer and Studio's Next.js together.
+  Do not install only the renderer package.
 - **`playwright` or `chromium` fails:** run `topview-3d-cli browser ensure` once (it downloads the pinned
   Chromium into the user cache).
 - **Rendering fails inside an agent sandbox** although `doctor` passes: the sandbox blocks the
