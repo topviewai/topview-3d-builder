@@ -3,7 +3,7 @@
 // 把 Studio 的编辑写回实体库，之后 Agent 再读这份项目就是编辑后的结果。
 import { createHash } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir, tmpdir } from 'node:os'
 import path from 'node:path'
 import { summarizeDraft, type DraftSummary } from './draftStore'
@@ -34,28 +34,23 @@ export function projectId(root: string): string {
   return `cli-${createHash('sha256').update(root).digest('hex').slice(0, 16)}`
 }
 
-function remember(roots: Map<string, string>, candidate: string): void {
+/** 路径保持 CLI 写入时的原样：id 要和 CLI 算的一致，Windows 上 Node 再解析一遍可能改变盘符或大小写。 */
+function remember(roots: Set<string>, candidate: string): void {
   const trimmed = candidate.trim()
-  if (!trimmed) return
-  try {
-    const resolved = realpathSync(path.resolve(trimmed))
-    roots.set(resolved, resolved)
-  } catch {
-    // A listed directory that is not on disk yet is ignored.
-  }
+  if (trimmed && path.isAbsolute(trimmed) && existsSync(trimmed)) roots.add(trimmed)
 }
 
 export function projectRoots(): string[] {
-  const roots = new Map<string, string>()
+  const roots = new Set<string>()
   const raw = process.env.TOPVIEW3D_PROJECTS?.trim()
   if (raw) raw.split(path.delimiter).forEach((item) => remember(roots, item))
   try {
     const text = readFileSync(path.join(cacheDir(), 'studio', 'projects.txt'), 'utf8')
-    text.split('\n').forEach((item) => remember(roots, item))
+    text.split(/\r?\n/).forEach((item) => remember(roots, item))
   } catch {
     // No shared registry yet.
   }
-  return [...roots.values()]
+  return [...roots]
 }
 
 export function listProjects(): LocalProject[] {
@@ -105,12 +100,13 @@ export function adoptProjectEdit(id: string, payload: { document?: unknown; fcur
   if (payload.document === undefined && payload.fcurves === undefined) {
     throw new Error('保存内容为空')
   }
-  const cli = process.env.TOPVIEW3D_CLI?.trim() || 'topview-3d-cli'
+  const python = process.env.TOPVIEW3D_PYTHON?.trim()
+  const [command, prefix] = python ? [python, ['-m', 'topview_3d_cli']] : ['topview-3d-cli', []]
   const dir = mkdtempSync(path.join(tmpdir(), 'topview-3d-adopt-'))
   const file = path.join(dir, 'edit.json')
   try {
     writeFileSync(file, JSON.stringify(payload))
-    execFileSync(cli, ['project', 'adopt', project.root, file], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
+    execFileSync(command, [...prefix, 'project', 'adopt', project.root, file], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })
   } catch (error) {
     const stderr = error && typeof error === 'object' && 'stderr' in error ? String((error as { stderr?: unknown }).stderr) : ''
     throw new Error(stderr.trim() || (error instanceof Error ? error.message : String(error)))

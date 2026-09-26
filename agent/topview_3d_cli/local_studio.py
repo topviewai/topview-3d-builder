@@ -10,7 +10,6 @@ from __future__ import annotations
 import hashlib
 import json
 import os
-import shutil
 import socket
 import sys
 import subprocess
@@ -69,7 +68,7 @@ def _next_bin(studio: Path) -> Path:
             return candidate
     raise LocalProjectError(
         "STUDIO_UNAVAILABLE",
-        "Next.js is not installed; run pnpm install in editor/ of the checkout",
+        f"Next.js is not installed; run pnpm install in {studio.parents[1]}",
     )
 
 
@@ -92,7 +91,8 @@ def _projects(port: int) -> list[dict]:
     return projects
 
 
-def _wait_until_listed(port: int, project_id: str, timeout: float = 60) -> None:
+def _wait_until_listed(port: int, project_id: str, timeout: float = 180) -> None:
+    # The first request compiles the route in next dev, which takes minutes on slow machines.
     deadline = time.monotonic() + timeout
     last_error = "timed out"
     while time.monotonic() < deadline:
@@ -107,6 +107,14 @@ def _wait_until_listed(port: int, project_id: str, timeout: float = 60) -> None:
     raise LocalProjectError("STUDIO_START_FAILED", f"Studio did not become ready: {last_error}")
 
 
+def _detached() -> dict:
+    """Keep Studio running after the agent's command and its console exit."""
+    if sys.platform == "win32":
+        flags = subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.CREATE_NO_WINDOW
+        return {"creationflags": flags, "close_fds": True}
+    return {"start_new_session": True}
+
+
 def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
     log_dir = user_cache_dir() / "studio"
     log_dir.mkdir(parents=True, exist_ok=True)
@@ -114,7 +122,7 @@ def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
     env = dict(os.environ)
     env["TOPVIEW3D_CACHE_DIR"] = str(user_cache_dir())
     env["TOPVIEW3D_PROJECTS"] = str(project_root)
-    env["TOPVIEW3D_CLI"] = shutil.which("topview-3d-cli") or sys.argv[0]
+    env["TOPVIEW3D_PYTHON"] = sys.executable
     try:
         env["TOPVIEW3D_BUILTIN_ASSETS"] = str(runtime().builtin_assets)
     except LocalProjectError:
@@ -125,9 +133,10 @@ def _start(studio: Path, next_bin: Path, project_root: Path) -> int:
             ["node", str(next_bin), "dev", "--port", str(STUDIO_PORT), "--hostname", STUDIO_HOST],
             cwd=studio,
             env=env,
+            stdin=subprocess.DEVNULL,
             stdout=log,
             stderr=subprocess.STDOUT,
-            start_new_session=True,
+            **_detached(),
         )
     finally:
         log.close()

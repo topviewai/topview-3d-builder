@@ -20,7 +20,7 @@ pnpm build && pnpm --filter @topview/3d-studio start
 | 变量 | 作用 | 缺省 |
 |---|---|---|
 | `TOPVIEW3D_BUILTIN_ASSETS` | 内置素材库目录（含 `manifest.json`） | 仓库根 `builtin-assets/` |
-| `TOPVIEW3D_PROJECTS` | 要只读打开的 CLI 项目目录，多个用系统路径分隔符隔开 | 空 |
+| `TOPVIEW3D_PROJECTS` | 要只读打开的 CLI 项目目录（绝对路径），多个用系统路径分隔符隔开 | 空 |
 
 改了变量要重启服务。
 
@@ -58,7 +58,7 @@ pnpm build && pnpm --filter @topview/3d-studio start
 | CLI 项目 | 「CLI 项目」，来自 `TOPVIEW3D_PROJECTS` | `GET /api/projects/{id}`（+ `/fcurves`），读 `.topview-3d/document.json` 与 `fcurves.json` | `PUT` 同一路径，经 `topview-3d-cli project adopt` 写回 `entities.json` |
 
 Studio 里改过的 CLI 项目会写回实体库。下一次 `topview-3d-cli` 读到的就是这次编辑，Agent 从这份结果继续改。
-保存时 Studio 进程要能运行 `topview-3d-cli`（`studio open` 会设置 `TOPVIEW3D_CLI`）。同一时刻只让一边写入。
+保存时 Studio 要能调用 CLI：`studio open` 把当前 Python 写进 `TOPVIEW3D_PYTHON`，Studio 用 `python -m topview_3d_cli` 调用；没有这个变量时调用 PATH 上的 `topview-3d-cli`。同一时刻只让一边写入。
 
 ---
 

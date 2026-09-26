@@ -111,6 +111,44 @@ jobs:
       - name: Offline smoke (fails on any non-localhost request)
         run: pnpm -C editor --filter @topview/3d-studio test:offline
 
+  studio-launch:
+    name: Studio launch (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      TOPVIEW3D_CACHE_DIR: ${{ github.workspace }}/.studio-cache
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: editor/pnpm-lock.yaml
+      - run: pnpm -C editor install --frozen-lockfile
+      - run: pnpm -C editor --filter @topview/3d-builder build
+      - run: python -m pip install -e agent
+      # Separate steps on purpose: check runs after the step that started Studio has exited.
+      - name: studio open
+        run: python scripts/studio_smoke.py start "${{ runner.temp }}/studio-project"
+      - name: Studio still up, lists and saves the project
+        run: python scripts/studio_smoke.py check "${{ runner.temp }}/studio-project"
+      - name: Studio log
+        if: failure()
+        shell: bash
+        run: cat "$TOPVIEW3D_CACHE_DIR/studio/studio.log" || true
+      - name: Stop Studio
+        if: always()
+        run: python scripts/studio_smoke.py stop "${{ runner.temp }}/studio-project"
+
   package:
     name: Codex plugin archive
     runs-on: ubuntu-latest
