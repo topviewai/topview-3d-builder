@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Tooltip } from '../common/Tooltip'
 import { CanvasExportPicker } from '../dialogs/CanvasExportPicker'
+import { TopviewCanvasSendButton } from '../dialogs/TopviewCanvasSendButton'
+import { useTopviewCanvasAuth } from '../dialogs/hooks/useTopviewCanvasAuth'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { Dropdown } from '../common/Dropdown'
 import { Modal } from '../common/Modal'
@@ -15,6 +16,7 @@ export function FilmExportDialog({
 }) {
   const s = useFilmExportDialog(sequenceId, onClose)
   const [picking, setPicking] = useState(false)
+  const canvasAuth = useTopviewCanvasAuth(s.adapter, s.supportsTopviewCanvas)
   if (!s.sequence) return null
 
   return (
@@ -44,17 +46,13 @@ export function FilmExportDialog({
           >
             {s.t('export.download')}
           </button>
-          <Tooltip label={s.exporting ? s.t('help.exporting') : s.duration <= 0 ? s.t('help.needClip') : s.issues.length ? s.t('film.issue.' + s.issues[0].code) : ''} side="top" variant="description">
-            <button
-              aria-label={s.t('export.sendToCanvas')}
-              type="button"
-              className="t3d-dialog-solid"
-              disabled={!s.canExport}
-              onClick={() => (s.supportsTopviewCanvas ? setPicking(true) : void s.start())}
-            >
-              {s.t('export.sendToCanvas')}
-            </button>
-          </Tooltip>
+          <TopviewCanvasSendButton
+            auth={s.supportsTopviewCanvas ? canvasAuth.auth : null}
+            loginUrl={canvasAuth.loginUrl}
+            disabled={!s.canExport}
+            tooltip={s.exporting ? s.t('help.exporting') : s.duration <= 0 ? s.t('help.needClip') : s.issues.length ? s.t('film.issue.' + s.issues[0].code) : ''}
+            onClick={() => (s.supportsTopviewCanvas ? setPicking(true) : void s.start())}
+          />
         </>
       }
     >
@@ -130,6 +128,10 @@ export function FilmExportDialog({
               adapter={s.adapter}
               busy={s.exporting}
               onCancel={() => setPicking(false)}
+              onUnauthorized={() => {
+                setPicking(false)
+                canvasAuth.markUnauthorized()
+              }}
               onConfirm={(canvas) => {
                 setPicking(false)
                 s.sendToCanvas(canvas.id)

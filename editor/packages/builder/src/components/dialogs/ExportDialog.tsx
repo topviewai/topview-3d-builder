@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { Tooltip } from '../common/Tooltip'
 import { CanvasExportPicker } from './CanvasExportPicker'
+import { TopviewCanvasSendButton } from './TopviewCanvasSendButton'
+import { useTopviewCanvasAuth } from './hooks/useTopviewCanvasAuth'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
 import { DualRangeSlider } from '../common/DualRangeSlider'
 import { Dropdown } from '../common/Dropdown'
@@ -13,6 +14,7 @@ import { useExportDialog } from './hooks/useExportDialog'
 export function ExportDialog({ onClose }: { onClose: () => void }) {
   const s = useExportDialog()
   const [picking, setPicking] = useState(false)
+  const canvasAuth = useTopviewCanvasAuth(s.adapter, s.supportsTopviewCanvas)
   if (!s.doc || !s.tl) return null
   const send = () => {
     if (s.supportsTopviewCanvas) setPicking(true)
@@ -43,16 +45,13 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
           >
             {s.t('export.download')}
           </button>
-          <Tooltip label={s.exporting ? s.t('help.exporting') : ''} side="top" variant="description">
-            <button
-              type="button"
-              className="t3d-dialog-solid"
-              disabled={s.exporting}
-              onClick={send}
-            >
-              {s.t('export.sendToCanvas')}
-            </button>
-          </Tooltip>
+          <TopviewCanvasSendButton
+            auth={s.supportsTopviewCanvas ? canvasAuth.auth : null}
+            loginUrl={canvasAuth.loginUrl}
+            disabled={s.exporting}
+            tooltip={s.exporting ? s.t('help.exporting') : ''}
+            onClick={send}
+          />
         </>
       }
     >
@@ -179,6 +178,10 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               adapter={s.adapter}
               busy={s.exporting}
               onCancel={() => setPicking(false)}
+              onUnauthorized={() => {
+                setPicking(false)
+                canvasAuth.markUnauthorized()
+              }}
               onConfirm={(canvas) => {
                 setPicking(false)
                 void s.sendToCanvas(canvas.id, s.output)

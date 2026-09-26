@@ -137,6 +137,8 @@ export interface HostAdapter<TDocument = unknown> {
   createTopviewCanvas?(name: string): Promise<TopviewCanvasSummary>
   uploadToTopviewCanvas?(canvasId: string, blob: Blob, meta: ExportMeta): Promise<void>
   topviewCanvasLoginUrl?(): string
+  /** 本地是否已有可用的 Topview MCP 授权；不访问 Canvas 列表。 */
+  topviewCanvasAuthorized?(): Promise<boolean>
   /** 文档或用户关键帧变更后通知宿主；节流由宿主自己做。交互拖拽中不会触发。 */
   onDocumentChange?(documentId: string, doc: TDocument, fcurves: unknown): void
 }

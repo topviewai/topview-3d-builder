@@ -166,7 +166,12 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
     }
   }
 
-  topviewCanvasLoginUrl = (): string => '/api/topview-canvas/login'
+  topviewCanvasLoginUrl = (): string => '/api/topview-canvas/login?return=/api/topview-canvas/done'
+
+  async topviewCanvasAuthorized(): Promise<boolean> {
+    const body = await canvasJson('/api/topview-canvas/status')
+    return isRecord(body) && body.authorized === true
+  }
 
   async listTopviewCanvases(): Promise<TopviewCanvasSummary[]> {
     const body = await canvasJson('/api/topview-canvas/canvases')

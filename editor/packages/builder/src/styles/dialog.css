@@ -541,12 +541,17 @@
   flex: 1;
 }
 
-.t3d-canvas-login {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  text-decoration: none;
+.t3d-export-signin {
+  align-self: center;
+  color: var(--t3d-text);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+.t3d-export-signin:hover {
+  opacity: 0.8;
 }
 
 .t3d-export-form {

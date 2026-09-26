@@ -1,7 +1,7 @@
 // 本地 Studio 通过 Topview MCP 列出、新建 Canvas，并把渲染结果上传进去。
 // 登录态存在用户缓存，和 CLI 的缓存目录同一处。
 import { createHash, randomBytes } from 'node:crypto'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import path from 'node:path'
 
@@ -23,6 +23,7 @@ export interface TopviewCanvasSummary {
 
 interface OAuthDoc {
   clientId: string
+  redirectUris?: string[]
   accessToken?: string
   refreshToken?: string
   expiresAt?: number
@@ -73,15 +74,28 @@ async function authMetadata(): Promise<{ authorization_endpoint: string; token_e
   return res.json() as Promise<{ authorization_endpoint: string; token_endpoint: string; registration_endpoint: string }>
 }
 
+/** 授权服务只认注册时登记过的回调地址，所以 localhost 和 127.0.0.1 两种写法都登记上。 */
+function loopbackVariants(redirectUri: string): string[] {
+  const url = new URL(redirectUri)
+  const variants = new Set([url.toString()])
+  for (const host of ['localhost', '127.0.0.1']) {
+    const copy = new URL(url)
+    copy.hostname = host
+    variants.add(copy.toString())
+  }
+  return [...variants]
+}
+
 async function clientId(redirectUri: string, meta: { registration_endpoint: string }): Promise<string> {
   const saved = readJson<OAuthDoc>(authPath())
-  if (saved?.clientId) return saved.clientId
+  if (saved?.clientId && saved.redirectUris?.includes(redirectUri)) return saved.clientId
+  const redirectUris = loopbackVariants(redirectUri)
   const res = await fetch(meta.registration_endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       client_name: 'Topview 3D Builder',
-      redirect_uris: [redirectUri],
+      redirect_uris: redirectUris,
       grant_types: ['authorization_code', 'refresh_token'],
       response_types: ['code'],
       token_endpoint_auth_method: 'none',
@@ -90,7 +104,7 @@ async function clientId(redirectUri: string, meta: { registration_endpoint: stri
   if (!res.ok) throw new Error(`OAuth register HTTP ${res.status}`)
   const body = (await res.json()) as { client_id?: string }
   if (!body.client_id) throw new Error('OAuth register returned no client_id')
-  writeJson(authPath(), { clientId: body.client_id })
+  writeJson(authPath(), { clientId: body.client_id, redirectUris })
   return body.client_id
 }
 
@@ -118,9 +132,15 @@ export async function beginLogin(origin: string, returnTo: string): Promise<stri
   return url.toString()
 }
 
+export function cancelLogin(state: string): void {
+  const pending = readJson<PendingLogin>(pendingPath())
+  if (pending?.state === state) rmSync(pendingPath(), { force: true })
+}
+
 export async function finishLogin(code: string, state: string): Promise<string> {
   const pending = readJson<PendingLogin>(pendingPath())
   if (!pending || pending.state !== state) throw new Error('登录状态无效，请重新登录')
+  if (!code) throw new Error('授权服务没有返回授权码，请重新登录')
   const saved = readJson<OAuthDoc>(authPath())
   if (!saved?.clientId) throw new Error('缺少 OAuth client')
   const meta = await authMetadata()
@@ -140,8 +160,10 @@ export async function finishLogin(code: string, state: string): Promise<string> 
   if (!res.ok) throw new Error(`OAuth token HTTP ${res.status}`)
   const token = (await res.json()) as { access_token?: string; refresh_token?: string; expires_in?: number }
   if (!token.access_token) throw new Error('OAuth token 为空')
+  rmSync(pendingPath(), { force: true })
   writeJson(authPath(), {
     clientId: saved.clientId,
+    redirectUris: saved.redirectUris,
     accessToken: token.access_token,
     refreshToken: token.refresh_token,
     expiresAt: Date.now() + (token.expires_in ?? 3600) * 1000,
@@ -175,6 +197,16 @@ async function accessToken(): Promise<string> {
     expiresAt: Date.now() + (token.expires_in ?? 3600) * 1000,
   })
   return token.access_token
+}
+
+export async function isAuthorized(): Promise<boolean> {
+  try {
+    await accessToken()
+    return true
+  } catch (error) {
+    if (error instanceof TopviewCanvasAuthError) return false
+    throw error
+  }
 }
 
 interface McpResult {

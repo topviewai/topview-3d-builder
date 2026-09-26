@@ -7,17 +7,18 @@ export function CanvasExportPicker({
   busy,
   onCancel,
   onConfirm,
+  onUnauthorized,
 }: {
   adapter: HostAdapter
   busy: boolean
   onCancel: () => void
   onConfirm: (canvas: TopviewCanvasSummary) => void
+  onUnauthorized: () => void
 }) {
   const t = useT()
   const [canvases, setCanvases] = useState<TopviewCanvasSummary[]>([])
   const [selected, setSelected] = useState('')
   const [name, setName] = useState('')
-  const [needsAuth, setNeedsAuth] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
@@ -31,7 +32,7 @@ export function CanvasExportPicker({
       })
       .catch((err: unknown) => {
         if (cancelled) return
-        if (err instanceof Error && err.message === 'TOPVIEW_CANVAS_AUTH') setNeedsAuth(true)
+        if (err instanceof Error && err.message === 'TOPVIEW_CANVAS_AUTH') onUnauthorized()
         else setError(err instanceof Error ? err.message : String(err))
       })
       .finally(() => {
@@ -40,6 +41,8 @@ export function CanvasExportPicker({
     return () => {
       cancelled = true
     }
+    // onUnauthorized 每次渲染都是新函数，只在换宿主时重新拉列表。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adapter])
 
   const create = async () => {
@@ -51,7 +54,8 @@ export function CanvasExportPicker({
       setSelected(created.id)
       setName('')
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err))
+      if (err instanceof Error && err.message === 'TOPVIEW_CANVAS_AUTH') onUnauthorized()
+      else setError(err instanceof Error ? err.message : String(err))
     }
   }
 
@@ -60,11 +64,7 @@ export function CanvasExportPicker({
   return (
     <div className="t3d-export-field t3d-canvas-picker">
       <span>{t('export.pickCanvas')}</span>
-      {needsAuth ? (
-        <a className="t3d-dialog-solid t3d-canvas-login" href={adapter.topviewCanvasLoginUrl?.() || '/api/topview-canvas/login'}>
-          {t('export.signIn')}
-        </a>
-      ) : loading ? (
+      {loading ? (
         <span>{t('common.loading')}</span>
       ) : (
         <div className="t3d-canvas-list" role="listbox" aria-label={t('export.pickCanvas')}>
@@ -89,12 +89,12 @@ export function CanvasExportPicker({
           type="text"
           value={name}
           maxLength={200}
-          disabled={busy || needsAuth}
+          disabled={busy}
           placeholder={t('export.canvasName')}
           aria-label={t('export.canvasName')}
           onChange={(event) => setName(event.target.value)}
         />
-        <button type="button" className="t3d-dialog-ghost" disabled={busy || needsAuth || !name.trim()} onClick={() => void create()}>
+        <button type="button" className="t3d-dialog-ghost" disabled={busy || !name.trim()} onClick={() => void create()}>
           {t('export.createCanvas')}
         </button>
       </div>
