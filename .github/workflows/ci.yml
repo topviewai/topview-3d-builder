@@ -165,7 +165,7 @@ jobs:
           unzip -Z1 dist/topview-3d-builder-plugin.zip > files.txt
           cat files.txt
           if grep -v '^topview-3d-builder/' files.txt; then echo "::error::entries outside topview-3d-builder/"; exit 1; fi
-          if grep -vE '^topview-3d-builder/((\.codex-plugin|assets|skills)(/.*)?)?$' files.txt; then
+          if grep -vE '^topview-3d-builder/((\.codex-plugin|assets|skills)(/.*)?|\.mcp\.json)?$' files.txt; then
             echo "::error::unexpected top-level entries"; exit 1
           fi
       - uses: actions/upload-artifact@v4
