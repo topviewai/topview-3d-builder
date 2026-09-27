@@ -50,7 +50,7 @@ def test_manifests_parse_and_share_the_plugin_name():
     assert codex["interface"]["displayName"] == "Topview 3D Builder"
     assert codex["skills"] == "./skills/"
     mcp = json.loads((ROOT / ".mcp.json").read_text(encoding="utf-8"))
-    assert mcp["mcpServers"]["topview-browser"]["url"] == "https://mcp-browser.topview.ai"
+    assert mcp["mcpServers"]["topview-browser"]["url"] == "https://mcp-3d.topview.ai"
     assert codex["interface"]["capabilities"] == ["Read", "Write"]
     for key in ("composerIcon", "logo"):
         assert (ROOT / codex["interface"][key]).is_file()
