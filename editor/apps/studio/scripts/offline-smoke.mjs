@@ -61,8 +61,8 @@ async function main() {
     })
 
     await page.goto(base)
-    await page.getByRole('button', { name: '新建草稿' }).first().click()
-    await page.getByRole('button', { name: '创建并打开' }).click()
+    await page.getByRole('button', { name: /新建草稿|Create new draft/ }).first().click()
+    await page.getByRole('button', { name: /创建并打开|Create and open/ }).click()
     await page.waitForFunction(() => window.__store?.getState?.().ready === true, null, { timeout: 60_000 })
     draftId = new URL(page.url()).searchParams.get('draft')
     if (!draftId) fail('draft id missing from URL')
@@ -75,14 +75,14 @@ async function main() {
     if (!search.total) fail('pose search returned nothing')
 
     const nodesBefore = await page.evaluate(() => window.__store.getState().doc?.content.nodes.length ?? 0)
-    await page.getByText('男性', { exact: true }).click()
+    await page.getByText(/^(男性|Male)$/).click()
     await page.waitForFunction(
       (count) => (window.__store.getState().doc?.content.nodes.length ?? 0) > count,
       nodesBefore,
       { timeout: 30_000 },
     )
 
-    await page.locator('.t3d-inspector-tab', { hasText: '姿势' }).click()
+    await page.locator('.t3d-inspector-tab', { hasText: /姿势|Pose/ }).click()
     await page.locator('.t3d-pose-tag', { hasText: /坐|sit/i }).first().click()
     const poseCell = page.locator('button.t3d-pose-atlas-cell:not(.is-skel)').first()
     await poseCell.waitFor({ timeout: 30_000 })
@@ -100,7 +100,7 @@ async function main() {
     const poses = [...JSON.stringify(saved).matchAll(/"posePresetId":"([^"]+)"/g)].map((m) => m[1])
     if (!poses.some((id) => id !== 'stand')) fail('saved draft lost the pose')
 
-    await page.locator('.t3d-rail-btn, [role="tab"]', { hasText: '动作' }).first().click().catch(() => undefined)
+    await page.locator('.t3d-rail-btn, [role="tab"]', { hasText: /动作|Motions/ }).first().click().catch(() => undefined)
     if (process.env.SMOKE_SCREENSHOT) await page.screenshot({ path: process.env.SMOKE_SCREENSHOT })
 
     if (external.length) fail(`external requests: ${external.join(', ')}`)
