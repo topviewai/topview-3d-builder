@@ -4,6 +4,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import path from 'node:path'
+import { boxesFromCanvasState, placeMediaNode } from './canvasPlacement'
 import { StudioError } from './locale/catalog'
 import { topviewRequest } from './topviewHttp'
 
@@ -372,14 +373,26 @@ export async function uploadRender(
   const put = await topviewRequest(uploadUrl, { method: 'PUT', headers, body: new Uint8Array(bytes), signal })
   if (!put.ok) throw new StudioError('上传失败 HTTP {{status}}', { status: put.status })
   signal?.throwIfAborted()
+  const kind = mediaType === 'video' ? 'video' : 'image'
+  let obstacles: ReturnType<typeof boxesFromCanvasState> = []
+  try {
+    const state = await mcpCall('get_topview_canvas_state', {
+      canvasId,
+      fields: ['nodes.basic', 'nodes.geometry'],
+    })
+    obstacles = boxesFromCanvasState(state.structuredContent)
+  } catch (error) {
+    console.warn('[studio] canvas layout read failed', error)
+  }
+  const position = placeMediaNode(kind, obstacles)
   const created = await mcpCall('create_topview_canvas_media_node', {
     canvasId,
     mediaType,
     url: objectKey,
     mimeType: exactMime,
     title: fileName,
-    x: 40,
-    y: 40,
+    x: position.x,
+    y: position.y,
   })
   return textOf(created).match(/node_[\w-]{1,128}/)?.[0] || objectKey
 }

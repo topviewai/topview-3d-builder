@@ -1,5 +1,4 @@
 import { TopviewCanvasSendButton } from './TopviewCanvasSendButton'
-import { TopviewCanvasSentDialog } from './TopviewCanvasSentDialog'
 import { useTopviewCanvasAuth } from './hooks/useTopviewCanvasAuth'
 import { useTopviewCanvasSend } from './hooks/useTopviewCanvasSend'
 import { aspectRatioLabel } from '../../contract/aspectRatio'
@@ -14,9 +13,11 @@ import { useExportDialog } from './hooks/useExportDialog'
 export function ExportDialog({ onClose }: { onClose: () => void }) {
   const s = useExportDialog()
   const canvasAuth = useTopviewCanvasAuth(s.adapter, s.supportsTopviewCanvas)
-  const canvasSend = useTopviewCanvasSend((canvas) => s.sendToCanvas(canvas.id, s.output))
+  const canvasSend = useTopviewCanvasSend(
+    (canvas) => (s.list.length > 0 ? s.sendListToCanvas(canvas.id, s.list) : s.sendToCanvas(canvas.id, s.output)),
+    { openWhenSent: true, onOpened: onClose },
+  )
   if (!s.doc || !s.tl) return null
-  if (canvasSend.sent) return <TopviewCanvasSentDialog canvasUrl={canvasSend.sent.canvasUrl} onClose={onClose} />
 
   return (
     <Modal
@@ -27,18 +28,17 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
       footer={
         <>
           <span className="t3d-export-footer-hint">
-            {s.output === 'image'
-              ? s.t('export.hintImage')
-              : s.t('export.hintVideo', { start: s.start, end: s.end })}
+            {s.list.length > 0
+              ? s.t('export.hintList', { count: s.list.length })
+              : s.output === 'image'
+                ? s.t('export.hintImage')
+                : s.t('export.hintVideo', { start: s.start, end: s.end })}
           </span>
-          <button
-            type="button"
-            className="t3d-dialog-ghost"
-            onClick={canvasSend.sending ? s.abort : onClose}
-            disabled={s.exporting && !canvasSend.sending}
-          >
-            {canvasSend.sending ? s.t('export.cancelSend') : s.t('common.cancel')}
-          </button>
+          {canvasSend.sending ? null : (
+            <button type="button" className="t3d-dialog-ghost" onClick={onClose} disabled={s.exporting}>
+              {s.t('common.cancel')}
+            </button>
+          )}
           <button
             type="button"
             className="t3d-dialog-ghost t3d-export-download"
@@ -48,12 +48,18 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
             {s.t('export.download')}
           </button>
           {s.supportsTopviewCanvas ? (
+            <button type="button" className="t3d-dialog-ghost t3d-export-add" disabled={s.exporting} onClick={s.addToList}>
+              {s.t('export.addToList')}
+            </button>
+          ) : null}
+          {s.supportsTopviewCanvas ? (
             <TopviewCanvasSendButton
               adapter={s.adapter}
               auth={canvasAuth.auth}
               loginUrl={canvasAuth.loginUrl}
               disabled={s.exporting}
               sending={canvasSend.sending}
+              label={s.list.length > 0 ? s.t('export.sendList', { count: s.list.length }) : undefined}
               tooltip={s.exporting ? s.t('help.exporting') : ''}
               onSend={(canvas) => void canvasSend.start(canvas)}
               onUnauthorized={canvasAuth.markUnauthorized}
@@ -68,6 +74,11 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               {s.t('export.sendToCanvas')}
             </button>
           )}
+          {canvasSend.sending ? (
+            <button type="button" className="t3d-dialog-ghost" onClick={s.abort}>
+              {s.t('export.cancelSend')}
+            </button>
+          ) : null}
         </>
       }
     >
@@ -87,16 +98,23 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
               </div>
             )
           ) : null}
-          {s.progress ? (
+          {s.listProgress || s.progress ? (
             <div className="t3d-export-progress">
-              {s.t('export.progress', {
-                index: s.progress.index,
-                total: s.progress.total,
-                frame: Math.round(s.progress.frame),
-              })}
-              <button type="button" className="t3d-dialog-cancel" onClick={s.abort}>
-                {s.t('common.cancel')}
-              </button>
+              {s.listProgress ? <span>{s.t('export.listProgress', s.listProgress)}</span> : null}
+              {s.progress ? (
+                <span>
+                  {s.t('export.progress', {
+                    index: s.progress.index,
+                    total: s.progress.total,
+                    frame: Math.round(s.progress.frame),
+                  })}
+                </span>
+              ) : null}
+              {canvasSend.sending ? null : (
+                <button type="button" className="t3d-dialog-cancel" onClick={s.abort}>
+                  {s.t('common.cancel')}
+                </button>
+              )}
             </div>
           ) : null}
         </div>
@@ -192,6 +210,49 @@ export function ExportDialog({ onClose }: { onClose: () => void }) {
           {s.status ? <div className="t3d-dialog-status">{s.status}</div> : null}
         </div>
       </div>
+      {s.supportsTopviewCanvas && s.list.length > 0 ? (
+        <div className="t3d-export-list">
+          <div className="t3d-export-list-head">
+            <span>{s.t('export.exportList')}</span>
+          </div>
+          <ul>
+              {s.list.map((item, index) => (
+                <li key={item.id} className={cx(s.listProgress?.index === index + 1 && 'is-sending')}>
+                  <span className="t3d-export-list-kind">
+                    {s.t(item.kind === 'image' ? 'export.outputImage' : 'export.outputVideo')}
+                  </span>
+                  <span className="t3d-export-list-label">
+                    {item.kind === 'image'
+                      ? s.t('export.listImage', { camera: cameraLabel(s, item.cameraId), frame: Math.round(item.frame) })
+                      : s.t('export.listVideo', {
+                          camera: cameraLabel(s, item.cameraId),
+                          start: item.start,
+                          end: item.end,
+                        })}
+                  </span>
+                  <span className="t3d-export-list-ratio">
+                    {aspectRatioLabel(item.aspectRatio, s.t('topbar.aspectRatioAuto'))}
+                  </span>
+                  <button
+                    type="button"
+                    className="t3d-export-list-remove"
+                    aria-label={s.t('export.removeFromList')}
+                    disabled={s.exporting}
+                    onClick={() => s.removeFromList(item.id)}
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </div>
+      ) : null}
     </Modal>
   )
+}
+
+function cameraLabel(s: ReturnType<typeof useExportDialog>, cameraId: string): string {
+  if (cameraId === s.editorCameraId) return s.t('cameraPreset.current')
+  const camera = s.cameras.find((item) => item.id === cameraId)
+  return camera ? displayCameraName(s.t, camera.name) : cameraId
 }

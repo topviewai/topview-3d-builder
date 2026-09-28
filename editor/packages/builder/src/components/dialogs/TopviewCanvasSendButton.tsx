@@ -26,6 +26,7 @@ export function TopviewCanvasSendButton({
   loginUrl,
   disabled,
   sending,
+  label,
   tooltip,
   onSend,
   onUnauthorized,
@@ -35,6 +36,7 @@ export function TopviewCanvasSendButton({
   loginUrl: string
   disabled: boolean
   sending: boolean
+  label?: string
   tooltip: string
   onSend: (canvas: TopviewCanvasSummary) => void
   onUnauthorized: () => void
@@ -180,7 +182,7 @@ export function TopviewCanvasSendButton({
             ref={triggerRef}
             type="button"
             className="t3d-dialog-solid"
-            aria-label={t('export.sendToCanvas')}
+            aria-label={label ?? t('export.sendToCanvas')}
             aria-haspopup="menu"
             aria-expanded={open}
             disabled={blocked}
@@ -193,7 +195,7 @@ export function TopviewCanvasSendButton({
                 {t('export.sending')}
               </>
             ) : (
-              t('export.sendToCanvas')
+              label ?? t('export.sendToCanvas')
             )}
           </button>
         </Tooltip>

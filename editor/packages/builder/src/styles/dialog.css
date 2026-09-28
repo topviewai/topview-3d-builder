@@ -400,11 +400,13 @@
   background: var(--t3d-ui-hover);
 }
 
-.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-download {
+.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-download,
+.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-add {
   background: var(--t3d-ui-active);
 }
 
-.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-download:hover:not(:disabled) {
+.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-download:hover:not(:disabled),
+.t3d-export-modal .t3d-modal-footer .t3d-dialog-ghost.t3d-export-add:hover:not(:disabled) {
   background: var(--t3d-ui-active-strong);
 }
 
@@ -686,4 +688,100 @@
 .t3d-export-tabs button.is-active {
   background: var(--t3d-ui-active);
   color: var(--t3d-text);
+}
+
+.t3d-export-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.t3d-export-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--t3d-text-secondary);
+  font-size: 12px;
+}
+
+.t3d-export-list-head button {
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid var(--t3d-dropdown-border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--t3d-text);
+  cursor: pointer;
+}
+
+.t3d-export-list-head button:hover:not(:disabled) {
+  background: var(--t3d-ui-hover);
+}
+
+.t3d-export-list-head button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.t3d-export-list ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 144px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  list-style: none;
+}
+
+.t3d-export-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 0 8px;
+  border-radius: 8px;
+  background: var(--t3d-bg-wash-soft);
+  font-size: 12px;
+}
+
+.t3d-export-list li.is-sending {
+  outline: 1px solid var(--t3d-text-muted);
+}
+
+.t3d-export-list-kind,
+.t3d-export-list-ratio {
+  flex: none;
+  color: var(--t3d-text-muted);
+}
+
+.t3d-export-list-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.t3d-export-list-remove {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--t3d-text-muted);
+  cursor: pointer;
+}
+
+.t3d-export-list-remove:hover:not(:disabled) {
+  background: var(--t3d-ui-hover);
+  color: var(--t3d-text);
+}
+
+.t3d-export-list-remove:disabled {
+  opacity: 0.5;
+  cursor: default;
 }

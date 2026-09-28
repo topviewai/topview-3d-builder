@@ -24,6 +24,20 @@ type StudioStore = { getState: () => StudioView }
 
 export type ExportOutputKind = 'image' | 'video'
 
+export type ExportListItem = {
+  id: string
+  kind: ExportOutputKind
+  cameraId: string
+  aspectRatio: string
+  label: string
+  width: number
+  frame: number
+  start: number
+  end: number
+}
+
+type ExportJob = Omit<ExportListItem, 'id' | 'aspectRatio'>
+
 const EXPORT_HEIGHT = 1080
 
 function exportLabel(cameraId: string, name: string | undefined): string {
@@ -57,6 +71,7 @@ export function useExportDialog() {
   )
   const [end, setEnd] = useState(defaultEnd)
   const [aspectRatio, setAspectRatio] = useState(doc?.content.aspectRatio ?? DEFAULT_ASPECT_RATIO)
+  const [list, setList] = useState<ExportListItem[]>([])
   useEffect(() => {
     setEnd(clampFrame(defaultEnd, fs, fe))
   }, [cameraId, defaultEnd, fs, fe])
@@ -107,6 +122,24 @@ export function useExportDialog() {
     previewUrl,
     previewLoading,
     previewCanvasRef,
+    list,
+    addToList: () => {
+      setList((prev) => [
+        ...prev,
+        {
+          id: `${Date.now().toString(36)}-${prev.length}`,
+          kind: output,
+          cameraId,
+          aspectRatio,
+          label,
+          width,
+          frame: currentFrame,
+          start,
+          end,
+        },
+      ])
+    },
+    removeFromList: (id: string) => setList((prev) => prev.filter((item) => item.id !== id)),
     ...actions,
     adapter,
     supportsTopviewCanvas: Boolean(adapter.listTopviewCanvases && adapter.uploadToTopviewCanvas),
@@ -130,16 +163,27 @@ function useExportActions(input: {
   fps?: number
 }) {
   const [progress, setProgress] = useState<{ frame: number; index: number; total: number } | null>(null)
+  const [listProgress, setListProgress] = useState<{ index: number; total: number } | null>(null)
   const [status, setStatus] = useState('')
   const abortRef = useRef<AbortController | null>(null)
 
-  const common = (localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
+  const currentJob = (): ExportJob => ({
+    kind: 'image',
+    cameraId: input.cameraId,
+    label: input.label,
+    width: input.width,
+    frame: input.currentFrame,
+    start: input.start,
+    end: input.end,
+  })
+
+  const payload = (job: ExportJob, localDownload: boolean, upload?: (blob: Blob, meta: ExportMeta) => Promise<void>) => {
     const s = input.useStore.getState()
     return {
       onExport: localDownload ? undefined : upload ?? input.adapter.onExport?.bind(input.adapter),
-      cameraId: input.cameraId,
-      label: input.label,
-      width: input.width,
+      cameraId: job.cameraId,
+      label: job.label,
+      width: job.width,
       height: EXPORT_HEIGHT,
       userKeys: s.userKeys,
       userKeysEnabled: s.userKeysEnabled,
@@ -160,73 +204,133 @@ function useExportActions(input: {
     input.engine.seek(s.frame)
   }
 
-  const runImage = async (
+  const failStatus = (ac: AbortController | undefined, error: unknown) => {
+    setStatus(ac?.signal.aborted ? input.t('export.cancelled') : input.t('export.failed', { error: localizeMessage(input.t, error) }))
+  }
+
+  const renderImage = async (
+    job: ExportJob,
     localDownload: boolean,
-    upload?: (blob: Blob, meta: ExportMeta) => Promise<void>,
-    ac?: AbortController,
+    upload: ((blob: Blob, meta: ExportMeta) => Promise<void>) | undefined,
+    ac: AbortController | undefined,
+    lifecycle: boolean,
   ): Promise<boolean> => {
-    beginExport()
+    if (lifecycle) beginExport()
     try {
-      await input.engine.captureFrame({ ...common(localDownload, upload), frame: input.currentFrame })
-      setStatus(input.t(upload ? 'export.sentToCanvas' : 'export.pngDone', { frame: Math.round(input.currentFrame) }))
+      await input.engine.captureFrame({ ...payload(job, localDownload, upload), frame: job.frame })
+      if (lifecycle) setStatus(input.t(upload ? 'export.sentToCanvas' : 'export.pngDone', { frame: Math.round(job.frame) }))
       return true
     } catch (e) {
-      setStatus(ac?.signal.aborted ? input.t('export.cancelled') : input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      failStatus(ac, e)
       return false
     } finally {
-      if (abortRef.current === ac) abortRef.current = null
-      endExport()
+      if (lifecycle) {
+        if (abortRef.current === ac) abortRef.current = null
+        endExport()
+      }
     }
   }
 
-  const runVideo = async (
+  const renderVideo = async (
+    job: ExportJob,
     localDownload: boolean,
-    upload?: (blob: Blob, meta: ExportMeta) => Promise<void>,
-    ac = new AbortController(),
+    upload: ((blob: Blob, meta: ExportMeta) => Promise<void>) | undefined,
+    ac: AbortController,
+    lifecycle: boolean,
   ): Promise<boolean> => {
     if (input.fps == null) return false
-    beginExport()
-    abortRef.current = ac
+    if (lifecycle) {
+      beginExport()
+      abortRef.current = ac
+    }
     try {
       const res = await input.engine.recordRange({
-        ...common(localDownload, upload),
-        frameStart: input.start,
-        frameEnd: input.end,
+        ...payload(job, localDownload, upload),
+        frameStart: job.start,
+        frameEnd: job.end,
         fps: input.fps,
         signal: ac.signal,
         onProgress: (p) => setProgress(p),
       })
-      setStatus(res.cancelled ? input.t('export.cancelled') : input.t(upload ? 'export.sentToCanvas' : 'export.videoDone', { frames: res.frames }))
-      return !res.cancelled
+      if (res.cancelled) {
+        setStatus(input.t('export.cancelled'))
+        return false
+      }
+      if (lifecycle) setStatus(input.t(upload ? 'export.sentToCanvas' : 'export.videoDone', { frames: res.frames }))
+      return true
     } catch (e) {
-      setStatus(ac.signal.aborted ? input.t('export.cancelled') : input.t('export.failed', { error: localizeMessage(input.t, e) }))
+      failStatus(ac, e)
       return false
     } finally {
-      if (abortRef.current === ac) abortRef.current = null
       setProgress(null)
-      endExport()
+      if (lifecycle) {
+        if (abortRef.current === ac) abortRef.current = null
+        endExport()
+      }
+    }
+  }
+
+  const renderCurrent = (kind: ExportOutputKind, localDownload: boolean) => {
+    const job = { ...currentJob(), kind }
+    return kind === 'image' ? renderImage(job, localDownload, undefined, undefined, true) : renderVideo(job, localDownload, undefined, new AbortController(), true)
+  }
+
+  const uploadTo = (canvasId: string, ac: AbortController, canvasUrl: { value: string }) => {
+    return async (blob: Blob, meta: ExportMeta) => {
+      if (!input.adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas upload is unavailable')
+      const res = await input.adapter.uploadToTopviewCanvas(canvasId, blob, meta, ac.signal)
+      if (res?.canvasUrl) canvasUrl.value = res.canvasUrl
     }
   }
 
   return {
     progress,
+    listProgress,
     status,
     abort: () => abortRef.current?.abort(),
-    onExportImage: () => runImage(false),
-    onDownloadImage: () => runImage(true),
-    onExportVideo: () => runVideo(false),
-    onDownloadVideo: () => runVideo(true),
+    onExportImage: () => renderCurrent('image', false),
+    onDownloadImage: () => renderCurrent('image', true),
+    onExportVideo: () => renderCurrent('video', false),
+    onDownloadVideo: () => renderCurrent('video', true),
     sendToCanvas: async (canvasId: string, kind: ExportOutputKind): Promise<TopviewCanvasSent | null> => {
       const ac = new AbortController()
       abortRef.current = ac
-      let canvasUrl = ''
-      const upload = async (blob: Blob, meta: ExportMeta) => {
-        if (!input.adapter.uploadToTopviewCanvas) throw new Error('Topview Canvas 上传不可用')
-        const res = await input.adapter.uploadToTopviewCanvas(canvasId, blob, meta, ac.signal)
-        canvasUrl = res?.canvasUrl ?? ''
+      const canvasUrl = { value: '' }
+      const upload = uploadTo(canvasId, ac, canvasUrl)
+      const job = { ...currentJob(), kind }
+      const ok = kind === 'image' ? await renderImage(job, false, upload, ac, true) : await renderVideo(job, false, upload, ac, true)
+      return ok ? { canvasUrl: canvasUrl.value } : null
+    },
+    sendListToCanvas: async (canvasId: string, items: ExportListItem[]): Promise<TopviewCanvasSent | null> => {
+      if (items.length === 0) return null
+      if (input.fps == null && items.some((item) => item.kind === 'video')) return null
+      const ac = new AbortController()
+      abortRef.current = ac
+      const canvasUrl = { value: '' }
+      beginExport()
+      try {
+        for (let index = 0; index < items.length; index += 1) {
+          if (ac.signal.aborted) {
+            setStatus(input.t('export.cancelled'))
+            return null
+          }
+          const item = items[index]
+          setListProgress({ index: index + 1, total: items.length })
+          const job: ExportJob = { ...item, label: `${item.label}_${index + 1}` }
+          const upload = uploadTo(canvasId, ac, canvasUrl)
+          const ok = item.kind === 'image'
+            ? await renderImage(job, false, upload, ac, false)
+            : await renderVideo(job, false, upload, ac, false)
+          if (!ok) return null
+        }
+        setStatus(input.t('export.sentList', { count: items.length }))
+        return { canvasUrl: canvasUrl.value }
+      } finally {
+        setListProgress(null)
+        setProgress(null)
+        if (abortRef.current === ac) abortRef.current = null
+        endExport()
       }
-      const ok = kind === 'image' ? await runImage(false, upload, ac) : await runVideo(false, upload, ac)
-      return ok ? { canvasUrl } : null
     },
   }
 }
