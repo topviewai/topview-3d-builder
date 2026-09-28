@@ -59,6 +59,7 @@ export const zhTW: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "語言",
     "meta": "{{aspectRatio}} · {{nodes}} 個節點 · {{fps}}fps · 影格 {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps·{{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "畫幅比例",

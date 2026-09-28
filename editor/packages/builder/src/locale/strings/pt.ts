@@ -59,6 +59,7 @@ export const pt: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Idioma",
     "meta": "{{aspectRatio}} · {{nodes}} nós · {{fps}}fps · quadros {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "Proporção",

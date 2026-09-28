@@ -1,3 +1,4 @@
+import { useStudioT } from '../../../src/locale'
 import { DraftGlyph } from './icons'
 import type { DraftRow } from '../types'
 import { coverTone, formatDraftMeta } from '../utils'
@@ -21,8 +22,9 @@ export function DraftCard({
   onConfirmingChange,
   onRemove,
 }: DraftCardProps) {
+  const t = useStudioT()
   const [from, to] = coverTone(draft.id)
-  const meta = formatDraftMeta(draft)
+  const meta = formatDraftMeta(draft, t)
 
   return (
     <article className="wb-card">
@@ -33,7 +35,7 @@ export function DraftCard({
         >
           <span className="wb-card-cover-grid" />
           <DraftGlyph />
-          {readonly && <span className="wb-card-flag">只读</span>}
+          {readonly && <span className="wb-card-flag">{t('只读')}</span>}
         </span>
         <span className="wb-card-body">
           <span className="wb-card-title">{draft.name}</span>
@@ -44,8 +46,8 @@ export function DraftCard({
         <div className="wb-card-actions">
           {confirming ? (
             <>
-              <button type="button" className="wb-danger" disabled={busy} onClick={onRemove}>确认删除</button>
-              <button type="button" className="wb-ghost" disabled={busy} onClick={() => onConfirmingChange?.(null)}>取消</button>
+              <button type="button" className="wb-danger" disabled={busy} onClick={onRemove}>{t('确认删除')}</button>
+              <button type="button" className="wb-ghost" disabled={busy} onClick={() => onConfirmingChange?.(null)}>{t('取消')}</button>
             </>
           ) : (
             <button
@@ -53,7 +55,7 @@ export function DraftCard({
               className="wb-ghost"
               disabled={busy}
               onClick={() => onConfirmingChange?.(draft.id)}
-            >删除</button>
+            >{t('删除')}</button>
           )}
         </div>
       )}

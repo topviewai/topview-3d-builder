@@ -4,6 +4,7 @@
 // 只提供清单里列出的文件，不做任何远程请求。
 import { readFileSync, statSync } from 'node:fs'
 import path from 'node:path'
+import { requestT } from './locale/server'
 import { projectRoots } from './localProjects'
 
 const MANIFEST_FORMAT = 'scene3d-asset-manifest'
@@ -79,12 +80,12 @@ function loadManifest(root: string): LocalAsset[] {
   try {
     manifest = JSON.parse(readFileSync(file, 'utf8'))
   } catch (error) {
-    console.warn(`[studio] 素材清单无法解析: ${file}`, error)
+    console.warn(`[studio] asset manifest is not valid JSON: ${file}`, error)
     return []
   }
   const raw = (manifest as { format?: unknown; assets?: unknown })
   if (raw.format !== MANIFEST_FORMAT || !Array.isArray(raw.assets)) {
-    console.warn(`[studio] 素材清单格式不对: ${file}`)
+    console.warn(`[studio] asset manifest has an unknown format: ${file}`)
     return []
   }
   const assets: LocalAsset[] = []
@@ -241,13 +242,14 @@ const CONTENT_TYPES: Record<string, string> = {
   '.jpeg': 'image/jpeg',
 }
 
-export function fileResponse(file: string | undefined): Response {
-  if (!file) return Response.json({ error: '素材不存在' }, { status: 404 })
+export function fileResponse(file: string | undefined, request: Request): Response {
+  const { t } = requestT(request)
+  if (!file) return Response.json({ error: t('素材不存在') }, { status: 404 })
   let body: Buffer
   try {
     body = readFileSync(file)
   } catch {
-    return Response.json({ error: '素材文件缺失' }, { status: 404 })
+    return Response.json({ error: t('素材文件缺失') }, { status: 404 })
   }
   return new Response(new Uint8Array(body), {
     headers: {

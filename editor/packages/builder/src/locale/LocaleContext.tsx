@@ -5,12 +5,15 @@ import type { TranslateFn } from './types'
 
 const LocaleContext = createContext<TranslateFn>((key) => key)
 const LanguageContext = createContext('en')
+const LocaleChangeContext = createContext<((locale: string) => void) | undefined>(undefined)
 
 export function LocaleProvider({
   locale,
+  onLocaleChange,
   children,
 }: {
   locale?: string
+  onLocaleChange?: (locale: string) => void
   children: ReactNode
 }) {
   const t = useMemo<TranslateFn>(() => {
@@ -21,13 +24,20 @@ export function LocaleProvider({
 
   return (
     <LanguageContext.Provider value={resolveLocale(locale)}>
-      <LocaleContext.Provider value={t}>{children}</LocaleContext.Provider>
+      <LocaleChangeContext.Provider value={onLocaleChange}>
+        <LocaleContext.Provider value={t}>{children}</LocaleContext.Provider>
+      </LocaleChangeContext.Provider>
     </LanguageContext.Provider>
   )
 }
 
 export function useLocale(): string {
   return useContext(LanguageContext)
+}
+
+/** The host's language setter; undefined when the host keeps the language fixed. */
+export function useLocaleChange(): ((locale: string) => void) | undefined {
+  return useContext(LocaleChangeContext)
 }
 
 export function useT(): TranslateFn {

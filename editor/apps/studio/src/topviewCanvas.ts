@@ -4,6 +4,7 @@ import { createHash, randomBytes } from 'node:crypto'
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import path from 'node:path'
+import { StudioError } from './locale/catalog'
 import { topviewRequest } from './topviewHttp'
 
 const MCP_URL = 'https://mcp-browser.topview.ai'
@@ -150,10 +151,10 @@ export function cancelLogin(state: string): void {
 
 export async function finishLogin(code: string, state: string): Promise<string> {
   const pending = readJson<PendingLogin>(pendingPath())
-  if (!pending || pending.state !== state) throw new Error('登录状态无效，请重新登录')
-  if (!code) throw new Error('授权服务没有返回授权码，请重新登录')
+  if (!pending || pending.state !== state) throw new StudioError('登录状态无效，请重新登录')
+  if (!code) throw new StudioError('授权服务没有返回授权码，请重新登录')
   const saved = readJson<OAuthDoc>(authPath())
-  if (!saved?.clientId) throw new Error('缺少 OAuth client')
+  if (!saved?.clientId) throw new StudioError('缺少 OAuth client')
   const meta = await authMetadata()
   const body = new URLSearchParams({
     grant_type: 'authorization_code',
@@ -170,7 +171,7 @@ export async function finishLogin(code: string, state: string): Promise<string> 
   })
   if (!res.ok) throw new Error(`OAuth token HTTP ${res.status}`)
   const token = res.json<{ access_token?: string; refresh_token?: string; expires_in?: number }>()
-  if (!token.access_token) throw new Error('OAuth token 为空')
+  if (!token.access_token) throw new StudioError('OAuth token 为空')
   rmSync(pendingPath(), { force: true })
   writeJson(authPath(), {
     clientId: saved.clientId,
@@ -279,12 +280,12 @@ async function mcpCall(name: string, args: Record<string, unknown>): Promise<Mcp
     { jsonrpc: '2.0', id: 2, method: 'tools/call', params: { name, arguments: args } },
     opened.session,
   )
-  if (called.payload.error) throw new Error(called.payload.error.message || 'MCP 调用失败')
+  if (called.payload.error) throw called.payload.error.message ? new Error(called.payload.error.message) : new StudioError('MCP 调用失败')
   const result = called.payload.result
-  if (!result) throw new Error('MCP 没有返回结果')
+  if (!result) throw new StudioError('MCP 没有返回结果')
   if (result.isError) {
-    const text = result.content?.map((item) => item.text || '').join('\n') || 'MCP 工具失败'
-    throw new Error(text)
+    const text = result.content?.map((item) => item.text || '').join('\n')
+    throw text ? new Error(text) : new StudioError('MCP 工具失败')
   }
   return result
 }
@@ -318,14 +319,14 @@ export async function listCanvases(): Promise<TopviewCanvasSummary[]> {
 
 export async function createCanvas(name: string): Promise<TopviewCanvasSummary> {
   const trimmed = name.trim()
-  if (!trimmed || trimmed.length > 200) throw new Error('Canvas 名称需要 1 到 200 个字符')
+  if (!trimmed || trimmed.length > 200) throw new StudioError('Canvas 名称需要 1 到 200 个字符', undefined, 400)
   const result = await mcpCall('create_topview_canvas', { name: trimmed })
   const fields = result.structuredContent ?? {}
   const id =
     (typeof fields.canvasId === 'string' && fields.canvasId) ||
     textOf(result).match(/\(([\w.:@-]{1,128})\)\.?\s*$/)?.[1] ||
     canvasesFrom(result)[0]?.id
-  if (!id) throw new Error('新建 Canvas 没有返回 id')
+  if (!id) throw new StudioError('新建 Canvas 没有返回 id')
   return { id, name: typeof fields.name === 'string' && fields.name ? fields.name : trimmed }
 }
 
@@ -360,7 +361,7 @@ export async function uploadRender(
   const objectKey = read('objectKey')
   const mediaType = read('mediaType') || (mimeType.startsWith('video/') ? 'video' : 'image')
   const exactMime = read('mimeType') || mimeType
-  if (!uploadUrl || !objectKey) throw new Error('上传准备没有返回地址')
+  if (!uploadUrl || !objectKey) throw new StudioError('上传准备没有返回地址')
   const required = fields.requiredHeaders
   const headers: Record<string, string> = { 'Content-Type': exactMime }
   if (required && typeof required === 'object') {
@@ -369,7 +370,7 @@ export async function uploadRender(
     }
   }
   const put = await topviewRequest(uploadUrl, { method: 'PUT', headers, body: new Uint8Array(bytes), signal })
-  if (!put.ok) throw new Error(`上传失败 HTTP ${put.status}`)
+  if (!put.ok) throw new StudioError('上传失败 HTTP {{status}}', { status: put.status })
   signal?.throwIfAborted()
   const created = await mcpCall('create_topview_canvas_media_node', {
     canvasId,

@@ -9,6 +9,7 @@ import { StudioCloseButton } from '../overlay/StudioCloseButton'
 import { TutorialButton } from '../tutorial'
 import { AspectRatioSelect } from './AspectRatioSelect'
 import { ExportMenu } from './ExportMenu'
+import { LanguageSelect } from './LanguageSelect'
 import { ShortcutsButton } from './ShortcutsDialog'
 
 export function Topbar() {
@@ -78,6 +79,7 @@ export function Topbar() {
         {workspaceMode !== 'film' ? <ExportMenu disabled={!ready} /> : null}
       </div>
       <div className="t3d-topbar-right">
+        <LanguageSelect />
         <TutorialButton disabled={!ready} />
         <ShortcutsButton />
         {!ready && loadStatus ? (

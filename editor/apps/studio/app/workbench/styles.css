@@ -79,6 +79,44 @@
   padding: 0 14px;
 }
 
+.wb-language {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.wb-language svg {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+
+.wb-language select {
+  height: 40px;
+  padding: 0 14px 0 36px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  appearance: none;
+}
+
+.wb-language select:hover,
+.wb-language select:focus-visible {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.wb-language option {
+  background: #1b1c1f;
+  color: #fff;
+}
+
 .wb-kicker {
   margin: 0;
   font-size: 11px;

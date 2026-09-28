@@ -82,9 +82,12 @@ id 受 `/^[a-z0-9][a-z0-9_-]{0,63}$/i` 约束，删除时连带清掉 fcurves �
 |---|---|
 | `/` | 工作台：列表 / 新建；点草稿在当前页 overlay 打开 `DirectorStudio`。打开后 URL 带 `?draft=<id>`（CLI 项目为 `?project=<id>`），刷新 / 复制链接可回到同一份 |
 
-工作台文案属于宿主，固定中文，不要走 `t()` / studio locale json。
-`check:locales` 不扫 `app/workbench`。右下角语言切换只作用于包内导演台，
-不要再把工作台首页、建草稿包进多语言。
+界面语言：用户在首页或导演台顶栏选过的语言优先（存 localStorage 和 cookie `t3d-studio-locale`），
+否则跟随浏览器语言，不支持的语言用英文。服务端渲染的页面（首页首屏、登录流程页、接口错误）按
+cookie、再按 `Accept-Language` 选语言。工作台、登录页和接口错误的文案都走 `src/locale/*.json`
+（key 是简体中文原文）；服务端抛出的用户可见错误用 `StudioError`，在路由出口按请求语言翻译。
+`pnpm --filter @topview/3d-studio test:locales` 检查 15 种语言的 key 一致、源码里没有写死的中文、
+目录里没有无人使用的 key。导演台的语言由宿主通过 `locale` / `onLocaleChange` 传入，包内不探测。
 
 导演台**没有**独立路由。`app/page.tsx` 是三行薄壳，实现在 `app/workbench/`
 （普通目录，不是路由段）：

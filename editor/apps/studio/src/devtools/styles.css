@@ -57,7 +57,6 @@ body:has(.t3d-root.is-viewport-fullscreen) .studio-devtools {
 
 .studio-devtools-icon-btn,
 .studio-devtools-primary,
-.studio-devtools-linkish,
 .studio-devtools-nav-item {
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.04);
@@ -102,36 +101,6 @@ body:has(.t3d-root.is-viewport-fullscreen) .studio-devtools {
 }
 
 .studio-devtools-nav-item.is-active {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
-}
-
-.studio-devtools-locale-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.studio-devtools-locale-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  padding: 8px;
-  text-align: left;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  color: inherit;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.studio-devtools-locale-btn small {
-  color: rgba(255, 255, 255, 0.55);
-  font-size: 11px;
-}
-
-.studio-devtools-locale-btn.is-active {
   border-color: rgba(255, 255, 255, 0.35);
   background: rgba(255, 255, 255, 0.12);
 }
@@ -230,13 +199,6 @@ body:has(.t3d-root.is-viewport-fullscreen) .studio-devtools {
 }
 
 .studio-devtools-result-label {
-  word-break: break-all;
-}
-
-.studio-devtools-linkish {
-  text-align: left;
-  padding: 4px 6px;
-  font-size: 12px;
   word-break: break-all;
 }
 

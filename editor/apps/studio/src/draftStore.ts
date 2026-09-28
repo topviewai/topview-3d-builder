@@ -2,6 +2,7 @@
 // 这是宿主侧的集合操作（列表 / 新建 / 删除），包完全不感知，见 architecture.md §3.5。
 import { mkdir, readdir, readFile, unlink, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { StudioError } from './locale/catalog'
 
 export interface DraftSummary {
   id: string
@@ -80,7 +81,7 @@ export async function readDraft(id: string): Promise<unknown | null> {
 }
 
 export async function writeUserDraft(id: string, doc: unknown): Promise<void> {
-  if (!isValidDraftId(id)) throw new Error(`非法草稿 id: ${id}`)
+  if (!isValidDraftId(id)) throw new StudioError('非法草稿 id: {{detail}}', { detail: id }, 400)
   await mkdir(draftsDir(), { recursive: true })
   await writeFile(draftPath(id), `${JSON.stringify(doc, null, 2)}\n`, 'utf8')
 }
@@ -102,7 +103,7 @@ export async function readFCurves(id: string): Promise<unknown | null> {
 }
 
 export async function writeUserFCurves(id: string, data: unknown): Promise<void> {
-  if (!isValidDraftId(id)) throw new Error(`非法草稿 id: ${id}`)
+  if (!isValidDraftId(id)) throw new StudioError('非法草稿 id: {{detail}}', { detail: id }, 400)
   await mkdir(draftsDir(), { recursive: true })
   await writeFile(fcurvesPath(id), `${JSON.stringify(data)}\n`, 'utf8')
 }

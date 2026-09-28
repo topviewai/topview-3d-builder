@@ -1,4 +1,5 @@
 import { readFCurves, writeUserFCurves } from '../../../../../src/draftStore'
+import { errorStatus, requestT } from '../../../../../src/locale/server'
 
 export const runtime = 'nodejs'
 
@@ -12,17 +13,18 @@ export async function GET(_request: Request, ctx: Ctx): Promise<Response> {
 }
 
 export async function PUT(request: Request, ctx: Ctx): Promise<Response> {
+  const { t, error } = requestT(request)
   const { id } = await ctx.params
   let data: unknown
   try {
     data = await request.json()
   } catch {
-    return Response.json({ error: '请求体不是合法 JSON' }, { status: 400 })
+    return Response.json({ error: t('请求体不是合法 JSON') }, { status: 400 })
   }
   try {
     await writeUserFCurves(id, data)
   } catch (e) {
-    return Response.json({ error: e instanceof Error ? e.message : String(e) }, { status: 400 })
+    return Response.json({ error: error(e) }, { status: errorStatus(e, 400) })
   }
   return Response.json({ id })
 }

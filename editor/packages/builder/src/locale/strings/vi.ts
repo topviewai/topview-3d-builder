@@ -59,6 +59,7 @@ export const vi: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Ngôn ngữ",
     "meta": "{{aspectRatio}} · {{nodes}} nút · {{fps}}fps · khung {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "Tỷ lệ khung",

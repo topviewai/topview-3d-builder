@@ -59,6 +59,7 @@ export const ms: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Bahasa",
     "meta": "{{aspectRatio}} · {{nodes}} nod · {{fps}}fps · bingkai {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "Nisbah aspek",

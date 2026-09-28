@@ -59,6 +59,7 @@ export const tr: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Dil",
     "meta": "{{aspectRatio}} · {{nodes}} düğüm · {{fps}}fps · kareler {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "En-boy oranı",

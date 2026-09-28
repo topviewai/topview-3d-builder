@@ -59,6 +59,7 @@ export const fr: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Langue",
     "meta": "{{aspectRatio}} · {{nodes}} nœuds · {{fps}}fps · images {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "Format",

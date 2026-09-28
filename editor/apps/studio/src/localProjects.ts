@@ -7,6 +7,7 @@ import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'no
 import { homedir, tmpdir } from 'node:os'
 import path from 'node:path'
 import { summarizeDraft, type DraftSummary } from './draftStore'
+import { StudioError } from './locale/catalog'
 
 export interface LocalProject {
   id: string
@@ -96,9 +97,9 @@ export function readProjectFCurves(id: string): unknown | null {
 
 export function adoptProjectEdit(id: string, payload: { document?: unknown; fcurves?: unknown }): void {
   const project = findProject(id)
-  if (!project) throw new Error(`项目不存在: ${id}`)
+  if (!project) throw new StudioError('项目不存在: {{id}}', { id }, 404)
   if (payload.document === undefined && payload.fcurves === undefined) {
-    throw new Error('保存内容为空')
+    throw new StudioError('保存内容为空', undefined, 400)
   }
   const python = process.env.TOPVIEW3D_PYTHON?.trim()
   const [command, prefix] = python ? [python, ['-m', 'topview_3d_cli']] : ['topview-3d-cli', []]

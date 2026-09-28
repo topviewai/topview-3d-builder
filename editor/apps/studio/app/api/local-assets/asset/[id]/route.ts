@@ -4,7 +4,7 @@ export const runtime = 'nodejs'
 
 type Ctx = { params: Promise<{ id: string }> }
 
-export async function GET(_request: Request, ctx: Ctx): Promise<Response> {
+export async function GET(request: Request, ctx: Ctx): Promise<Response> {
   const { id } = await ctx.params
-  return fileResponse(findAssetById(decodeURIComponent(id))?.path)
+  return fileResponse(findAssetById(decodeURIComponent(id))?.path, request)
 }

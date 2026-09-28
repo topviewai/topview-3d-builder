@@ -2,21 +2,16 @@
 
 import type { ReactNode } from 'react'
 import { ExportDraftPanel } from './tools/ExportDraftPanel'
-import { LocaleSwitchPanel } from './tools/LocaleSwitchPanel'
+
 export interface DevToolDefinition {
   id: string
+  /** Catalog keys, translated where they are shown. */
   title: string
   description: string
   render: () => ReactNode
 }
 
 export const DEV_TOOLS: DevToolDefinition[] = [
-  {
-    id: 'locale-switch',
-    title: '界面语言',
-    description: '切换导演台 UI 语言，刷新后仍保留。',
-    render: () => <LocaleSwitchPanel />,
-  },
   {
     id: 'export-draft',
     title: '导出草稿',

@@ -41,10 +41,10 @@ export function coverTone(id: string): readonly [string, string] {
   return COVER_TONES[hash] ?? COVER_TONES[0]
 }
 
-export function formatDraftMeta(draft: DraftRow): string {
+export function formatDraftMeta(draft: DraftRow, t: (key: string, params?: Record<string, string | number>) => string): string {
   const parts: string[] = []
-  if (draft.nodeCount != null) parts.push(`${draft.nodeCount} 节点`)
+  if (draft.nodeCount != null) parts.push(t('{{count}} 节点', { count: draft.nodeCount }))
   if (draft.fps) parts.push(`${draft.fps} fps`)
-  if (draft.frameEnd) parts.push(`${draft.frameEnd} 帧`)
+  if (draft.frameEnd) parts.push(t('{{count}} 帧', { count: draft.frameEnd }))
   return parts.join(' · ')
 }

@@ -1,4 +1,5 @@
 import { useEffect, useId, useMemo } from 'react'
+import { useStudioT } from '../../../src/locale'
 import { DEFAULT_FPS, DEFAULT_FRAMES, FPS_MAX, FPS_MIN } from '../constants'
 
 interface CreateDialogProps {
@@ -30,6 +31,7 @@ export function CreateDialog({
   onClose,
   onSubmit,
 }: CreateDialogProps) {
+  const t = useStudioT()
   const titleId = useId()
   const duration = useMemo(() => (fps > 0 ? (frames / fps).toFixed(1) : '—'), [fps, frames])
 
@@ -51,16 +53,16 @@ export function CreateDialog({
         onClick={(event) => event.stopPropagation()}
       >
         <div className="wb-dialog-head">
-          <h2 id={titleId}>新建草稿</h2>
-          <button type="button" className="wb-icon-btn" onClick={onClose} disabled={busy} aria-label="关闭">
+          <h2 id={titleId}>{t('新建草稿')}</h2>
+          <button type="button" className="wb-icon-btn" onClick={onClose} disabled={busy} aria-label={t('关闭')}>
             ×
           </button>
         </div>
         <div className="wb-dialog-body">
-          <label className="wb-field">名称<input value={name} onChange={(e) => onName(e.target.value)} autoFocus />
+          <label className="wb-field">{t('名称')}<input value={name} onChange={(e) => onName(e.target.value)} autoFocus />
           </label>
           <div className="wb-field-row">
-            <label className="wb-field">帧率<input
+            <label className="wb-field">{t('帧率')}<input
                 type="number"
                 min={FPS_MIN}
                 max={FPS_MAX}
@@ -75,7 +77,7 @@ export function CreateDialog({
                 }}
               />
             </label>
-            <label className="wb-field">总帧数<input
+            <label className="wb-field">{t('总帧数')}<input
                 type="number"
                 min={1}
                 value={frames}
@@ -84,16 +86,16 @@ export function CreateDialog({
             </label>
           </div>
           <p className="wb-hint">
-            {`约 ${duration} 秒 · ${fps} fps · ${frames} 帧`}
+            {t('约 {{seconds}} 秒 · {{fps}} fps · {{frames}} 帧', { seconds: duration, fps, frames })}
           </p>
           <label className="wb-check">
-            <input type="checkbox" checked={withCamera} onChange={(e) => onCamera(e.target.checked)} />含默认机位（正面中景）</label>
+            <input type="checkbox" checked={withCamera} onChange={(e) => onCamera(e.target.checked)} />{t('含默认机位（正面中景）')}</label>
           {error ? <p className="wb-error">{error}</p> : null}
         </div>
         <div className="wb-dialog-foot">
-          <button type="button" className="wb-ghost" onClick={onClose} disabled={busy}>取消</button>
+          <button type="button" className="wb-ghost" onClick={onClose} disabled={busy}>{t('取消')}</button>
           <button type="button" className="wb-cta" onClick={onSubmit} disabled={busy}>
-            {busy ? '创建中…' : '创建并打开'}
+            {busy ? t('创建中…') : t('创建并打开')}
           </button>
         </div>
       </div>

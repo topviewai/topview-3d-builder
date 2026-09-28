@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { translateStudio } from '../../../src/locale'
 import { CAMERA_PRESETS, createInitialDraft, type DirectorDocument } from '@topview/3d-builder'
 import type { DraftsResponse, ProjectRow } from '../types'
 import { slugify } from '../utils'
@@ -51,7 +52,7 @@ export function useWorkbenchDrafts() {
     try {
       const camera = input.withCamera ? CAMERA_PRESETS.find((p) => p.id === 'front-medium') : undefined
       const doc = await createInitialDraft(new LocalHostAdapter(), {
-        name: input.name.trim() || '新草稿',
+        name: input.name.trim() || translateStudio('新草稿'),
         fps: input.fps,
         totalFrames: input.frames,
         camera,

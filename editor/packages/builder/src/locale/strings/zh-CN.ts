@@ -59,6 +59,7 @@ export const zhCN: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "语言",
     "meta": "{{aspectRatio}} · {{nodes}} 节点 · {{fps}}fps · 帧 {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "画幅比例",

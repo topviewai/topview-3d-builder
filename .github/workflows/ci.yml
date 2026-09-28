@@ -104,6 +104,8 @@ jobs:
           cache: pnpm
           cache-dependency-path: editor/pnpm-lock.yaml
       - run: pnpm -C editor install --frozen-lockfile
+      - name: Studio locales (15 languages, no hardcoded UI text)
+        run: pnpm -C editor --filter @topview/3d-studio test:locales
       - run: pnpm -C editor --filter @topview/3d-builder build
       - run: pnpm -C editor --filter @topview/3d-studio build
       - name: Install Chromium

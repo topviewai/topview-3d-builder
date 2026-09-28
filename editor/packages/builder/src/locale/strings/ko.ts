@@ -59,6 +59,7 @@ export const ko: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "언어",
     "meta": "{{aspectRatio}} · 노드 {{nodes}}개 · {{fps}}fps · 프레임 {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "화면비",

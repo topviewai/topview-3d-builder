@@ -1,6 +1,6 @@
 export { DirectorStudio, StudioBootOverlay, DEFAULT_AUTO_SAVE_INTERVAL_MS } from './DirectorStudio'
 export type { DirectorStudioProps, StudioBootOverlayProps, DirectorApi, StudioCloseHandler } from './DirectorStudio'
-export { DEFAULT_LOCALE, listLocales, resolveLocale } from './locale'
+export { DEFAULT_LOCALE, LOCALE_NAMES, listLocales, localeName, orderedLocales, resolveLocale } from './locale'
 
 export type {
   HostAdapter,

@@ -59,6 +59,7 @@ export const ru: LocaleDict = {
   },
   "topbar": {
     "title": "3D Builder",
+    "language": "Язык",
     "meta": "{{aspectRatio}} · {{nodes}} узлов · {{fps}}fps · кадры {{frameStart}}–{{frameEnd}}",
     "timelineMeta": "{{fps}}fps · {{frameStart}}–{{frameEnd}}",
     "aspectRatioTitle": "Формат кадра",

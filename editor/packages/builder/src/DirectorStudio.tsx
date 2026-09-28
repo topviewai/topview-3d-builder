@@ -44,6 +44,11 @@ export interface DirectorStudioProps {
    */
   locale?: string
   /**
+   * 传入后顶栏显示语言菜单，用户选中的语言交给宿主；宿主更新 `locale` 才生效。
+   * 不传则不显示菜单。
+   */
+  onLocaleChange?: (locale: string) => void
+  /**
    * 自动保存间隔。缺省 5000；`0` 关闭。
    * `saveDocument` 未实现时整条链关闭。
    */
@@ -115,13 +120,14 @@ export function DirectorStudio({
   onClose,
   saveOnCloseInBackground = false,
   locale,
+  onLocaleChange,
   autoSaveIntervalMs = DEFAULT_AUTO_SAVE_INTERVAL_MS,
   readOnly = false,
 }: DirectorStudioProps) {
   const hostClass = studioHostClass(className)
 
   return (
-    <LocaleProvider locale={locale}>
+    <LocaleProvider locale={locale} onLocaleChange={onLocaleChange}>
       <DirectorProvider
         adapter={adapter}
         documentId={documentId}

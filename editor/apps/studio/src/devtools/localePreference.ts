@@ -1,27 +1,35 @@
 'use client'
 
-import { useSyncExternalStore } from 'react'
-import { resolveLocale } from '@topview/3d-builder'
-
-/** 调试台默认中文，与历史硬编码一致；包内缺省仍是 en。 */
-export const STUDIO_DEFAULT_LOCALE = 'zh-CN'
+import { createContext, createElement, useContext, useEffect, useSyncExternalStore, type ReactNode } from 'react'
+import { DEFAULT_LOCALE, pickLocale, resolveLocale, STUDIO_LOCALE_COOKIE } from '../locale/catalog'
 
 const STORAGE_KEY = 't3d-studio-locale'
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 365
 
 type Listener = () => void
 const listeners = new Set<Listener>()
 
+/** The language the server negotiated for this page; the snapshot React hydrates with. */
+const ServerLocaleContext = createContext(DEFAULT_LOCALE)
+
 function readStored(): string | null {
   if (typeof window === 'undefined') return null
   try {
-    return window.localStorage.getItem(STORAGE_KEY)
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    return stored && resolveLocale(stored) === stored ? stored : null
   } catch {
     return null
   }
 }
 
+function browserLocale(): string {
+  if (typeof navigator === 'undefined') return DEFAULT_LOCALE
+  return pickLocale(navigator.languages?.length ? navigator.languages : [navigator.language])
+}
+
+/** The user's own pick when there is one, else the browser language (English when unsupported). */
 export function getStudioLocale(): string {
-  return resolveLocale(readStored() ?? STUDIO_DEFAULT_LOCALE)
+  return readStored() ?? browserLocale()
 }
 
 export function setStudioLocale(locale: string): void {
@@ -31,6 +39,7 @@ export function setStudioLocale(locale: string): void {
   } catch {
     /* private mode / quota */
   }
+  document.cookie = `${STUDIO_LOCALE_COOKIE}=${encodeURIComponent(next)}; path=/; max-age=${COOKIE_MAX_AGE}; samesite=lax`
   listeners.forEach((fn) => fn())
 }
 
@@ -42,5 +51,18 @@ export function subscribeStudioLocale(listener: Listener): () => void {
 }
 
 export function useStudioLocale(): string {
-  return useSyncExternalStore(subscribeStudioLocale, getStudioLocale, () => STUDIO_DEFAULT_LOCALE)
+  const serverLocale = useContext(ServerLocaleContext)
+  return useSyncExternalStore(subscribeStudioLocale, getStudioLocale, () => serverLocale)
+}
+
+function DocumentLanguage() {
+  const locale = useStudioLocale()
+  useEffect(() => {
+    document.documentElement.lang = locale
+  }, [locale])
+  return null
+}
+
+export function StudioLocaleRoot({ serverLocale, children }: { serverLocale: string; children: ReactNode }) {
+  return createElement(ServerLocaleContext.Provider, { value: serverLocale }, createElement(DocumentLanguage), children)
 }

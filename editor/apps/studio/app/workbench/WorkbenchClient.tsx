@@ -7,11 +7,14 @@ import { DraftCard } from './components/DraftCard'
 import { PlusIcon } from './components/icons'
 import { StudioOverlay } from './components/StudioOverlay'
 import { DEFAULT_FPS, DEFAULT_FRAMES, DRAFT_QUERY_KEY, PROJECT_QUERY_KEY } from './constants'
+import { useStudioT } from '../../src/locale'
 import { useWorkbenchDrafts } from './hooks/useWorkbenchDrafts'
+import { LanguageMenu } from './components/LanguageMenu'
 import { buildWorkbenchHref, isValidDraftId, readDraftQuery } from './utils'
 import './styles.css'
 
 export function WorkbenchClient() {
+  const t = useStudioT()
   const router = useRouter()
   const searchParams = useSearchParams()
   const { data, projects, error, busy, createDraft, removeDraft } = useWorkbenchDrafts()
@@ -19,7 +22,7 @@ export function WorkbenchClient() {
   const editingId = readDraftQuery(searchParams.get(DRAFT_QUERY_KEY))
   const projectId = editingId ? null : readDraftQuery(searchParams.get(PROJECT_QUERY_KEY))
   const [confirmingId, setConfirmingId] = useState<string | null>(null)
-  const [name, setName] = useState('新草稿')
+  const [name, setName] = useState('')
   const [fps, setFps] = useState(DEFAULT_FPS)
   const [frames, setFrames] = useState(DEFAULT_FRAMES)
   const [withCamera, setWithCamera] = useState(true)
@@ -34,7 +37,7 @@ export function WorkbenchClient() {
   )
 
   const openCreate = () => {
-    setName('新草稿')
+    setName(t('新草稿'))
     setFps(DEFAULT_FPS)
     setFrames(DEFAULT_FRAMES)
     setWithCamera(true)
@@ -84,19 +87,20 @@ export function WorkbenchClient() {
           <div className="wb-hero-top">
             <p className="wb-kicker">Topview · Scene3D Studio</p>
             <div className="wb-hero-actions">
+              <LanguageMenu />
               <button type="button" className="wb-cta" onClick={openCreate} disabled={busy}>
-                <PlusIcon />新建草稿</button>
+                <PlusIcon />{t('新建草稿')}</button>
             </div>
           </div>
-          <h1 className="wb-title">3D 导演台</h1>
-          <p className="wb-sub">本地草稿工作台。草稿保存在本机，素材来自本地素材清单，全程离线。</p>
+          <h1 className="wb-title">{t('3D 导演台')}</h1>
+          <p className="wb-sub">{t('本地草稿工作台。草稿保存在本机，素材来自本地素材清单，全程离线。')}</p>
         </header>
 
         {error && <div className="wb-error">{error}</div>}
 
         <section className="wb-section">
           <div className="wb-section-head">
-            <h2>我的草稿</h2>
+            <h2>{t('我的草稿')}</h2>
             {data ? <span className="wb-count">{data.user.length}</span> : null}
           </div>
           <div className="wb-grid">
@@ -107,8 +111,8 @@ export function WorkbenchClient() {
                 </span>
               </span>
               <span className="wb-card-body">
-                <span className="wb-card-title">从空白开始</span>
-                <span className="wb-card-meta">空白场景 · 可配置帧率</span>
+                <span className="wb-card-title">{t('从空白开始')}</span>
+                <span className="wb-card-meta">{t('空白场景 · 可配置帧率')}</span>
               </span>
             </button>
             {data
@@ -130,7 +134,7 @@ export function WorkbenchClient() {
         {projects.length > 0 ? (
           <section className="wb-section">
             <div className="wb-section-head">
-              <h2>CLI 项目</h2>
+              <h2>{t('CLI 项目')}</h2>
               <span className="wb-count">{projects.length}</span>
             </div>
             <div className="wb-grid">

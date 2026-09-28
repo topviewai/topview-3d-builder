@@ -175,7 +175,7 @@ function RatioMenu({
   return portal ? createPortal(menu, portal) : menu
 }
 
-function placeMenu(menu: HTMLElement, trigger: HTMLElement): void {
+export function placeMenu(menu: HTMLElement, trigger: HTMLElement): void {
   const rect = trigger.getBoundingClientRect()
   const width = menu.offsetWidth
   const pad = 8

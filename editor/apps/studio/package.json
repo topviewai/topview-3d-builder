@@ -10,7 +10,8 @@
     "start": "next start --port 3002",
     "typecheck": "tsc --noEmit",
     "lint": "next lint",
-    "test:offline": "node scripts/offline-smoke.mjs"
+    "test:offline": "node scripts/offline-smoke.mjs",
+    "test:locales": "node scripts/check-locales.mjs"
   },
   "dependencies": {
     "@topview/3d-builder": "workspace:*",

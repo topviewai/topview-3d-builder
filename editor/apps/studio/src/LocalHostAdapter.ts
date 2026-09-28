@@ -1,3 +1,4 @@
+import { translateStudio } from './locale'
 import { navigationHintPreference } from './navigationHintPreference'
 import {
   normalizeAssetKey,
@@ -91,18 +92,18 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
 
   async loadDocument(documentId: string): Promise<DirectorDocument> {
     const doc = (await fetchJson(`${this.base}/${documentId}`)) as DirectorDocument
-    if (doc.type !== 'biz/scene3d-director-document') throw new Error(`未知草稿类型: ${doc.type}`)
+    if (doc.type !== 'biz/scene3d-director-document') throw new Error(translateStudio('未知草稿类型: {{type}}', { type: String(doc.type) }))
     return doc
   }
 
   saveDocument?: (documentId: string, doc: DirectorDocument) => Promise<void> = async (documentId, doc) => {
     const res = await fetch(`${this.base}/${documentId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(doc) })
-    if (!res.ok) throw new Error(`保存失败: HTTP ${res.status}`)
+    if (!res.ok) throw new Error(translateStudio('保存失败: HTTP {{status}}', { status: res.status }))
   }
 
   saveFCurves?: (documentId: string, data: unknown) => Promise<void> = async (documentId, data) => {
     const res = await fetch(`${this.base}/${documentId}/fcurves`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
-    if (!res.ok) throw new Error(`关键帧保存失败: HTTP ${res.status}`)
+    if (!res.ok) throw new Error(translateStudio('关键帧保存失败: HTTP {{status}}', { status: res.status }))
   }
 
   async loadFCurves(documentId: string): Promise<unknown | null> {
@@ -114,7 +115,7 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
     if (trimmed.startsWith(`${LOCAL_ASSET_ROUTE}/`)) return trimmed
     if (/^https?:\/\//i.test(trimmed)) return trimmed
     const normalized = normalizeAssetKey(trimmed)
-    if (!normalized) throw new Error('素材 key 为空')
+    if (!normalized) throw new Error(translateStudio('素材 key 为空'))
     return keyUrl(normalized)
   }
 
@@ -189,7 +190,7 @@ export class LocalHostAdapter implements HostAdapter<DirectorDocument> {
       body: JSON.stringify({ name }),
     })
     const canvas = isRecord(body) ? body.canvas : null
-    if (!isRecord(canvas) || typeof canvas.id !== 'string') throw new Error('新建 Canvas 失败')
+    if (!isRecord(canvas) || typeof canvas.id !== 'string') throw new Error(translateStudio('新建 Canvas 失败'))
     return { id: canvas.id, name: typeof canvas.name === 'string' ? canvas.name : name }
   }
 

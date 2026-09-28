@@ -6,7 +6,8 @@ import { createPortal } from 'react-dom'
 import type { DirectorApi } from '@topview/3d-builder'
 import { LocalHostAdapter, type LocalDocumentSource } from '../../../src/LocalHostAdapter'
 import { setLiveStudio } from '../../../src/devtools/liveStudio'
-import { useStudioLocale } from '../../../src/devtools/localePreference'
+import { setStudioLocale, useStudioLocale } from '../../../src/devtools/localePreference'
+import { useStudioT } from '../../../src/locale'
 
 function StudioChunkFallback() {
   return (
@@ -101,6 +102,7 @@ export function StudioOverlay({
 }) {
   const [mounted, setMounted] = useState(false)
   const locale = useStudioLocale()
+  const t = useStudioT()
   const adapter = useMemo(() => new LocalHostAdapter(source), [source])
   const onReady = useCallback((api: DirectorApi) => {
     installDebugHooks(api)
@@ -114,13 +116,13 @@ export function StudioOverlay({
   if (!mounted) return null
 
   return createPortal(
-    <div className="wb-studio-overlay" role="dialog" aria-modal="true" aria-label="3D 导演台">
+    <div className="wb-studio-overlay" role="dialog" aria-modal="true" aria-label={t('3D 导演台')}>
       <div className="studio-root">
-        {/* 工作台宿主文案固定中文；包内导演台仍可由右下角开发工具切语言 */}
         <DirectorStudio
           adapter={adapter}
           documentId={documentId}
           locale={locale}
+          onLocaleChange={setStudioLocale}
           onReady={onReady}
           onClose={onClose}
           readOnly={adapter.readOnly}
