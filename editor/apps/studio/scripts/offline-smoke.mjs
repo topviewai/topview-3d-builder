@@ -75,7 +75,7 @@ async function main() {
     if (!search.total) fail('pose search returned nothing')
 
     const nodesBefore = await page.evaluate(() => window.__store.getState().doc?.content.nodes.length ?? 0)
-    await page.getByText(/^(男性|Male)$/).click()
+    await page.getByText(/^(男性|Man|Male)$/).click()
     await page.waitForFunction(
       (count) => (window.__store.getState().doc?.content.nodes.length ?? 0) > count,
       nodesBefore,
