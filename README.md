@@ -40,7 +40,7 @@ execution path.
 ## Install the plugin
 
 The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent. The skill's first step
-runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.5` (or a local wheel, see
+runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.6` (or a local wheel, see
 [Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+, Node.js 20.6+ and uv
 or pipx on the machine. The wheel also carries a prebuilt local Studio (open and edit a scene, send
 renders to a Topview Canvas), so `studio open` works from the package with Node alone; a checkout
@@ -232,10 +232,10 @@ or `~/.cache/topview-3d-cli`) by `topview-3d-cli browser ensure`.
 ```bash
 pipx install topview-3d-cli
 # or, without a permanent install:
-uvx --python 3.12 topview-3d-cli@0.1.5 doctor
+uvx --python 3.12 topview-3d-cli@0.1.6 doctor
 # or, with neither pipx nor uv: one environment shared by every project
 python3 -m venv ~/.local/share/topview-3d-cli/venv
-~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.5
+~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.6
 topview-3d-cli browser ensure          # installs Playwright into the user cache and downloads Chromium
 topview-3d-cli doctor
 ```
@@ -244,7 +244,7 @@ On Windows the shared environment is `%LOCALAPPDATA%\topview-3d-cli\venv` and it
 `Scripts\topview-3d-cli.exe`. `pip install --user` is not used: many Python installs refuse it
 (PEP 668). A plain `uvx topview-3d-cli` fails when the default Python is older than 3.11, so pass
 `--python 3.12`. If pip is pointed at a mirror that does not have this version yet, retry
-with the official index: `pip install --index-url https://pypi.org/simple/ topview-3d-cli==0.1.5`.
+with the official index: `pip install --index-url https://pypi.org/simple/ topview-3d-cli==0.1.6`.
 
 ### Developer install from a checkout
 

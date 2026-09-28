@@ -37,7 +37,7 @@ project would install everything again. Do not use `pip install --user` either: 
 installs refuse it (PEP 668, `externally-managed-environment`).
 
 1. **Reuse.** When `topview-3d-cli` is on PATH or the shared command exists, run its
-   `doctor --json`. If `cliVersion` matches the pin `topview-3d-cli==0.1.5`, use it and stop here. If the version differs,
+   `doctor --json`. If `cliVersion` matches the pin `topview-3d-cli==0.1.6`, use it and stop here. If the version differs,
    reinstall into the same environment with step 2 or 3; do not create another one.
 2. **Checkout.** When the folder that holds this skill also has `agent/` and `editor/` (agent
    plugin installs are checkouts), run `scripts/install.sh` from that
@@ -48,16 +48,16 @@ installs refuse it (PEP 668, `externally-managed-environment`).
    gives `RUNTIME_MISSING`.
 3. **No checkout.** The package carries a prebuilt Studio, so `studio open` works from each of
    these routes. Stop at the first route that works:
-   - `uvx --python 3.12 topview-3d-cli@0.1.5 doctor --json` runs from uv's cache without an install;
+   - `uvx --python 3.12 topview-3d-cli@0.1.6 doctor --json` runs from uv's cache without an install;
      `--python 3.12` makes uv use (or download) a Python it can run the package with. Prefix every
      later command the same way.
-   - `pipx install topview-3d-cli==0.1.5` gives a permanent `topview-3d-cli` on PATH.
+   - `pipx install topview-3d-cli==0.1.6` gives a permanent `topview-3d-cli` on PATH.
    - Otherwise create the shared environment with a Python 3.11 or newer and install into it:
      - macOS, Linux: `python3 -m venv ~/.local/share/topview-3d-cli/venv`, then
-       `~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.5`
+       `~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.6`
      - Windows: `py -3.12 -m venv "$env:LOCALAPPDATA\topview-3d-cli\venv"` (or `python -m venv ...`
        when the `py` launcher is missing), then
-       `& "$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts\python.exe" -m pip install topview-3d-cli==0.1.5`
+       `& "$env:LOCALAPPDATA\topview-3d-cli\venv\Scripts\python.exe" -m pip install topview-3d-cli==0.1.6`
 
 In an agent sandbox, creating the shared environment writes outside the workspace and downloads
 packages, so it may need the user's approval. Ask once; every later project reuses the install
@@ -68,8 +68,8 @@ has not synced yet reports `Could not find a version` and `from versions: none`)
 command against the official PyPI simple index and do not change the user's pip configuration.
 Build the index as scheme https, host `pypi.org`, path `/simple/`, and pass it like this:
 
-- pip: `<venv-python> -m pip install --index-url <index> topview-3d-cli==0.1.5`
-- pipx: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.5`
+- pip: `<venv-python> -m pip install --index-url <index> topview-3d-cli==0.1.6`
+- pipx: `pipx install --pip-args '--index-url <index>' topview-3d-cli==0.1.6`
 
 Other pip failures (no network, permissions, a broken environment) are not an index problem;
 do not switch the index for those.
