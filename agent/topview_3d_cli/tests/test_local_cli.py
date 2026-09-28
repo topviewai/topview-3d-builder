@@ -112,13 +112,16 @@ def test_studio_open_reports_a_package_without_studio(capsys, project, tmp_path,
 
 def test_packaged_studio_runs_server_js_with_drafts_in_the_cache(tmp_path, monkeypatch):
     from topview_3d_cli.local_studio import STUDIO_HOST, STUDIO_PORT, _studio_command
+    from topview_3d_cli.node_runtime import NodeChoice
+
+    monkeypatch.setattr("topview_3d_cli.node_runtime.choose_node", lambda: NodeChoice("/bin/node", "v24.0.0", None, None))
 
     monkeypatch.setenv("TOPVIEW3D_CACHE_DIR", str(tmp_path / "cache"))
     rt = packaged_runtime(tmp_path)
     rt.studio.mkdir(parents=True)
     (rt.studio / "server.js").write_text("", encoding="utf-8")
     command, cwd, env = _studio_command(rt)
-    assert command == ["node", str(rt.studio / "server.js")] and cwd == rt.studio
+    assert command == ["/bin/node", str(rt.studio / "server.js")] and cwd == rt.studio
     assert env["PORT"] == str(STUDIO_PORT) and env["HOSTNAME"] == STUDIO_HOST
     assert Path(env["TOPVIEW3D_DRAFTS_DIR"]) == tmp_path / "cache" / "studio" / "drafts"
 

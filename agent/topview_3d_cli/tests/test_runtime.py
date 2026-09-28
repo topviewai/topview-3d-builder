@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from topview_3d_cli import local_cli, runtime as runtime_module
+from topview_3d_cli import local_cli, node_runtime, runtime as runtime_module
 from topview_3d_cli.local_errors import LocalProjectError
 from topview_3d_cli.runtime import PLAYWRIGHT_VERSION, node_env, runtime, user_cache_dir
 
@@ -78,6 +78,12 @@ def test_forced_mode(monkeypatch, packaged):
     assert invalid.value.code == "RUNTIME_MISSING"
 
 
+def fake_node(monkeypatch, *, npm):
+    chosen = node_runtime.NodeChoice("/bin/node", "v24.0.0", "/bin/node", "v24.0.0")
+    monkeypatch.setattr(node_runtime, "choose_node", lambda: chosen)
+    monkeypatch.setattr(local_cli, "npm_path", lambda: npm)
+
+
 def test_browser_ensure_installs_playwright_into_the_cache(monkeypatch, packaged):
     calls = []
 
@@ -90,7 +96,7 @@ def test_browser_ensure_installs_playwright_into_the_cache(monkeypatch, packaged
             return subprocess.CompletedProcess(args, 0, "", "")
         return subprocess.CompletedProcess(args, 0, '{"ok": true, "browser": "chromium"}\n', "")
 
-    monkeypatch.setattr(local_cli.shutil, "which", lambda name: f"/bin/{name}")
+    fake_node(monkeypatch, npm="/bin/npm")
     monkeypatch.setattr(local_cli.subprocess, "run", fake_run)
     result = local_cli.browser_ensure(with_deps=False)
     prefix = packaged / "cache" / "node" / local_cli.CLI_VERSION
@@ -109,7 +115,7 @@ def test_browser_ensure_installs_playwright_into_the_cache(monkeypatch, packaged
 
 
 def test_browser_ensure_reports_missing_npm(monkeypatch, packaged):
-    monkeypatch.setattr(local_cli.shutil, "which", lambda name: None if name == "npm" else f"/bin/{name}")
+    fake_node(monkeypatch, npm=None)
     with pytest.raises(LocalProjectError) as missing:
         local_cli.browser_ensure(with_deps=False)
     assert missing.value.code == "NPM_UNAVAILABLE"

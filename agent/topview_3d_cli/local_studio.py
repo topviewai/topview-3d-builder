@@ -20,6 +20,7 @@ from pathlib import Path
 
 from topview_3d_cli.local_errors import LocalProjectError
 from topview_3d_cli.local_project import open_project
+from topview_3d_cli.node_runtime import node_path, with_node_on_path
 from topview_3d_cli.runtime import Runtime, runtime, user_cache_dir
 
 STUDIO_PORT = 3002
@@ -76,10 +77,10 @@ def _studio_command(rt: Runtime) -> tuple[list[str], Path, dict[str, str]]:
             "HOSTNAME": STUDIO_HOST,
             "TOPVIEW3D_DRAFTS_DIR": str(user_cache_dir() / "studio" / "drafts"),
         }
-        return ["node", str(server)], rt.studio, env
+        return [node_path(), str(server)], rt.studio, env
     if not (rt.studio / "package.json").is_file():
         raise LocalProjectError("STUDIO_UNAVAILABLE", f"Studio is missing from the checkout ({rt.studio})")
-    command = ["node", str(_next_bin(rt.studio)), "dev", "--port", str(STUDIO_PORT), "--hostname", STUDIO_HOST]
+    command = [node_path(), str(_next_bin(rt.studio)), "dev", "--port", str(STUDIO_PORT), "--hostname", STUDIO_HOST]
     return command, rt.studio, {}
 
 
@@ -132,7 +133,7 @@ def _start(project_root: Path) -> int:
     log_dir = user_cache_dir() / "studio"
     log_dir.mkdir(parents=True, exist_ok=True)
     log_path = log_dir / "studio.log"
-    env = dict(os.environ)
+    env = with_node_on_path(dict(os.environ))
     env.update(extra_env)
     env["TOPVIEW3D_CACHE_DIR"] = str(user_cache_dir())
     env["TOPVIEW3D_PROJECTS"] = str(project_root)
@@ -149,8 +150,6 @@ def _start(project_root: Path) -> int:
             stderr=subprocess.STDOUT,
             **_detached(),
         )
-    except FileNotFoundError as exc:
-        raise LocalProjectError("STUDIO_UNAVAILABLE", "Node.js is not on PATH; Studio needs Node.js 20.6 or newer") from exc
     finally:
         log.close()
     return process.pid

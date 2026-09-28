@@ -100,7 +100,9 @@ def builder_version() -> str:
 
 
 def node_env(current: Runtime) -> dict[str, str]:
-    env = dict(os.environ)
+    from topview_3d_cli.node_runtime import with_node_on_path
+
+    env = with_node_on_path(dict(os.environ))
     if current.mode == "packaged":
         env["TOPVIEW3D_NODE_PREFIX"] = str(current.node_prefix)
     else:

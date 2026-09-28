@@ -4,23 +4,16 @@ from __future__ import annotations
 import json
 import os
 import re
-import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 from typing import Any
 
 from topview_3d_cli.local_errors import LocalProjectError
+from topview_3d_cli.node_runtime import node_path
 from topview_3d_cli.runtime import node_env, runtime
 
 BROWSER_COMMANDS = frozenset({"render-frames", "inspect-nodes", "apply-library-pose", "apply-library-poses"})
-
-
-def node_path() -> str:
-    node = shutil.which("node")
-    if not node:
-        raise LocalProjectError("NODE_UNAVAILABLE", "node is not on PATH; install Node.js 20.6 or newer")
-    return node
 
 
 def director_cli(command: str, body: dict[str, Any] | None = None) -> dict[str, Any]:

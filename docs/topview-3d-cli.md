@@ -237,6 +237,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `ASSET_NOT_AVAILABLE` | 1 | A character or prop model in the document has no local asset (see details). |
 | `RUNTIME_MISSING` | 1 | The renderer runtime is missing (incomplete install, or an unbuilt checkout). |
 | `NODE_UNAVAILABLE` | 1 | `node` is not on PATH. |
+| `NODE_TOO_OLD` | 1 | No Node.js 20.6 or newer was found; the first `node` on PATH is older. |
 | `NPM_UNAVAILABLE` | 1 | `browser ensure` needs `npm` (it ships with Node.js). |
 | `PLAYWRIGHT_INSTALL_FAILED` | 1 | `browser ensure` could not install the pinned Playwright into the user cache. |
 | `BROWSER_INSTALL_FAILED` | 1 | `browser ensure` could not install or launch Chromium. |
@@ -246,7 +247,7 @@ This table must match `agent/topview_3d_cli/local_errors.py`; `test_local_cli.py
 | `RENDER_RESULT_MISSING` | 1 | The Node renderer printed no result. |
 | `RENDER_RESULT_INVALID` | 1 | The Node renderer printed a non-JSON result. |
 | `DOCTOR_FAILED` | 1 | Plain `doctor` found a missing or outdated dependency (`doctor --json` always exits 0). |
-| `STUDIO_UNAVAILABLE` | 1 | Studio cannot start: the package has no Studio build, a checkout lacks Next.js, or Node is not on PATH. |
+| `STUDIO_UNAVAILABLE` | 1 | Studio cannot start: the package has no Studio build or a checkout lacks Next.js. |
 | `STUDIO_START_FAILED` | 1 | Node started Studio, but it did not list this project on port 3002. |
 | `STUDIO_PROJECT_MISSING` | 1 | Studio is already running on port 3002 without this project; stop it and retry. |
 | `INTERNAL_ERROR` | 1 | Unexpected failure; the message carries the exception. |

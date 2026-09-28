@@ -117,8 +117,9 @@ Do this once at the end of a scene, not after every edit.
   the bundled Studio. Reinstall the pinned version into the same environment (install step 1 or 3
   above) and run `studio open` once more. If it still fails, say so and stop; do not build another
   viewer.
-- `STUDIO_UNAVAILABLE` and the error says Node.js is not on PATH: install Node.js 20.6 or newer,
-  as for rendering, then run `studio open` once more.
+- `NODE_TOO_OLD` (any command): the first `node` on PATH is older than 20.6 and no newer Node was
+  found in nvm, fnm, Volta, asdf, mise or Homebrew. Install Node.js 20.6 or newer, or pass
+  `TOPVIEW3D_NODE=<path to node>`; do not edit the project while this is unresolved.
 - `STUDIO_PROJECT_MISSING`: a Studio is already running and does not see this project yet
   (often one started from another directory before this registry existed). Ask the user to stop
   it, then run the command again. Do not start a second Studio on the same port.

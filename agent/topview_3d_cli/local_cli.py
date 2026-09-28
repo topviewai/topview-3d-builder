@@ -33,10 +33,9 @@ from topview_3d_cli.local_inspect import evaluate, inspect_nodes, inspect_views,
 from topview_3d_cli.local_read import camera_presets, document_view, renders_list, renders_show
 from topview_3d_cli.local_render import render
 from topview_3d_cli.local_studio import open_studio
-from topview_3d_cli.renderer import node_path
+from topview_3d_cli.node_runtime import MIN_NODE_TEXT, choose_node, node_path, npm_path, with_node_on_path
 from topview_3d_cli.runtime import PLAYWRIGHT_VERSION, builder_version, node_env, runtime
 
-MIN_NODE = (20, 6)
 BUILDER_DIST_FILES = ("evaluate/index.mjs", "engine/index.mjs", "headless/index.mjs", "draco/draco_decoder.wasm")
 KINDS = ("character", "prop", "pose", "primitive")
 RUNTIME_FILES = ("cli.mjs", "render.mjs", "playwright.mjs", "static/headless.html")
@@ -88,10 +87,6 @@ def node_delete(directory: str, node_id: str, *, dry_run: bool) -> dict[str, Any
     return {**result, **summary}
 
 
-def _version_tuple(text: str) -> tuple[int, ...]:
-    return tuple(int(part) for part in re.findall(r"\d+", text)[:3])
-
-
 def _run(command: list[str], *, cwd: Path | None = None, env: dict[str, str] | None = None,
          timeout: int = 30) -> subprocess.CompletedProcess[str] | None:
     try:
@@ -102,13 +97,14 @@ def _run(command: list[str], *, cwd: Path | None = None, env: dict[str, str] | N
 
 
 def _check_node() -> dict[str, Any]:
-    node = shutil.which("node")
-    completed = _run([node, "--version"]) if node else None
-    version = completed.stdout.strip() if completed and completed.returncode == 0 else None
-    ok = bool(version) and _version_tuple(version) >= MIN_NODE
-    check: dict[str, Any] = {"ok": ok, "path": node, "version": version}
-    if not ok:
-        check["hint"] = "Install Node.js 20.6 or newer (https://nodejs.org/); npm ships with it."
+    try:
+        chosen = choose_node()
+    except LocalProjectError as exc:
+        return {"ok": False, "code": exc.code, "error": str(exc),
+                "hint": f"Install Node.js {MIN_NODE_TEXT} or newer (https://nodejs.org/); npm ships with it."}
+    check: dict[str, Any] = {"ok": True, "path": chosen.path, "version": chosen.version}
+    if chosen.path_node != chosen.path:
+        check["pathNode"] = {"path": chosen.path_node, "version": chosen.path_version}
     return check
 
 
@@ -193,7 +189,7 @@ def browser_ensure(*, with_deps: bool) -> dict[str, Any]:
         except (OSError, json.JSONDecodeError):
             installed = None
         if installed != PLAYWRIGHT_VERSION:
-            npm = shutil.which("npm")
+            npm = npm_path()
             if not npm:
                 raise LocalProjectError("NPM_UNAVAILABLE", "npm is not on PATH; it ships with Node.js")
             current.node_prefix.mkdir(parents=True, exist_ok=True)
@@ -203,7 +199,7 @@ def browser_ensure(*, with_deps: bool) -> dict[str, Any]:
             process = subprocess.run(
                 [npm, "install", "--prefix", str(current.node_prefix), "--no-audit", "--no-fund",
                  "--omit=dev", "--save-exact", f"playwright@{PLAYWRIGHT_VERSION}"],
-                check=False, capture_output=True, text=True, encoding="utf-8")
+                env=with_node_on_path(dict(os.environ)), check=False, capture_output=True, text=True, encoding="utf-8")
             if process.returncode:
                 raise LocalProjectError("PLAYWRIGHT_INSTALL_FAILED", (process.stderr or process.stdout).strip()[-2000:])
     args = [node, "cli.mjs", "browser", "ensure", *(["--with-deps"] if with_deps else [])]
