@@ -103,7 +103,7 @@ Read the reference for a stage once per session, before its first command:
 | 3. Props | 1–4 primitives first; imported models only when needed | `references/add-prop.md` |
 | 4. People | Pick from the built-in characters; place before posing | `references/add-character.md` |
 | 5. Pose | Reviewed text mappings; seat fitting | `references/pose.md` |
-| 6. Cameras | Mandatory bird's-eye overview plus purposeful story views | `references/camera.md` |
+| 6. Cameras | Mandatory bird's-eye overview plus story coverage scaled to the number of people | `references/camera.md` |
 | 7. Edit | Change only what was asked; batch syntax; keyframes | `references/edit.md` |
 | 8. Check | Numbers, renders, look at the PNGs, revise | `references/checks.md` |
 | 9. Studio | Open the finished scene in the local Studio with the In-App Browser | `references/doctor-browser.md` |
@@ -140,7 +140,9 @@ Installation, the browser and sandbox limits are in `references/doctor-browser.m
    `evaluate` use node origins and primitive boxes only.
 3. Every scene keeps one dedicated bird's-eye camera (BOM camera role `layout_overview`), refitted
    after layout changes. It is layout evidence, never the primary story image.
-4. Choose one BOM `story` camera as `--primary` for `inspect views`.
+4. Choose one BOM `story` camera as `--primary` for `inspect views`. Unless the user sets the
+   count, cover multi-person scenes per the minimums in `references/camera.md` (3 or more people:
+   a group master, one view per interacting group and one close-up per main character).
 5. Ordinary "sitting" means a chair, sofa, bench or stool unless floor sitting, cross-legged sitting
    or kneeling is explicit. Reuse a seat or build one from 1–4 primitives first.
 6. Report gaps honestly: a simplified substitute is described as such; an unverified constraint

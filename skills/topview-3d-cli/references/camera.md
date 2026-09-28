@@ -40,9 +40,20 @@ Add cameras with their explicit `view` and `fov` in one `topview-3d-cli node bat
 exist. Put a new camera's `presetId`, `view` and `fov` in the same `add_camera` change when they
 are already planned; keep a follow-up `update` for a measurement- or render-driven correction.
 For each requested view record purpose, subjects, shot size and required visible relationships in
-BOM `cameras`. Respect the requested count and style; avoid redundant cameras. For unspecified
-dialogue coverage, a master two-shot plus complementary views is a starting plan, not a
-requirement to create every shot.
+BOM `cameras`. A count or shot list the user gives always wins. Otherwise plan at least this
+story coverage (the bird's-eye overview is extra):
+
+| People in the scene | Minimum story cameras |
+| --- | --- |
+| 1 | 2: a full or medium shot and a closer shot of the face or the action |
+| 2 | 3: a two-shot master and two complementary over-the-shoulder shots or close-ups |
+| 3 or more | 1 group master, 1 view per interacting group, and 1 close-up or reaction per main character; usually 4–8 |
+
+An interacting group is people who talk to, look at or handle something with each other; a
+bystander is not a group. In a group master every face is readable; move the camera first when
+someone is hidden. Each group has its own line of action for the 180-degree rule below. "Redundant"
+means nearly the same shot size and angle as another camera; it is never a reason to go below the
+minimum. When a scene needs fewer, say which minimum was skipped and why in BOM `cameras`.
 
 | Purpose | Starting composition |
 | --- | --- |
@@ -68,7 +79,9 @@ camera is never primary. Pass the story camera as `--primary` to `topview-3d-cli
   story cameras on one side to preserve screen direction and eyelines. Record the axis endpoints
   and the chosen side in BOM `constraints`. For a world-XZ axis A→B, the sign of
   `(B.x-A.x)*(C.z-A.z) - (B.z-A.z)*(C.x-A.x)` gives camera C's side; near zero is on the axis and
-  needs judgment. An intentional break needs a stated reason.
+  needs judgment. An intentional break needs a stated reason. With several interacting groups,
+  record one axis per group; a group's cameras stay on its side, and the group master may cross an
+  axis only when the BOM says why.
 - **Eyelines:** people look toward their partner or object. Check complementary views together
   (head height and gaze) rather than turning each character to its own camera. An over-the-shoulder
   camera targets the person being seen.
