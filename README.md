@@ -40,7 +40,7 @@ execution path.
 ## Install the plugin
 
 The plugin is the `skills/topview-3d-cli` skill plus a manifest per agent. The skill's first step
-runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.4` (or a local wheel, see
+runs the CLI through `uvx --python 3.12 topview-3d-cli@0.1.5` (or a local wheel, see
 [Install the CLI](#install-the-cli)), so every agent also needs Python 3.11+, Node.js 20.6+ and uv
 or pipx on the machine. The wheel also carries a prebuilt local Studio (open and edit a scene, send
 renders to a Topview Canvas), so `studio open` works from the package with Node alone; a checkout
@@ -82,7 +82,7 @@ codex plugin marketplace add git@github.com:topviewai/topview-3d-builder.git --r
 codex plugin add topview-3d-builder@topview-3d-builder
 ```
 
-Replace `--ref main` with a tag such as `--ref v0.1.4` to pin a release, or pass a local checkout
+Replace `--ref main` with a tag such as `--ref v0.1.5` to pin a release, or pass a local checkout
 path instead of the Git URL. Restart Codex afterwards.
 
 To update, remove the old version first, then add it again. Codex caches an installed plugin by its
@@ -114,7 +114,7 @@ git -C ~/.cursor/plugins/local/topview-3d-builder fetch origin main
 git -C ~/.cursor/plugins/local/topview-3d-builder checkout -B main origin/main
 ```
 
-For a release, use `fetch origin tag v0.1.4` and `checkout v0.1.4` instead. If the pull fails
+For a release, use `fetch origin tag v0.1.5` and `checkout v0.1.5` instead. If the pull fails
 because of local edits in that folder, delete the old copy and clone again:
 
 ```bash
@@ -232,10 +232,10 @@ or `~/.cache/topview-3d-cli`) by `topview-3d-cli browser ensure`.
 ```bash
 pipx install topview-3d-cli
 # or, without a permanent install:
-uvx --python 3.12 topview-3d-cli@0.1.4 doctor
+uvx --python 3.12 topview-3d-cli@0.1.5 doctor
 # or, with neither pipx nor uv: one environment shared by every project
 python3 -m venv ~/.local/share/topview-3d-cli/venv
-~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.4
+~/.local/share/topview-3d-cli/venv/bin/python -m pip install topview-3d-cli==0.1.5
 topview-3d-cli browser ensure          # installs Playwright into the user cache and downloads Chromium
 topview-3d-cli doctor
 ```
@@ -244,7 +244,7 @@ On Windows the shared environment is `%LOCALAPPDATA%\topview-3d-cli\venv` and it
 `Scripts\topview-3d-cli.exe`. `pip install --user` is not used: many Python installs refuse it
 (PEP 668). A plain `uvx topview-3d-cli` fails when the default Python is older than 3.11, so pass
 `--python 3.12`. If pip is pointed at a mirror that does not have this version yet, retry
-with the official index: `pip install --index-url https://pypi.org/simple/ topview-3d-cli==0.1.4`.
+with the official index: `pip install --index-url https://pypi.org/simple/ topview-3d-cli==0.1.5`.
 
 ### Developer install from a checkout
 
