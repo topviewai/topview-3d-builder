@@ -12,7 +12,7 @@
       "name": "topview-3d-builder",
       "source": "./",
       "description": "Build, check and render 3D director scenes on your own machine with the topview-3d-cli command: characters, poses, props, cameras and keyframes, fully offline.",
-      "homepage": "https://www.topview.ai/topview-3d-builder",
+      "homepage": "https://www.topview.ai/3d-builder",
       "license": "Apache-2.0",
       "category": "creativity",
       "keywords": [

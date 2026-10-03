@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://www.topview.ai/topview-3d-builder"
+Homepage = "https://www.topview.ai/3d-builder"
 Repository = "https://github.com/topviewai/topview-3d-builder"
 Issues = "https://github.com/topviewai/topview-3d-builder/issues"
 Documentation = "https://github.com/topviewai/topview-3d-builder/blob/main/docs/topview-3d-cli.md"

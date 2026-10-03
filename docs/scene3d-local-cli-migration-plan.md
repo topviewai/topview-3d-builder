@@ -543,7 +543,7 @@ Acceptance (met):
 - **`.codex-plugin/plugin.json`.** The hyperframes fields plus `interface.privacyPolicyURL`,
   `interface.termsOfServiceURL`, `brandColor` (`#3341FF`, sampled from the symbol) and the three
   positive test cases as `defaultPrompt`; no `apps`, no `mcpServers`, no `.mcp.json` or `.app.json`.
-  `homepage` and `websiteURL` are https://www.topview.ai/topview-3d-builder, `repository` is
+  `homepage` and `websiteURL` are https://www.topview.ai/3d-builder, `repository` is
   https://github.com/topviewai/topview-3d-builder and `author.url` is https://www.topview.ai (the same
   in every manifest and in pyproject `[project.urls]`). `privacyPolicyURL` and `termsOfServiceURL`
   stay `TODO:` placeholders until those pages exist, so `--release` packaging still fails on purpose.
@@ -677,7 +677,7 @@ Still to do before publishing:
 ## Open items
 
 - Where the support, privacy, and terms pages are hosted (the website is
-  https://www.topview.ai/topview-3d-builder).
+  https://www.topview.ai/3d-builder).
 - Logo and icon artwork.
 - OpenAI's position on a plugin that requires local execution.
 - Scale the pose `hips` root offset to the character (stage 5).
