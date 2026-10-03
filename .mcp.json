@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "topview-browser": {
+    "topview-3d": {
       "type": "http",
       "url": "https://mcp-3d.topview.ai",
       "oauth_resource": "https://mcp-3d.topview.ai",

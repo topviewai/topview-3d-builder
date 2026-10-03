@@ -57,7 +57,7 @@ SSH key. The short `topviewai/topview-3d-builder` form clones over HTTPS and fai
 | Cursor | `.cursor-plugin/plugin.json` |
 | Claude Code | `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` |
 
-Only the Codex manifest declares an MCP server (`topview-browser`, in `.mcp.json`); Codex asks you to
+Only the Codex manifest declares an MCP server (`topview-3d`, in `.mcp.json`); Codex asks you to
 sign in to Topview the first time the plugin uses it. Cursor and Claude Code load the skill only.
 In every agent, the local Studio signs in to Topview on its own when you send a render to a Canvas.
 
